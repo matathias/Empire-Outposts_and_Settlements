@@ -9,14 +9,26 @@ using VOE;
 namespace EmpireVOE
 {
     /// <summary>
-    /// WorldComponent that persists per-outpost auto-defend state and provides
+    /// WorldComponent that persists per-outpost auto-defend state, per-settlement
+    /// delivery destinations, per-settlement financing outposts, and provides
     /// lookup from Outpost instances to their interface wrappers.
     /// Auto-discovered by RimWorld (WorldComponent subclasses are instantiated automatically).
     /// </summary>
     public class VOETracker : WorldComponent
     {
+        // --- Military state (serialized) ---
         private Dictionary<int, bool> autoDefendStates = new Dictionary<int, bool>();
 
+        // --- Delivery state (serialized) ---
+        // settlement loadID → outpost loadID hash. Absence = deliver to tax map.
+        private Dictionary<int, int> deliveryDestinations = new Dictionary<int, int>();
+        // settlement loadID → outpost loadID hash. Absence = no financing outpost.
+        private Dictionary<int, int> financingOutposts = new Dictionary<int, int>();
+
+        // --- Redirect flags (not serialized, consumed same tick) ---
+        private static readonly HashSet<int> redirectedSettlements = new HashSet<int>();
+
+        // --- Wrapper registries (not serialized, rebuilt on SpawnSetup) ---
         private static readonly Dictionary<Outpost, OutpostRaidTarget> raidTargets
             = new Dictionary<Outpost, OutpostRaidTarget>();
         private static readonly Dictionary<Outpost_Defensive, DefensiveAutoDefender> autoDefenders
@@ -36,8 +48,16 @@ namespace EmpireVOE
             base.ExposeData();
             Scribe_Collections.Look(ref autoDefendStates, "voeAutoDefendStates",
                 LookMode.Value, LookMode.Value);
+            Scribe_Collections.Look(ref deliveryDestinations, "voeDeliveryDestinations",
+                LookMode.Value, LookMode.Value);
+            Scribe_Collections.Look(ref financingOutposts, "voeFinancingOutposts",
+                LookMode.Value, LookMode.Value);
             if (autoDefendStates == null)
                 autoDefendStates = new Dictionary<int, bool>();
+            if (deliveryDestinations == null)
+                deliveryDestinations = new Dictionary<int, int>();
+            if (financingOutposts == null)
+                financingOutposts = new Dictionary<int, int>();
         }
 
         public static void RegisterOutpost(Outpost outpost, OutpostRaidTarget target)
@@ -104,6 +124,101 @@ namespace EmpireVOE
             instance.autoDefendStates[outpost.GetUniqueLoadID().GetHashCode()] = value;
         }
 
+        // --- Delivery destination accessors ---
+
+        public static Outpost GetDeliveryDestination(WorldSettlementFC settlement)
+        {
+            if (instance == null || instance.deliveryDestinations == null || settlement == null)
+                return null;
+            int outpostId;
+            if (!instance.deliveryDestinations.TryGetValue(settlement.ID, out outpostId))
+                return null;
+            foreach (Outpost o in Find.WorldObjects.AllWorldObjects.OfType<Outpost>())
+            {
+                if (o.GetUniqueLoadID().GetHashCode() == outpostId)
+                    return o;
+            }
+            // Outpost gone — clear stale entry
+            instance.deliveryDestinations.Remove(settlement.ID);
+            return null;
+        }
+
+        public static void SetDeliveryDestination(WorldSettlementFC settlement, Outpost outpost)
+        {
+            if (instance == null || settlement == null) return;
+            if (outpost == null)
+                instance.deliveryDestinations.Remove(settlement.ID);
+            else
+                instance.deliveryDestinations[settlement.ID] = outpost.GetUniqueLoadID().GetHashCode();
+        }
+
+        // --- Per-settlement financing outpost accessors ---
+
+        public static Outpost GetFinancingOutpost(WorldSettlementFC settlement)
+        {
+            if (instance == null || instance.financingOutposts == null || settlement == null)
+                return null;
+            int outpostId;
+            if (!instance.financingOutposts.TryGetValue(settlement.ID, out outpostId))
+                return null;
+            foreach (Outpost o in Find.WorldObjects.AllWorldObjects.OfType<Outpost>())
+            {
+                if (o.GetUniqueLoadID().GetHashCode() == outpostId)
+                    return o;
+            }
+            instance.financingOutposts.Remove(settlement.ID);
+            return null;
+        }
+
+        public static void SetFinancingOutpost(WorldSettlementFC settlement, Outpost outpost)
+        {
+            if (instance == null || settlement == null) return;
+            if (outpost == null)
+                instance.financingOutposts.Remove(settlement.ID);
+            else
+                instance.financingOutposts[settlement.ID] = outpost.GetUniqueLoadID().GetHashCode();
+        }
+
+        /// <summary>
+        /// Returns all distinct financing outposts currently assigned to any settlement.
+        /// Used by GetSilver postfix to include financing outpost silver in total.
+        /// </summary>
+        public static IEnumerable<Outpost> GetAllDistinctFinancingOutposts()
+        {
+            if (instance == null || instance.financingOutposts == null)
+                yield break;
+            HashSet<int> seen = new HashSet<int>();
+            foreach (int outpostId in instance.financingOutposts.Values)
+            {
+                if (!seen.Add(outpostId)) continue;
+                foreach (Outpost o in Find.WorldObjects.AllWorldObjects.OfType<Outpost>())
+                {
+                    if (o.GetUniqueLoadID().GetHashCode() == outpostId)
+                    {
+                        yield return o;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // --- Redirect flag accessors ---
+
+        public static bool IsRedirected(int settlementTile)
+        {
+            return redirectedSettlements.Contains(settlementTile);
+        }
+
+        public static void SetRedirected(int settlementTile)
+        {
+            redirectedSettlements.Add(settlementTile);
+        }
+
+        public static void ClearRedirected(int settlementTile)
+        {
+            redirectedSettlements.Remove(settlementTile);
+        }
+
         /// <summary>
         /// Unregisters all outpost wrappers from all registries. Called when the user
         /// disables integration at runtime via settings.
@@ -122,6 +237,8 @@ namespace EmpireVOE
             raidTargets.Clear();
             autoDefenders.Clear();
             tabEntries.Clear();
+
+            SilverPaymentRegistry.Unregister(OutpostFinancer.Instance);
         }
 
         /// <summary>
@@ -131,6 +248,7 @@ namespace EmpireVOE
         public static void ReregisterAll()
         {
             if (Find.World == null) return;
+            SilverPaymentRegistry.Register(OutpostFinancer.Instance);
             List<Outpost> outposts = Find.WorldObjects.AllWorldObjects.OfType<Outpost>().ToList();
             foreach (Outpost outpost in outposts)
             {

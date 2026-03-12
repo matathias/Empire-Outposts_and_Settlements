@@ -15,6 +15,7 @@ namespace EmpireVOE
         static VOECompatInit()
         {
             new Harmony("com.Matathias.EmpireVOE").PatchAll(Assembly.GetExecutingAssembly());
+            SilverPaymentRegistry.Register(OutpostFinancer.Instance);
             LogUtil.MessageForce("Empire - Vanilla Outposts Expanded integration loaded.");
         }
     }

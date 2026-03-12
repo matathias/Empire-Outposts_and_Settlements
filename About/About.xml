@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ModMetaData>
-    <name>Empire - Vanilla Outposts Expanded</name>
+    <name>Empire: Vanilla Outposts Expanded Integration</name>
     <author>Matathias</author>
     <packageId>Matathias.EmpireVOE</packageId>
     <supportedVersions><li>1.6</li></supportedVersions>
-    <description>Integrates Vanilla Outposts Expanded with Empire's military system. Outposts become raid targets with 24-hour warnings, Empire settlements can auto-defend outposts, and defensive outposts can auto-defend nearby Empire settlements.</description>
+    <description>Integrates Vanilla Outposts Expanded with Empire's military and tax systems. Outposts become raid targets with 24-hour warnings, defensive outposts can auto-defend nearby Empire settlements, and you can redirect tax deliveries and silver payments to VOE outposts.</description>
     <modDependencies>
         <li>
             <packageId>Saakra.Empire</packageId>

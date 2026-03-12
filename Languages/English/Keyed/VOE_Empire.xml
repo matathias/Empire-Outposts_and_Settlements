@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+    <VOE_DisableIntegration>Disable VOE military integration</VOE_DisableIntegration>
+    <VOE_DisableIntegrationDesc>Disables all Empire-VOE military integration. Outposts will not be raided and defensive outposts will not auto-defend.</VOE_DisableIntegrationDesc>
+    <VOE_OutpostDefended>{0} defended</VOE_OutpostDefended>
+    <VOE_OutpostDefendedDesc>Your outpost {0} successfully repelled an enemy raid.</VOE_OutpostDefendedDesc>
+    <VOE_OutpostRaided>{0} raided</VOE_OutpostRaided>
+    <VOE_OutpostRaidedDesc>Your outpost {0} was raided! {1} colonists were injured and some supplies were lost.</VOE_OutpostRaidedDesc>
+    <VOE_ChangeDefender>Change Defender</VOE_ChangeDefender>
+    <VOE_ChangeDefenderDesc>Select an Empire settlement to defend this outpost.</VOE_ChangeDefenderDesc>
+    <VOE_DefenderChanged>{0} is now defending {1}.</VOE_DefenderChanged>
+
+    <!-- Delivery Integration -->
+    <VOE_DeliveryOutpostLabel>Tax Delivery Location</VOE_DeliveryOutpostLabel>
+    <VOE_DeliveryOutpostDesc>Choose where taxes from this settlement are delivered. Currently: {0}</VOE_DeliveryOutpostDesc>
+    <VOE_FinancingOutpostLabel>Financing Location</VOE_FinancingOutpostLabel>
+    <VOE_FinancingOutpostDesc>Choose an outpost to fund this settlement's payments. Currently: {0}</VOE_FinancingOutpostDesc>
+    <VOE_TaxDeliveredToOutpost>Taxes from {0} have arrived at {1}.</VOE_TaxDeliveredToOutpost>
+    <VOE_TaxDeliveredToOutpostDesc>Tax shipment from {0} has been delivered to outpost {1}.\n\nGoods:\n{2}</VOE_TaxDeliveredToOutpostDesc>
+    <VOE_TaxRedirected>Tax delivery redirected</VOE_TaxRedirected>
+    <VOE_TaxRedirectedDesc>The outpost designated to receive taxes from {0} no longer exists. Shipment redirected to {1}.</VOE_TaxRedirectedDesc>
+    <VOE_InvalidDeliveryOutpost>{0} tried to deliver taxes to an invalid outpost. Delivery destination has been reset.</VOE_InvalidDeliveryOutpost>
+    <VOE_FinancingPartiallyDepleted>{0}'s funds are depleted. Remaining {1} silver will be drawn from your coffers.</VOE_FinancingPartiallyDepleted>
+    <VOE_DeliveryEventDesc>Taxes from {0} are being delivered to {1}.\n\nGoods:\n{2}</VOE_DeliveryEventDesc>
+    <VOE_PlayerTaxMap>Player Tax Map</VOE_PlayerTaxMap>
+
+    <!-- Settings -->
+    <VOE_DebugLogging>Debug logging</VOE_DebugLogging>
+    <VOE_DebugLoggingDesc>Enable verbose debug logging for EmpireVOE integration.</VOE_DebugLoggingDesc>
+</LanguageData>

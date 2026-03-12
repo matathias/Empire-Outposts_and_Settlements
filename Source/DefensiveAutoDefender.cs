@@ -61,6 +61,11 @@ namespace EmpireVOE
             busy = true;
         }
 
+        public void OnDefenseReplaced()
+        {
+            busy = false;
+        }
+
         public void OnDefenseComplete(bool won, BattleResult result)
         {
             busy = false;

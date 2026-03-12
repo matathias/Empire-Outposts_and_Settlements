@@ -7,11 +7,13 @@ namespace EmpireVOE
     public class EmpireVOESettings : ModSettings
     {
         public static bool disableIntegration = false;
+        public static bool debugLogging = false;
 
         public override void ExposeData()
         {
             base.ExposeData();
             Scribe_Values.Look(ref disableIntegration, "disableIntegration", false);
+            Scribe_Values.Look(ref debugLogging, "debugLogging", false);
         }
     }
 
@@ -47,6 +49,11 @@ namespace EmpireVOE
                 else
                     VOETracker.ReregisterAll();
             }
+
+            ls.CheckboxLabeled(
+                "VOE_DebugLogging".Translate(),
+                ref EmpireVOESettings.debugLogging,
+                "VOE_DebugLoggingDesc".Translate());
 
             ls.End();
         }
