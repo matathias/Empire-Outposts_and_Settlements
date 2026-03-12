@@ -105,7 +105,7 @@ namespace EmpireVOE
 
             if (!__result.NullOrEmpty())
                 __result += "\n";
-            __result += "VOE_MilitaryLevel".Translate(target.MilitaryLevel);
+            __result += "VOE_MilitaryLevel".Translate(target.MilitaryLevel * FCSettings.defenderAdvantage);
         }
     }
 }
