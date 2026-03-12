@@ -9,6 +9,7 @@
     <VOE_ChangeDefender>Change Defender</VOE_ChangeDefender>
     <VOE_ChangeDefenderDesc>Select an Empire settlement to defend this outpost.</VOE_ChangeDefenderDesc>
     <VOE_DefenderChanged>{0} is now defending {1}.</VOE_DefenderChanged>
+	<VOE_DefenseIdle>Idle</VOE_DefenseIdle>
 
     <!-- Delivery Integration -->
     <VOE_DeliveryOutpostLabel>Tax Delivery Location</VOE_DeliveryOutpostLabel>

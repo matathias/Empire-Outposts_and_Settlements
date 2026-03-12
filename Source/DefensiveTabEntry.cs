@@ -53,16 +53,17 @@ namespace EmpireVOE
 
         public bool IsBusy
         {
-            get { return !defender.CanAutoDefend && !IsUnderAttack; }
+            get { return defender.Busy || IsUnderAttack || !defender.CanAutoDefend; }
         }
 
         public string StatusLabel
         {
             get
             {
-                if (IsUnderAttack) return "UnderAttack".Translate();
-                if (IsBusy) return "Busy".Translate();
-                return "Ready".Translate();
+                if (IsUnderAttack) return "FCMilStatusUnderAttack".Translate();
+                if (IsBusy) return "FCMilStatusBusy".Translate();
+                if (AutoDefend) return "FCMilStatusReady".Translate();
+                return "VOE_DefenseIdle".Translate();
             }
         }
 
@@ -72,7 +73,8 @@ namespace EmpireVOE
             {
                 if (IsUnderAttack) return AccentUtil.MilUnderAttack;
                 if (IsBusy) return AccentUtil.MilActiveMission;
-                return AccentUtil.MilReady;
+                if (AutoDefend) return AccentUtil.MilReady;
+                return AccentUtil.MilInactive;
             }
         }
     }

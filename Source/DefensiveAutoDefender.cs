@@ -16,7 +16,9 @@ namespace EmpireVOE
     public class DefensiveAutoDefender : IAutoDefender
     {
         private readonly Outpost_Defensive outpost;
-        private bool busy;
+        private bool _busy;
+
+        public bool Busy => _busy;
 
         public DefensiveAutoDefender(Outpost_Defensive outpost)
         {
@@ -45,7 +47,7 @@ namespace EmpireVOE
                 return VOETracker.GetAutoDefend(outpost)
                     && outpost.PawnCount > 1
                     && !outpost.Packing
-                    && !busy;
+                    && !_busy;
             }
         }
 
@@ -58,17 +60,17 @@ namespace EmpireVOE
 
         public void OnDefenseStarted()
         {
-            busy = true;
+            _busy = true;
         }
 
         public void OnDefenseReplaced()
         {
-            busy = false;
+            _busy = false;
         }
 
         public void OnDefenseComplete(bool won, BattleResult result)
         {
-            busy = false;
+            _busy = false;
             if (!won)
             {
                 int injuries = Math.Max(1, outpost.PawnCount / 4);
