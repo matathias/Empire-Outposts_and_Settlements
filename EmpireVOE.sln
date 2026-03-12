@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36518.9 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpireVOE", "Source\EmpireVOE.csproj", "{75687B87-284D-FE44-ACE3-C626D235C0EA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+		Testing|Any CPU = Testing|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{75687B87-284D-FE44-ACE3-C626D235C0EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75687B87-284D-FE44-ACE3-C626D235C0EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75687B87-284D-FE44-ACE3-C626D235C0EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75687B87-284D-FE44-ACE3-C626D235C0EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75687B87-284D-FE44-ACE3-C626D235C0EA}.Testing|Any CPU.ActiveCfg = Testing|Any CPU
+		{75687B87-284D-FE44-ACE3-C626D235C0EA}.Testing|Any CPU.Build.0 = Testing|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {18D39FA8-B23F-4F24-BC2D-C3CFA07B11D5}
+	EndGlobalSection
+EndGlobal
