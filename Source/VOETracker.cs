@@ -25,6 +25,10 @@ namespace EmpireVOE
         // settlement loadID → outpost loadID hash. Absence = no financing outpost.
         private Dictionary<int, int> financingOutposts = new Dictionary<int, int>();
 
+        // --- Cooldown state (serialized) ---
+        // outpost ID hash → tick when cooldown ends
+        private Dictionary<int, int> cooldownEndTicks = new Dictionary<int, int>();
+
         // --- Redirect flags (not serialized, consumed same tick) ---
         private static readonly HashSet<int> redirectedSettlements = new HashSet<int>();
 
@@ -52,12 +56,16 @@ namespace EmpireVOE
                 LookMode.Value, LookMode.Value);
             Scribe_Collections.Look(ref financingOutposts, "voeFinancingOutposts",
                 LookMode.Value, LookMode.Value);
+            Scribe_Collections.Look(ref cooldownEndTicks, "voeCooldownEndTicks",
+                LookMode.Value, LookMode.Value);
             if (autoDefendStates == null)
                 autoDefendStates = new Dictionary<int, bool>();
             if (deliveryDestinations == null)
                 deliveryDestinations = new Dictionary<int, int>();
             if (financingOutposts == null)
                 financingOutposts = new Dictionary<int, int>();
+            if (cooldownEndTicks == null)
+                cooldownEndTicks = new Dictionary<int, int>();
         }
 
         public static void RegisterOutpost(Outpost outpost, OutpostRaidTarget target)
@@ -217,6 +225,35 @@ namespace EmpireVOE
         public static void ClearRedirected(int settlementTile)
         {
             redirectedSettlements.Remove(settlementTile);
+        }
+
+        // --- Cooldown accessors ---
+
+        public static bool IsOnCooldown(Outpost_Defensive outpost)
+        {
+            if (instance == null || instance.cooldownEndTicks == null) return false;
+            int key = outpost.GetUniqueLoadID().GetHashCode();
+            int endTick;
+            if (!instance.cooldownEndTicks.TryGetValue(key, out endTick)) return false;
+            if (Find.TickManager.TicksGame >= endTick)
+            {
+                instance.cooldownEndTicks.Remove(key);
+                return false;
+            }
+            return true;
+        }
+
+        public static void SetCooldown(Outpost_Defensive outpost, int durationTicks)
+        {
+            if (instance == null) return;
+            int key = outpost.GetUniqueLoadID().GetHashCode();
+            instance.cooldownEndTicks[key] = Find.TickManager.TicksGame + durationTicks;
+        }
+
+        public static void ClearCooldown(Outpost_Defensive outpost)
+        {
+            if (instance == null) return;
+            instance.cooldownEndTicks.Remove(outpost.GetUniqueLoadID().GetHashCode());
         }
 
         /// <summary>

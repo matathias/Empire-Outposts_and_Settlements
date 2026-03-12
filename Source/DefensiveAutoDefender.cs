@@ -17,8 +17,10 @@ namespace EmpireVOE
     {
         private readonly Outpost_Defensive outpost;
         private bool _busy;
+        private WorldObject _defendingTarget;
 
         public bool Busy => _busy;
+        public string DefendingTargetName => _defendingTarget != null ? _defendingTarget.LabelCap : "";
 
         public DefensiveAutoDefender(Outpost_Defensive outpost)
         {
@@ -47,7 +49,8 @@ namespace EmpireVOE
                 return VOETracker.GetAutoDefend(outpost)
                     && outpost.PawnCount > 1
                     && !outpost.Packing
-                    && !_busy;
+                    && !_busy
+                    && !VOETracker.IsOnCooldown(outpost);
             }
         }
 
@@ -58,19 +61,25 @@ namespace EmpireVOE
             return new militaryForce(level, efficiency, null, Faction.OfPlayer);
         }
 
-        public void OnDefenseStarted()
+        public void OnDefenseStarted(WorldObject target)
         {
             _busy = true;
+            _defendingTarget = target;
         }
 
         public void OnDefenseReplaced()
         {
             _busy = false;
+            _defendingTarget = null;
         }
 
         public void OnDefenseComplete(bool won, BattleResult result)
         {
             _busy = false;
+            _defendingTarget = null;
+
+            // 2-day base cooldown (shorter than Empire's 3-day since outposts are simpler)
+            int cooldown = GenDate.TicksPerDay * 2;
             if (!won)
             {
                 int injuries = Math.Max(1, outpost.PawnCount / 4);
@@ -83,7 +92,10 @@ namespace EmpireVOE
                             -1f, null, part));
                     }
                 }
+                // Extra day cooldown on loss
+                cooldown += GenDate.TicksPerDay;
             }
+            VOETracker.SetCooldown(outpost, cooldown);
         }
 
         /// <summary>

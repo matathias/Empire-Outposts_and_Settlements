@@ -53,7 +53,7 @@ namespace EmpireVOE
 
         public bool IsBusy
         {
-            get { return defender.Busy || IsUnderAttack || !defender.CanAutoDefend; }
+            get { return defender.Busy || IsUnderAttack || VOETracker.IsOnCooldown(outpost); }
         }
 
         public string StatusLabel
@@ -61,7 +61,14 @@ namespace EmpireVOE
             get
             {
                 if (IsUnderAttack) return "FCMilStatusUnderAttack".Translate();
-                if (IsBusy) return "FCMilStatusBusy".Translate();
+                if (VOETracker.IsOnCooldown(outpost)) return "FCMilStatusCooldown".Translate();
+                if (defender.Busy)
+                {
+                    string target = defender.DefendingTargetName;
+                    if (target?.Length > 0)
+                        return "VOE_StatusDefending".Translate(target);
+                    return "FCMilStatusBusy".Translate();
+                }
                 if (AutoDefend) return "FCMilStatusReady".Translate();
                 return "VOE_DefenseIdle".Translate();
             }
