@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FactionColonies;
@@ -241,6 +242,15 @@ namespace EmpireVOE
                 return false;
             }
             return true;
+        }
+
+        public static int GetCooldownTicksLeft(Outpost_Defensive outpost)
+        {
+            if (instance == null || instance.cooldownEndTicks == null) return 0;
+            int key = outpost.GetUniqueLoadID().GetHashCode();
+            int endTick;
+            if (!instance.cooldownEndTicks.TryGetValue(key, out endTick)) return 0;
+            return Math.Max(0, endTick - Find.TickManager.TicksGame);
         }
 
         public static void SetCooldown(Outpost_Defensive outpost, int durationTicks)

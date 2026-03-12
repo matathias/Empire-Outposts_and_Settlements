@@ -88,4 +88,24 @@ namespace EmpireVOE
             yield return OutpostDefenderGizmo.CreateGizmo(outpost);
         }
     }
+
+    /// <summary>
+    /// Appends Military Level to the outpost inspect string on the world map.
+    /// </summary>
+    [HarmonyPatch(typeof(Outpost))]
+    [HarmonyPatch("GetInspectString")]
+    public static class Patch_GetInspectString
+    {
+        private static void Postfix(Outpost __instance, ref string __result)
+        {
+            if (EmpireVOESettings.disableIntegration) return;
+
+            OutpostRaidTarget target = VOETracker.GetRaidTarget(__instance);
+            if (target == null) return;
+
+            if (!__result.NullOrEmpty())
+                __result += "\n";
+            __result += "VOE_MilitaryLevel".Translate(target.MilitaryLevel);
+        }
+    }
 }

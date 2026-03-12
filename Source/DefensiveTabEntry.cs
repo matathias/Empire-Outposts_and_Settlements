@@ -1,4 +1,5 @@
 using FactionColonies;
+using FactionColonies.util;
 using RimWorld.Planet;
 using Verse;
 using UnityEngine;
@@ -61,7 +62,13 @@ namespace EmpireVOE
             get
             {
                 if (IsUnderAttack) return "FCMilStatusUnderAttack".Translate();
-                if (VOETracker.IsOnCooldown(outpost)) return "FCMilStatusCooldown".Translate();
+                if (VOETracker.IsOnCooldown(outpost))
+                {
+                    string label = "FCMilStatusCooldown".Translate();
+                    int ticksLeft = VOETracker.GetCooldownTicksLeft(outpost);
+                    if (ticksLeft > 0) label += " " + ticksLeft.ToTimeString();
+                    return label;
+                }
                 if (defender.Busy)
                 {
                     string target = defender.DefendingTargetName;

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using FactionColonies;
 using RimWorld;
@@ -135,6 +136,30 @@ namespace EmpireVOE
             if (avgSkill <= 20.0)
                 return 0.3 + 0.075 * avgSkill - 0.0005 * avgSkill * avgSkill;
             return 1.6 + 0.05 * Math.Sqrt(avgSkill - 20.0);
+        }
+
+        public List<Pawn> GetDefendingPawns()
+        {
+            if (outpost.PawnCount <= 1) return null;
+
+            List<Pawn> pawns = outpost.CapablePawns.ToList();
+            if (pawns.Count > 1)
+                pawns.RemoveAt(pawns.Count - 1); // keep at least 1 behind
+
+            foreach (Pawn pawn in pawns)
+                outpost.RemovePawn(pawn);
+
+            return pawns;
+        }
+
+        public void ReturnDefendingPawns(List<Pawn> pawns)
+        {
+            if (pawns == null) return;
+            foreach (Pawn pawn in pawns)
+            {
+                if (pawn != null && !pawn.Dead && !pawn.Destroyed)
+                    outpost.AddPawn(pawn);
+            }
         }
     }
 }
