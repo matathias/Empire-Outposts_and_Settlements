@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using FactionColonies;
+using FactionColonies.util;
 using HarmonyLib;
 using Outposts;
 using RimWorld;
 using RimWorld.Planet;
 using UnityEngine;
 using Verse;
+using VOE;
 
 namespace EmpireVOE
 {
@@ -120,6 +122,26 @@ namespace EmpireVOE
                     Find.WindowStack.Add(new FloatMenu(options));
                 }
             };
+        }
+    }
+
+    /// <summary>
+    /// Postfix on Outpost_Defensive.ReinforcementsDisabled — disables the "Send Reinforcements"
+    /// gizmo when the outpost is on Empire military cooldown.
+    /// </summary>
+    [HarmonyPatch(typeof(Outpost_Defensive))]
+    [HarmonyPatch("ReinforcementsDisabled")]
+    public static class Patch_ReinforcementsDisabled
+    {
+        public static void Postfix(Outpost_Defensive __instance, ref bool __result, ref string reason)
+        {
+            if (__result) return;
+            if (EmpireVOESettings.disableIntegration) return;
+            if (!VOETracker.IsOnCooldown(__instance)) return;
+
+            __result = true;
+            int ticksLeft = VOETracker.GetCooldownTicksLeft(__instance);
+            reason = "VOE_ReinforcementsCooldown".Translate(ticksLeft.ToTimeString());
         }
     }
 }

@@ -12,6 +12,7 @@
 	<VOE_DefenseIdle>Idle</VOE_DefenseIdle>
     <VOE_StatusDefending>Defending {0}</VOE_StatusDefending>
     <VOE_MilitaryLevel>Military Level: {0}</VOE_MilitaryLevel>
+    <VOE_ReinforcementsCooldown>Deployment cooldown: {0} remaining</VOE_ReinforcementsCooldown>
 
     <!-- Delivery Integration -->
     <VOE_DeliveryOutpostLabel>Tax Delivery Location</VOE_DeliveryOutpostLabel>
