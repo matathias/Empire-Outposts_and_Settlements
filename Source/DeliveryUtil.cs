@@ -22,8 +22,7 @@ namespace EmpireVOE
 
         public static void DebugLog(string message)
         {
-            if (EmpireVOESettings.debugLogging)
-                LogUtil.Message("[EmpireVOE] " + message);
+            VOELog.Message(message);
         }
     }
 }

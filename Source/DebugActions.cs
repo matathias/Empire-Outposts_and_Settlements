@@ -41,7 +41,7 @@ namespace EmpireVOE
                             militaryForce.GetMilitaryLevelAndEfficiencyFromTechLevel(
                                 enemyFaction.def.techLevel, out double _, out efficiency);
                             militaryForce attackingForce = new militaryForce(chosenLevel, efficiency, null, enemyFaction);
-                            LogUtil.MessageForce("Debug - Attack VOE Outpost - " + t.Name
+                            VOELog.MessageForce("Debug - Attack VOE Outpost - " + t.Name
                                 + " (level " + chosenLevel + ", efficiency " + efficiency + ")");
                             MilitaryUtilFC.AttackRaidTarget(attackingForce, t, enemyFaction);
                         }));

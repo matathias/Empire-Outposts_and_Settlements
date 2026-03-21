@@ -20,7 +20,7 @@ namespace EmpireVOE.Specialists
         static VOESpecialistsCompat()
         {
             TownConversionHandler.SpecialistsCallback = AssignTownPawns;
-            LogUtil.MessageForce("EmpireVOE - Specialists compat loaded.");
+            VOELog.MessageForce("EmpireVOE - Specialists compat loaded.");
         }
 
         private static void AssignTownPawns(WorldSettlementFC settlement, List<Pawn> pawns)
@@ -29,7 +29,7 @@ namespace EmpireVOE.Specialists
                 settlement.GetComponent<WorldObjectComp_SettlementSpecialists>();
             if (comp == null)
             {
-                LogUtil.Warning("VOESpecialistsCompat: Settlement " + settlement.Name +
+                VOELog.Warning("VOESpecialistsCompat: Settlement " + settlement.Name +
                     " has no SettlementSpecialists comp. Pawns will not be assigned.");
                 return;
             }

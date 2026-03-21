@@ -156,7 +156,7 @@ namespace EmpireVOE
                     }
                     catch (Exception e)
                     {
-                        LogUtil.Error("TownConversionHandler: Specialists callback failed: " + e);
+                        VOELog.Error("TownConversionHandler: Specialists callback failed: " + e);
                     }
                     // Remove pawns from town (AssignPawn already handles faction + world pawn)
                     foreach (Pawn pawn in townPawns)
@@ -198,7 +198,7 @@ namespace EmpireVOE
                         }
                         else
                         {
-                            LogUtil.Warning("TownConversionHandler: Settlement missing WorldObjectComp_TownBonus. Skill bonuses not applied.");
+                            VOELog.Warning("TownConversionHandler: Settlement missing WorldObjectComp_TownBonus. Skill bonuses not applied.");
                         }
                     }
                 }
