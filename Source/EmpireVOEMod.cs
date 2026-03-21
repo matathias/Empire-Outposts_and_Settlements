@@ -9,11 +9,25 @@ namespace EmpireVOE
         public static bool disableIntegration = false;
         public static bool debugLogging = false;
 
+        // Town Settlement feature
+        public static bool requireTownForSettlement = false;
+        public static bool convertTownPawns = true;
+        public static bool pawnSkillBonuses = true;
+        public static float additiveBonus = 0.2f;
+        public static int skillThreshold = 10;
+        public static bool scalingBonus = true;
+
         public override void ExposeData()
         {
             base.ExposeData();
             Scribe_Values.Look(ref disableIntegration, "disableIntegration", false);
             Scribe_Values.Look(ref debugLogging, "debugLogging", false);
+            Scribe_Values.Look(ref requireTownForSettlement, "requireTownForSettlement", false);
+            Scribe_Values.Look(ref convertTownPawns, "convertTownPawns", true);
+            Scribe_Values.Look(ref pawnSkillBonuses, "pawnSkillBonuses", true);
+            Scribe_Values.Look(ref additiveBonus, "additiveBonus", 0.2f);
+            Scribe_Values.Look(ref skillThreshold, "skillThreshold", 10);
+            Scribe_Values.Look(ref scalingBonus, "scalingBonus", true);
         }
     }
 
@@ -54,6 +68,44 @@ namespace EmpireVOE
                 "VOE_DebugLogging".Translate(),
                 ref EmpireVOESettings.debugLogging,
                 "VOE_DebugLoggingDesc".Translate());
+
+            ls.GapLine();
+
+            // Town Settlement section
+            ls.CheckboxLabeled(
+                "VOE_RequireTown".Translate(),
+                ref EmpireVOESettings.requireTownForSettlement,
+                "VOE_RequireTownDesc".Translate());
+
+            if (EmpireVOESettings.requireTownForSettlement)
+            {
+                ls.CheckboxLabeled(
+                    "  " + "VOE_ConvertTownPawns".Translate(),
+                    ref EmpireVOESettings.convertTownPawns,
+                    "VOE_ConvertTownPawnsDesc".Translate());
+
+                if (EmpireVOESettings.convertTownPawns)
+                {
+                    ls.CheckboxLabeled(
+                        "    " + "VOE_PawnSkillBonuses".Translate(),
+                        ref EmpireVOESettings.pawnSkillBonuses,
+                        "VOE_PawnSkillBonusesDesc".Translate());
+
+                    if (EmpireVOESettings.pawnSkillBonuses)
+                    {
+                        ls.Label("    " + "VOE_AdditiveBonus".Translate() + ": " + EmpireVOESettings.additiveBonus.ToString("F2"));
+                        EmpireVOESettings.additiveBonus = ls.Slider(EmpireVOESettings.additiveBonus, 0.05f, 1f);
+
+                        ls.Label("    " + "VOE_SkillThreshold".Translate() + ": " + EmpireVOESettings.skillThreshold);
+                        EmpireVOESettings.skillThreshold = (int)ls.Slider(EmpireVOESettings.skillThreshold, 1, 30);
+
+                        ls.CheckboxLabeled(
+                            "    " + "VOE_ScalingBonus".Translate(),
+                            ref EmpireVOESettings.scalingBonus,
+                            "VOE_ScalingBonusDesc".Translate());
+                    }
+                }
+            }
 
             ls.End();
         }

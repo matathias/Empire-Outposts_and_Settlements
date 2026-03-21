@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+	<!-- Add WorldObjectComp_TownBonus to all Empire settlement defs that have a comps list -->
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/FactionColonies.WorldSettlementDef[comps]/comps</xpath>
+		<value>
+			<li Class="EmpireVOE.WorldObjectCompProperties_TownBonus" />
+		</value>
+	</Operation>
+
+	<!-- Update VOE Town outpost description to mention Empire integration -->
+	<Operation Class="PatchOperationReplace">
+		<xpath>Defs/Outposts.OutpostDef[defName="Outpost_Town"]/description</xpath>
+		<value>
+			<description>A town that recruits new colonists over time based on social skill. Can be converted into an Empire settlement.</description>
+		</value>
+	</Operation>
+
+</Patch>

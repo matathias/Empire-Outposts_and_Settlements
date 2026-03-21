@@ -31,4 +31,20 @@
     <!-- Settings -->
     <VOE_DebugLogging>Debug logging</VOE_DebugLogging>
     <VOE_DebugLoggingDesc>Enable verbose debug logging for EmpireVOE integration.</VOE_DebugLoggingDesc>
+
+    <!-- Town Settlement Feature -->
+    <VOE_RequireTown>Require Town for settlement</VOE_RequireTown>
+    <VOE_RequireTownDesc>Empire settlements can only be founded on Town outposts.</VOE_RequireTownDesc>
+    <VOE_ConvertTownPawns>Convert Town pawns</VOE_ConvertTownPawns>
+    <VOE_ConvertTownPawnsDesc>Town pawns are transferred to the new settlement on creation.</VOE_ConvertTownPawnsDesc>
+    <VOE_PawnSkillBonuses>Apply skill bonuses</VOE_PawnSkillBonuses>
+    <VOE_PawnSkillBonusesDesc>When specialists are not available, apply production bonuses based on Town pawn skills.</VOE_PawnSkillBonusesDesc>
+    <VOE_AdditiveBonus>Bonus per threshold</VOE_AdditiveBonus>
+    <VOE_SkillThreshold>Skill threshold</VOE_SkillThreshold>
+    <VOE_ScalingBonus>Scaling bonus</VOE_ScalingBonus>
+    <VOE_ScalingBonusDesc>Multiply bonus by number of thresholds met (otherwise flat).</VOE_ScalingBonusDesc>
+    <VOE_NotATown>Empire settlements must be founded on Town outposts.</VOE_NotATown>
+    <VOE_TownIncorporated>{0} incorporated</VOE_TownIncorporated>
+    <VOE_TownIncorporatedDesc>The town {0} has been incorporated into your new settlement {1}. {2} residents have been transferred.</VOE_TownIncorporatedDesc>
+    <VOE_TownBonusDesc>Town workforce bonus</VOE_TownBonusDesc>
 </LanguageData>
