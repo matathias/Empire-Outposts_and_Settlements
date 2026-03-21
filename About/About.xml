@@ -7,7 +7,7 @@
     <description>Integrates Vanilla Outposts Expanded with Empire's military and tax systems. Outposts become raid targets with 24-hour warnings, defensive outposts can auto-defend nearby Empire settlements, and you can redirect tax deliveries and silver payments to VOE outposts.</description>
     <modDependencies>
         <li>
-            <packageId>Saakra.Empire</packageId>
+            <packageId>Matathias.Empire</packageId>
             <displayName>Empire</displayName>
         </li>
         <li>
@@ -16,7 +16,7 @@
         </li>
     </modDependencies>
     <loadAfter>
-        <li>Saakra.Empire</li>
+        <li>Matathias.Empire</li>
         <li>OskarPotocki.VanillaFactionsExpanded.Core</li>
         <li>vanillaexpanded.outposts</li>
     </loadAfter>
