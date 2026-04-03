@@ -52,12 +52,17 @@ namespace EmpireVOE
             return 1.0;
         }
 
-        public string GetResourceModifierDesc(ResourceFC resource)
+        public string GetResourceAdditiveDesc(ResourceFC resource)
         {
             if (resource == null || resource.def == null) return null;
             double bonus;
             if (resourceBonuses.TryGetValue(resource.def.defName, out bonus) && bonus > 0)
                 return "VOE_TownBonusDesc".Translate() + ": +" + bonus.ToString("F2");
+            return null;
+        }
+
+        public string GetResourceMultiplierDesc(ResourceFC resource)
+        {
             return null;
         }
 

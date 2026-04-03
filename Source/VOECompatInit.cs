@@ -12,11 +12,19 @@ namespace EmpireVOE
     [StaticConstructorOnStartup]
     public static class VOECompatInit
     {
+        private static readonly TownConversionHandler _townConversionHandler = new TownConversionHandler();
+
         static VOECompatInit()
         {
             new Harmony("com.Matathias.EmpireVOE").PatchAll(Assembly.GetExecutingAssembly());
             SilverPaymentRegistry.Register(OutpostFinancer.Instance);
-            LifecycleRegistry.Register(new TownConversionHandler());
+            LifecycleRegistry.Register(_townConversionHandler);
+            EmpireCacheUtil.RegisterCacheInvalidator("EmpireVOE", () =>
+            {
+                // Re-register after InvalidateAll clears all registries
+                SilverPaymentRegistry.Register(OutpostFinancer.Instance);
+                LifecycleRegistry.Register(_townConversionHandler);
+            });
             VOELog.MessageForce("Empire - Vanilla Outposts Expanded integration loaded.");
         }
     }
