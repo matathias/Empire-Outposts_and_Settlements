@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using FactionColonies;
 using HarmonyLib;
@@ -39,17 +38,17 @@ namespace EmpireVOE
         private static void Postfix(Outpost __instance)
         {
             if (EmpireVOESettings.disableIntegration) return;
-            if (VOETracker.GetRaidTarget(__instance) != null) return;
+            if (WorldComponent_VOETracker.GetRaidTarget(__instance) != null) return;
 
             OutpostRaidTarget target = new OutpostRaidTarget(__instance);
-            VOETracker.RegisterOutpost(__instance, target);
+            WorldComponent_VOETracker.RegisterOutpost(__instance, target);
 
             Outpost_Defensive defensive = __instance as Outpost_Defensive;
             if (defensive != null)
             {
                 DefensiveAutoDefender defender = new DefensiveAutoDefender(defensive);
                 DefensiveTabEntry tab = new DefensiveTabEntry(defensive, defender);
-                VOETracker.RegisterDefensive(defensive, defender, tab);
+                WorldComponent_VOETracker.RegisterDefensive(defensive, defender, tab);
             }
         }
     }
@@ -63,7 +62,7 @@ namespace EmpireVOE
     {
         private static void Postfix(Outpost __instance)
         {
-            VOETracker.UnregisterOutpost(__instance);
+            WorldComponent_VOETracker.UnregisterOutpost(__instance);
         }
     }
 
@@ -79,13 +78,13 @@ namespace EmpireVOE
             if (EmpireVOESettings.disableIntegration) return;
 
             FactionFC faction = FactionCache.FactionComp;
-            if (faction == null) return;
+            if (faction is null) return;
 
             FCEvent evt = faction.events.FirstOrDefault(e =>
                 e.def == FCEventDefOf.settlementBeingAttacked
                 && e.settlementFCDefending == __instance);
 
-            if (evt == null) return;
+            if (evt is null) return;
 
             __result = AddGizmo(__result, __instance);
         }
@@ -109,8 +108,8 @@ namespace EmpireVOE
         {
             if (EmpireVOESettings.disableIntegration) return;
 
-            OutpostRaidTarget target = VOETracker.GetRaidTarget(__instance);
-            if (target == null) return;
+            OutpostRaidTarget target = WorldComponent_VOETracker.GetRaidTarget(__instance);
+            if (target is null) return;
 
             if (!__result.NullOrEmpty())
                 __result += "\n";

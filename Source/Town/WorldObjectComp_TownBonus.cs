@@ -33,16 +33,12 @@ namespace EmpireVOE
             }
         }
 
-        public bool HasAnyBonus
-        {
-            get { return resourceBonuses.Count > 0; }
-        }
+        public bool HasAnyBonus => resourceBonuses.Count > 0;
 
         public double GetResourceAdditiveModifier(ResourceFC resource)
         {
-            if (resource == null || resource.def == null) return 0;
-            double bonus;
-            if (resourceBonuses.TryGetValue(resource.def.defName, out bonus))
+            if (resource?.def is null) return 0;
+            if (resourceBonuses.TryGetValue(resource.def.defName, out double bonus))
                 return bonus;
             return 0;
         }
@@ -54,9 +50,8 @@ namespace EmpireVOE
 
         public string GetResourceAdditiveDesc(ResourceFC resource)
         {
-            if (resource == null || resource.def == null) return null;
-            double bonus;
-            if (resourceBonuses.TryGetValue(resource.def.defName, out bonus) && bonus > 0)
+            double bonus = GetResourceAdditiveModifier(resource);
+            if (bonus > 0)
                 return "VOE_TownBonusDesc".Translate() + ": +" + bonus.ToString("F2");
             return null;
         }

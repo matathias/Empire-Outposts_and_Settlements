@@ -28,32 +28,17 @@ namespace EmpireVOE
             this.outpost = outpost;
         }
 
-        public WorldObject WorldObject
-        {
-            get { return outpost; }
-        }
+        public WorldObject WorldObject => outpost;
 
-        public int MilitaryLevel
-        {
-            get { return CalculateMilitaryLevel(); }
-        }
+        public int MilitaryLevel => CalculateMilitaryLevel();
 
-        public int Range
-        {
-            get { return outpost.Range; }
-        }
+        public int Range => outpost.Range;
 
-        public bool CanAutoDefend
-        {
-            get
-            {
-                return VOETracker.GetAutoDefend(outpost)
-                    && outpost.PawnCount > 1
-                    && !outpost.Packing
-                    && !_busy
-                    && !VOETracker.IsOnCooldown(outpost);
-            }
-        }
+        public bool CanAutoDefend => WorldComponent_VOETracker.GetAutoDefend(outpost)
+                                     && outpost.PawnCount > 1
+                                     && !outpost.Packing
+                                     && !_busy
+                                     && !WorldComponent_VOETracker.IsOnCooldown(outpost);
 
         public militaryForce CreateDefendingForce()
         {
@@ -96,7 +81,7 @@ namespace EmpireVOE
                 // Extra day cooldown on loss
                 cooldown += GenDate.TicksPerDay;
             }
-            VOETracker.SetCooldown(outpost, cooldown);
+            WorldComponent_VOETracker.SetCooldown(outpost, cooldown);
         }
 
         /// <summary>
@@ -154,7 +139,7 @@ namespace EmpireVOE
 
         public void ReturnDefendingPawns(List<Pawn> pawns)
         {
-            if (pawns == null) return;
+            if (pawns is null) return;
             foreach (Pawn pawn in pawns)
             {
                 if (pawn != null && !pawn.Dead && !pawn.Destroyed)

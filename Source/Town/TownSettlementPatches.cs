@@ -5,7 +5,6 @@ using System.Text;
 using FactionColonies;
 using FactionColonies.util;
 using HarmonyLib;
-using Outposts;
 using RimWorld;
 using RimWorld.Planet;
 using Verse;
@@ -28,7 +27,7 @@ namespace EmpireVOE
 
             if (tile == -1)
             {
-                if (reason != null) reason.Append("selectedInvalidTile".Translate());
+                reason?.Append("selectedInvalidTile".Translate());
                 __result = false;
                 return false;
             }
@@ -38,7 +37,7 @@ namespace EmpireVOE
             {
                 if (tile.Layer != Find.WorldGrid.Surface)
                 {
-                    if (reason != null) reason.Append("InvalidPlanetLayer".Translate());
+                    reason?.Append("InvalidPlanetLayer".Translate());
                     __result = false;
                     return false;
                 }
@@ -47,7 +46,7 @@ namespace EmpireVOE
             {
                 if (!settlementdef.planetLayers.Contains(tile.Layer.Def))
                 {
-                    if (reason != null) reason.Append("InvalidPlanetLayer".Translate());
+                    reason?.Append("InvalidPlanetLayer".Translate());
                     __result = false;
                     return false;
                 }
@@ -55,9 +54,9 @@ namespace EmpireVOE
 
             // Require Outpost_Town on tile
             Outpost_Town town = TownSettlementUtil.FindTownOnTile(tile);
-            if (town == null)
+            if (town is null)
             {
-                if (reason != null) reason.Append("VOE_NotATown".Translate());
+                reason?.Append("VOE_NotATown".Translate());
                 __result = false;
                 return false;
             }
@@ -76,7 +75,7 @@ namespace EmpireVOE
                 }
                 if (!foundAllowed)
                 {
-                    if (reason != null) reason.Append("NotAllowedBiome".Translate(settlementdef.LabelCap));
+                    reason?.Append("NotAllowedBiome".Translate(settlementdef.LabelCap));
                     __result = false;
                     return false;
                 }
@@ -87,7 +86,7 @@ namespace EmpireVOE
                 {
                     if (settlementdef.blockedBiomes.Contains(biome))
                     {
-                        if (reason != null) reason.Append("NotAllowedBiome".Translate(settlementdef.LabelCap));
+                        reason?.Append("NotAllowedBiome".Translate(settlementdef.LabelCap));
                         __result = false;
                         return false;
                     }
@@ -108,8 +107,7 @@ namespace EmpireVOE
         {
             foreach (WorldObject obj in Find.WorldObjects.AllWorldObjects)
             {
-                Outpost_Town town = obj as Outpost_Town;
-                if (town != null && town.Tile == tile)
+                if (obj is Outpost_Town town && town.Tile == tile)
                 {
                     return town;
                 }
@@ -137,7 +135,7 @@ namespace EmpireVOE
             if (!EmpireVOESettings.requireTownForSettlement) return;
 
             Outpost_Town town = TownSettlementUtil.FindTownOnTile(settlement.Tile);
-            if (town == null) return;
+            if (town is null) return;
 
             string townName = town.Name;
             int pawnCount = 0;
@@ -225,7 +223,7 @@ namespace EmpireVOE
 
             foreach (ResourceTypeDef rtd in DefDatabase<ResourceTypeDef>.AllDefsListForReading)
             {
-                if (rtd.associatedSkills == null || rtd.associatedSkills.Count == 0) continue;
+                if (rtd.associatedSkills is null || rtd.associatedSkills.Count == 0) continue;
 
                 // Sum total skill levels across all pawns for each associated skill, then average
                 double totalSkill = 0;

@@ -1,11 +1,7 @@
-using System.Collections.Generic;
-using System.Linq;
 using FactionColonies;
-using FactionColonies.util;
 using HarmonyLib;
 using Outposts;
 using RimWorld;
-using RimWorld.Planet;
 using Verse;
 
 namespace EmpireVOE
@@ -21,44 +17,38 @@ namespace EmpireVOE
         public static void Prefix(ref FCEvent fcevent)
         {
             if (EmpireVOESettings.disableIntegration) return;
-            if (fcevent == null || fcevent.def != FCEventDefOf.taxColony) return;
+            if (fcevent is null || fcevent.def != FCEventDefOf.taxColony) return;
             if (fcevent.source == -1) return;
 
-            WorldSettlementFC settlement =
-                FactionCache.FactionComp.ReturnSettlementByLocation(fcevent.source);
-            if (settlement == null) return;
+            WorldSettlementFC settlement = FactionCache.FactionComp.ReturnSettlementByLocation(fcevent.source);
+            if (settlement is null) return;
 
             // Check if this event was already redirected (prevents re-redirect loop)
-            if (VOETracker.IsRedirected((int)fcevent.source))
+            if (WorldComponent_VOETracker.IsRedirected(fcevent.source))
             {
-                VOETracker.ClearRedirected((int)fcevent.source);
-                DeliveryUtil.DebugLog("Skipping redirect for already-redirected event from "
-                    + settlement.Name);
+                WorldComponent_VOETracker.ClearRedirected(fcevent.source);
+                DeliveryUtil.DebugLog($"Skipping redirect for already-redirected event from {settlement.Name}");
                 return;
             }
 
-            Outpost outpost = VOETracker.GetDeliveryDestination(settlement);
-            if (outpost == null) return;
+            Outpost outpost = WorldComponent_VOETracker.GetDeliveryDestination(settlement);
+            if (outpost is null) return;
 
             // Validate outpost still exists
-            if (Find.WorldObjects.WorldObjectAt<Outpost>(outpost.Tile) == null)
+            if (Find.WorldObjects.WorldObjectAt<Outpost>(outpost.Tile) is null)
             {
-                Messages.Message("VOE_InvalidDeliveryOutpost".Translate(settlement.Name),
-                    MessageTypeDefOf.NeutralEvent);
-                VOETracker.SetDeliveryDestination(settlement, null);
+                Messages.Message("VOE_InvalidDeliveryOutpost".Translate(settlement.Name), MessageTypeDefOf.NeutralEvent);
+                WorldComponent_VOETracker.SetDeliveryDestination(settlement, null);
                 return;
             }
 
             // Redirect the event to the outpost tile
             fcevent.location = outpost.Tile;
-            fcevent.timeTillTrigger = Find.TickManager.TicksGame
-                + TravelUtil.ReturnTicksToArrive(fcevent.source, fcevent.location);
-            fcevent.customDescription = "VOE_DeliveryEventDesc".Translate(
-                settlement.Name, outpost.LabelCap, DeliveryUtil.GoodsToString(fcevent.goods));
+            fcevent.timeTillTrigger = Find.TickManager.TicksGame + TravelUtil.ReturnTicksToArrive(fcevent.source, fcevent.location);
+            fcevent.customDescription = "VOE_DeliveryEventDesc".Translate(settlement.Name, outpost.LabelCap, DeliveryUtil.GoodsToString(fcevent.goods));
             fcevent.hasCustomDescription = true;
 
-            DeliveryUtil.DebugLog("Redirected tax event from " + settlement.Name
-                + " to outpost " + outpost.LabelCap);
+            DeliveryUtil.DebugLog($"Redirected tax event from {settlement.Name} to outpost {outpost.LabelCap}");
         }
     }
 
@@ -74,7 +64,7 @@ namespace EmpireVOE
         public static bool Prefix(ref FCEvent evt)
         {
             if (EmpireVOESettings.disableIntegration) return true;
-            if (evt == null || evt.def != FCEventDefOf.taxColony) return true;
+            if (evt is null || evt.def != FCEventDefOf.taxColony) return true;
             if (evt.source == -1) return true;
 
             Map taxMap = FactionCache.FactionComp.TaxMap;
@@ -103,14 +93,12 @@ namespace EmpireVOE
                         DeliveryUtil.GoodsToString(evt.goods)),
                     LetterDefOf.PositiveEvent);
 
-                DeliveryUtil.DebugLog("Delivered taxes from " + sourceName
-                    + " to outpost " + destination.LabelCap);
+                DeliveryUtil.DebugLog("Delivered taxes from " + sourceName + " to outpost " + destination.LabelCap);
                 return false;
             }
 
             // Outpost no longer exists — redirect to tax map
-            DeliveryUtil.DebugLog("Delivery outpost at tile " + evt.location
-                + " no longer exists. Redirecting to tax map.");
+            DeliveryUtil.DebugLog("Delivery outpost at tile " + evt.location + " no longer exists. Redirecting to tax map.");
             Messages.Message("VOE_TaxRedirectedDesc".Translate(
                 source != null ? source.Name : "Unknown",
                 "VOE_PlayerTaxMap".Translate()),
@@ -118,21 +106,18 @@ namespace EmpireVOE
 
             // Clear the stale delivery destination
             if (source != null)
-                VOETracker.SetDeliveryDestination(source, null);
+                WorldComponent_VOETracker.SetDeliveryDestination(source, null);
 
             // Create redirect event to tax map
             FCEvent redirect = FCEventMaker.MakeEvent(FCEventDefOf.taxColony);
             redirect.source = evt.source;
             redirect.goods = evt.goods;
-            redirect.location = taxMap != null ? taxMap.Tile : evt.source;
-            redirect.timeTillTrigger = Find.TickManager.TicksGame
-                + TravelUtil.ReturnTicksToArrive(evt.source, redirect.location);
-            redirect.customDescription = "VOE_TaxRedirectedDesc".Translate(
-                source != null ? source.Name : "Unknown",
-                "VOE_PlayerTaxMap".Translate());
+            redirect.location = taxMap?.Tile ?? evt.source;
+            redirect.timeTillTrigger = Find.TickManager.TicksGame + TravelUtil.ReturnTicksToArrive(evt.source, redirect.location);
+            redirect.customDescription = "VOE_TaxRedirectedDesc".Translate(source != null ? source.Name : "Unknown", "VOE_PlayerTaxMap".Translate());
             redirect.hasCustomDescription = true;
 
-            VOETracker.SetRedirected((int)evt.source);
+            WorldComponent_VOETracker.SetRedirected(evt.source);
             FactionCache.FactionComp.AddEvent(redirect);
             return false;
         }
@@ -150,9 +135,9 @@ namespace EmpireVOE
         {
             if (EmpireVOESettings.disableIntegration) return;
 
-            foreach (Outpost outpost in VOETracker.GetAllDistinctFinancingOutposts())
+            foreach (Outpost outpost in WorldComponent_VOETracker.GetAllDistinctFinancingOutposts())
             {
-                if (Find.WorldObjects.WorldObjectAt<Outpost>(outpost.Tile) == null)
+                if (Find.WorldObjects.WorldObjectAt<Outpost>(outpost.Tile) is null)
                     continue;
 
                 foreach (Thing t in outpost.Things)

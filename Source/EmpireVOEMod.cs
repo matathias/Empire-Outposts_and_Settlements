@@ -59,9 +59,9 @@ namespace EmpireVOE
             if (prev != EmpireVOESettings.disableIntegration)
             {
                 if (EmpireVOESettings.disableIntegration)
-                    VOETracker.UnregisterAll();
+                    WorldComponent_VOETracker.UnregisterAll();
                 else
-                    VOETracker.ReregisterAll();
+                    WorldComponent_VOETracker.ReregisterAll();
             }
 
             ls.CheckboxLabeled(

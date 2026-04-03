@@ -6,7 +6,6 @@ using HarmonyLib;
 using Outposts;
 using RimWorld;
 using RimWorld.Planet;
-using UnityEngine;
 using Verse;
 using VOE;
 
@@ -40,7 +39,7 @@ namespace EmpireVOE
 
         private static Command_Action CreateDeliveryGizmo(WorldSettlementFC settlement)
         {
-            Outpost current = VOETracker.GetDeliveryDestination(settlement);
+            Outpost current = WorldComponent_VOETracker.GetDeliveryDestination(settlement);
             string currentLabel = current != null
                 ? current.LabelCap
                 : "VOE_PlayerTaxMap".Translate().ToString();
@@ -59,7 +58,7 @@ namespace EmpireVOE
                     // Option: deliver to player tax map (default)
                     options.Add(new FloatMenuOption(
                         "VOE_PlayerTaxMap".Translate(),
-                        delegate { VOETracker.SetDeliveryDestination(settlement, null); }));
+                        delegate { WorldComponent_VOETracker.SetDeliveryDestination(settlement, null); }));
 
                     // List all outposts ordered by distance
                     IEnumerable<Outpost> outposts = Find.WorldObjects.AllWorldObjects
@@ -71,7 +70,7 @@ namespace EmpireVOE
                         Outpost op = outpost; // closure capture
                         options.Add(new FloatMenuOption(
                             op.LabelCap,
-                            delegate { VOETracker.SetDeliveryDestination(settlement, op); },
+                            delegate { WorldComponent_VOETracker.SetDeliveryDestination(settlement, op); },
                             op.ExpandingIcon,
                             op.ExpandingIconColor));
                     }
@@ -83,7 +82,7 @@ namespace EmpireVOE
 
         private static Command_Action CreateFinancingGizmo(WorldSettlementFC settlement)
         {
-            Outpost current = VOETracker.GetFinancingOutpost(settlement);
+            Outpost current = WorldComponent_VOETracker.GetFinancingOutpost(settlement);
             string currentLabel = current != null
                 ? current.LabelCap
                 : "None".Translate().ToString();
@@ -102,7 +101,7 @@ namespace EmpireVOE
                     // Option: no financing outpost (use player coffers)
                     options.Add(new FloatMenuOption(
                         "None".Translate(),
-                        delegate { VOETracker.SetFinancingOutpost(settlement, null); }));
+                        delegate { WorldComponent_VOETracker.SetFinancingOutpost(settlement, null); }));
 
                     // List all outposts ordered by distance
                     IEnumerable<Outpost> outposts = Find.WorldObjects.AllWorldObjects
@@ -114,7 +113,7 @@ namespace EmpireVOE
                         Outpost op = outpost;
                         options.Add(new FloatMenuOption(
                             op.LabelCap,
-                            delegate { VOETracker.SetFinancingOutpost(settlement, op); },
+                            delegate { WorldComponent_VOETracker.SetFinancingOutpost(settlement, op); },
                             op.ExpandingIcon,
                             op.ExpandingIconColor));
                     }
@@ -137,10 +136,10 @@ namespace EmpireVOE
         {
             if (__result) return;
             if (EmpireVOESettings.disableIntegration) return;
-            if (!VOETracker.IsOnCooldown(__instance)) return;
+            if (!WorldComponent_VOETracker.IsOnCooldown(__instance)) return;
 
             __result = true;
-            int ticksLeft = VOETracker.GetCooldownTicksLeft(__instance);
+            int ticksLeft = WorldComponent_VOETracker.GetCooldownTicksLeft(__instance);
             reason = "VOE_ReinforcementsCooldown".Translate(ticksLeft.ToTimeString());
         }
     }

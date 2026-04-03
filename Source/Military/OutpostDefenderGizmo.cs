@@ -28,17 +28,17 @@ namespace EmpireVOE
         private static void ShowDefenderMenu(Outpost outpost)
         {
             FactionFC faction = FactionCache.FactionComp;
-            if (faction == null) return;
+            if (faction is null) return;
 
             FCEvent evt = faction.events.FirstOrDefault(e =>
                 e.def == FCEventDefOf.settlementBeingAttacked
                 && e.settlementFCDefending == outpost);
-            if (evt == null) return;
+            if (evt is null) return;
 
             List<FloatMenuOption> options = new List<FloatMenuOption>();
             foreach (WorldSettlementFC settlement in faction.settlements)
             {
-                if (settlement.MilitaryComp == null) continue;
+                if (settlement.MilitaryComp is null) continue;
                 if (!settlement.MilitaryComp.IsMilitaryValid()) continue;
                 if (settlement.MilitaryComp.IsMilitaryBusy()) continue;
 

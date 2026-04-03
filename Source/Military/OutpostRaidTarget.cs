@@ -22,25 +22,13 @@ namespace EmpireVOE
             this.outpost = outpost;
         }
 
-        public WorldObject WorldObject
-        {
-            get { return outpost; }
-        }
+        public WorldObject WorldObject => outpost;
 
-        public string Name
-        {
-            get { return outpost.Name ?? outpost.def.label; }
-        }
+        public string Name => outpost.Name ?? outpost.def.label;
 
-        public int Tile
-        {
-            get { return outpost.Tile; }
-        }
+        public int Tile =>outpost.Tile;
 
-        public int MilitaryLevel
-        {
-            get { return Math.Max(0, outpost.PawnCount / 3); }
-        }
+        public int MilitaryLevel => Math.Max(0, outpost.PawnCount / 3);
 
         public bool IsUnderAttack { get; set; }
 

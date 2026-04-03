@@ -22,50 +22,31 @@ namespace EmpireVOE
             this.defender = defender;
         }
 
-        public WorldObject WorldObject
-        {
-            get { return outpost; }
-        }
+        public WorldObject WorldObject => outpost;
 
-        public string Name
-        {
-            get { return outpost.Name ?? outpost.def.label; }
-        }
+        public string Name => outpost.Name ?? outpost.def.label;
 
-        public int MilitaryLevel
-        {
-            get { return defender.MilitaryLevel; }
-        }
+        public int MilitaryLevel => defender.MilitaryLevel;
 
         public bool AutoDefend
         {
-            get { return VOETracker.GetAutoDefend(outpost); }
-            set { VOETracker.SetAutoDefend(outpost, value); }
+            get => WorldComponent_VOETracker.GetAutoDefend(outpost);
+            set => WorldComponent_VOETracker.SetAutoDefend(outpost, value);
         }
 
-        public bool IsUnderAttack
-        {
-            get
-            {
-                OutpostRaidTarget target = VOETracker.GetRaidTarget(outpost);
-                return target != null && target.IsUnderAttack;
-            }
-        }
+        public bool IsUnderAttack => WorldComponent_VOETracker.GetRaidTarget(outpost)?.IsUnderAttack ?? false;
 
-        public bool IsBusy
-        {
-            get { return defender.Busy || IsUnderAttack || VOETracker.IsOnCooldown(outpost); }
-        }
+        public bool IsBusy => defender.Busy || IsUnderAttack || WorldComponent_VOETracker.IsOnCooldown(outpost);
 
         public string StatusLabel
         {
             get
             {
                 if (IsUnderAttack) return "FCMilStatusUnderAttack".Translate();
-                if (VOETracker.IsOnCooldown(outpost))
+                if (WorldComponent_VOETracker.IsOnCooldown(outpost))
                 {
                     string label = "FCMilStatusCooldown".Translate();
-                    int ticksLeft = VOETracker.GetCooldownTicksLeft(outpost);
+                    int ticksLeft = WorldComponent_VOETracker.GetCooldownTicksLeft(outpost);
                     if (ticksLeft > 0) label += " " + ticksLeft.ToTimeString();
                     return label;
                 }

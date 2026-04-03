@@ -3,7 +3,6 @@ using System.Linq;
 using FactionColonies;
 using Outposts;
 using RimWorld;
-using RimWorld.Planet;
 using Verse;
 
 namespace EmpireVOE
@@ -20,17 +19,16 @@ namespace EmpireVOE
         public void ModifyPayment(SilverPaymentContext context)
         {
             if (EmpireVOESettings.disableIntegration) return;
-            if (context.Settlement == null) return;
+            if (context.Settlement is null) return;
 
-            Outpost outpost = VOETracker.GetFinancingOutpost(context.Settlement);
-            if (outpost == null) return;
+            Outpost outpost = WorldComponent_VOETracker.GetFinancingOutpost(context.Settlement);
+            if (outpost is null) return;
 
             // Validate outpost still exists on the world map
             if (Find.WorldObjects.WorldObjectAt<Outpost>(outpost.Tile) == null)
             {
-                DeliveryUtil.DebugLog("Financing outpost no longer exists, clearing for "
-                    + context.Settlement.Name);
-                VOETracker.SetFinancingOutpost(context.Settlement, null);
+                DeliveryUtil.DebugLog("Financing outpost no longer exists, clearing for " + context.Settlement.Name);
+                WorldComponent_VOETracker.SetFinancingOutpost(context.Settlement, null);
                 return;
             }
 
@@ -60,10 +58,8 @@ namespace EmpireVOE
 
             if (deducted && remaining > 0)
             {
-                DeliveryUtil.DebugLog("Financing outpost " + outpost.LabelCap
-                    + " partially depleted. Remaining: " + remaining);
-                Messages.Message("VOE_FinancingPartiallyDepleted".Translate(
-                    outpost.LabelCap, remaining), MessageTypeDefOf.NeutralEvent);
+                DeliveryUtil.DebugLog("Financing outpost " + outpost.LabelCap + " partially depleted. Remaining: " + remaining);
+                Messages.Message("VOE_FinancingPartiallyDepleted".Translate(outpost.LabelCap, remaining), MessageTypeDefOf.NeutralEvent);
             }
 
             context.Amount = remaining;

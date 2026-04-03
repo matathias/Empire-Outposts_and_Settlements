@@ -25,12 +25,10 @@ namespace EmpireVOE.Specialists
 
         private static void AssignTownPawns(WorldSettlementFC settlement, List<Pawn> pawns)
         {
-            WorldObjectComp_SettlementSpecialists comp =
-                settlement.GetComponent<WorldObjectComp_SettlementSpecialists>();
-            if (comp == null)
+            WorldObjectComp_SettlementSpecialists comp = settlement.GetComponent<WorldObjectComp_SettlementSpecialists>();
+            if (comp is null)
             {
-                VOELog.Warning("VOESpecialistsCompat: Settlement " + settlement.Name +
-                    " has no SettlementSpecialists comp. Pawns will not be assigned.");
+                VOELog.Warning($"VOESpecialistsCompat: Settlement {settlement.Name} has no SettlementSpecialists comp. Pawns will not be assigned.");
                 return;
             }
 
@@ -51,13 +49,13 @@ namespace EmpireVOE.Specialists
 
         private static SkillRecord BestNonDisabledSkill(Pawn pawn)
         {
-            if (pawn.skills == null || pawn.skills.skills == null) return null;
+            if (pawn.skills?.skills is null) return null;
 
             SkillRecord best = null;
             foreach (SkillRecord record in pawn.skills.skills)
             {
                 if (record.TotallyDisabled) continue;
-                if (best == null || record.Level > best.Level)
+                if (best is null || record.Level > best.Level)
                 {
                     best = record;
                 }

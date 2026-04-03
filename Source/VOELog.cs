@@ -10,23 +10,23 @@ namespace EmpireVOE
         {
             if (EmpireVOESettings.debugLogging)
             {
-                Log.Message(Prefix + " " + message);
+                Log.Message($"{Prefix} {message}");
             }
         }
 
         public static void MessageForce(string message)
         {
-            Log.Message(Prefix + " " + message);
+            Log.Message($"{Prefix} {message}");
         }
 
         public static void Warning(string message)
         {
-            Log.Warning(Prefix + " " + message);
+            Log.Warning($"{Prefix} {message}");
         }
 
         public static void Error(string message)
         {
-            Log.Error(Prefix + " " + message);
+            Log.Error($"{Prefix} {message}");
         }
     }
 }
