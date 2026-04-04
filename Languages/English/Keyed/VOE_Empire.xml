@@ -29,6 +29,7 @@
     <VOE_PlayerTaxMap>Player Tax Map</VOE_PlayerTaxMap>
 
     <!-- Settings -->
+    <VOE_Title>Empire: Vanilla Outposts Expanded Integration</VOE_Title>
     <VOE_DebugLogging>Debug logging</VOE_DebugLogging>
     <VOE_DebugLoggingDesc>Enable verbose debug logging for EmpireVOE integration.</VOE_DebugLoggingDesc>
 
@@ -81,4 +82,8 @@
     <VOE_EncampmentRange>Encampment range (tiles)</VOE_EncampmentRange>
     <VOE_ThreatScalingHeader>Threat Scaling</VOE_ThreatScalingHeader>
     <VOE_OutpostThreatPerPawn>Threat per outpost pawn</VOE_OutpostThreatPerPawn>
+
+    <!-- Patch Notes -->
+    <VOE_PatchTitle>Patch Notes: VOE Integration</VOE_PatchTitle>
+    <VOE_OpenPatchNotes>Open Patch Notes</VOE_OpenPatchNotes>
 </LanguageData>

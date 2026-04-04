@@ -66,11 +66,21 @@ namespace EmpireVOE
         public EmpireVOEMod(ModContentPack content) : base(content)
         {
             settings = GetSettings<EmpireVOESettings>();
+            
+            string modVersion = content?.ModMetaData?.ModVersion;
+            if (modVersion.NullOrEmpty())
+            {
+                VOELog.MessageForce("Did not load a mod version");
+            }
+            else
+            {
+                VOELog.MessageForce($"v{modVersion}");
+            }
         }
 
         public override string SettingsCategory()
         {
-            return "Empire - VOE Integration";
+            return "VOE_Title".Translate();
         }
 
         public override void DoSettingsWindowContents(Rect inRect)
@@ -172,6 +182,10 @@ namespace EmpireVOE
             ls.Label("VOE_ThreatScalingHeader".Translate());
             ls.Label("  " + "VOE_OutpostThreatPerPawn".Translate() + ": " + EmpireVOESettings.outpostThreatPerPawn.ToString("F2"));
             EmpireVOESettings.outpostThreatPerPawn = ls.Slider(EmpireVOESettings.outpostThreatPerPawn, 0f, 2f);
+
+            ls.Gap(12f);
+            if (ls.ButtonText("VOE_OpenPatchNotes".Translate()))
+                Find.WindowStack.Add(new PatchNotesDisplayWindow("matathias.empirevoe", "VOE_PatchTitle".Translate()));
 
             ls.End();
         }
