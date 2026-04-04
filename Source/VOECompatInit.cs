@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using FactionColonies;
+using FactionColonies.util;
 using HarmonyLib;
 using Outposts;
 using Verse;
@@ -12,17 +13,20 @@ namespace EmpireVOE
     public static class VOECompatInit
     {
         private static readonly TownConversionHandler _townConversionHandler = new TownConversionHandler();
+        internal static readonly OutpostThreatContributor ThreatContributor = new OutpostThreatContributor();
 
         static VOECompatInit()
         {
             new Harmony("com.Matathias.EmpireVOE").PatchAll(Assembly.GetExecutingAssembly());
             SilverPaymentRegistry.Register(OutpostFinancer.Instance);
             LifecycleRegistry.Register(_townConversionHandler);
+            ThreatScalingRegistry.Register(ThreatContributor);
             EmpireCacheUtil.RegisterCacheInvalidator("EmpireVOE", () =>
             {
                 // Re-register after InvalidateAll clears all registries
                 SilverPaymentRegistry.Register(OutpostFinancer.Instance);
                 LifecycleRegistry.Register(_townConversionHandler);
+                ThreatScalingRegistry.Register(ThreatContributor);
             });
             VOELog.MessageForce("Empire - Vanilla Outposts Expanded integration loaded.");
         }
@@ -43,8 +47,7 @@ namespace EmpireVOE
             OutpostRaidTarget target = new OutpostRaidTarget(__instance);
             WorldComponent_VOETracker.RegisterOutpost(__instance, target);
 
-            Outpost_Defensive defensive = __instance as Outpost_Defensive;
-            if (defensive != null)
+            if (__instance is Outpost_Defensive defensive)
             {
                 DefensiveAutoDefender defender = new DefensiveAutoDefender(defensive);
                 DefensiveTabEntry tab = new DefensiveTabEntry(defensive, defender);
@@ -77,10 +80,7 @@ namespace EmpireVOE
         {
             if (EmpireVOESettings.disableIntegration) return;
 
-            FactionFC faction = FactionCache.FactionComp;
-            if (faction is null) return;
-
-            FCEvent evt = faction.events.FirstOrDefault(e =>
+            FCEvent evt = FactionCache.FactionComp?.events.FirstOrDefault(e =>
                 e.def == FCEventDefOf.settlementBeingAttacked
                 && e.settlementFCDefending == __instance);
 
@@ -114,6 +114,47 @@ namespace EmpireVOE
             if (!__result.NullOrEmpty())
                 __result += "\n";
             __result += "VOE_MilitaryLevel".Translate(target.MilitaryLevel * FCSettings.defenderAdvantage);
+
+            // Science link status
+            if (__instance is Outpost_Science science)
+            {
+                WorldSettlementFC linked = WorldComponent_VOETracker.GetLinkedSettlement(science);
+                __result += "\n" + (linked != null
+                    ? "VOE_LinkedTo".Translate(linked.Name)
+                    : "VOE_NotLinked".Translate());
+            }
+
+            // Defensive outpost status
+            if (__instance is Outpost_Defensive defensive)
+            {
+                if (target.IsUnderAttack)
+                {
+                    __result += "\n" + "VOE_DefenseStatusAttacked".Translate();
+                }
+                else if (WorldComponent_VOETracker.IsOnCooldown(defensive))
+                {
+                    int ticksLeft = WorldComponent_VOETracker.GetCooldownTicksLeft(defensive);
+                    __result += "\n" + "VOE_DefenseStatusCooldown".Translate(ticksLeft.ToTimeString());
+                }
+                else
+                {
+                    __result += "\n" + "VOE_DefenseStatusReady".Translate();
+                }
+            }
+
+            // Financing info (reverse lookup)
+            List<string> financedNames = WorldComponent_VOETracker.GetFinancedSettlementNames(__instance);
+            if (financedNames.Count > 0)
+            {
+                __result += "\n" + "VOE_FinancingFor".Translate(string.Join(", ", financedNames));
+            }
+
+            // Delivery source info (reverse lookup)
+            List<string> deliveryNames = WorldComponent_VOETracker.GetDeliverySourceNames(__instance);
+            if (deliveryNames.Count > 0)
+            {
+                __result += "\n" + "VOE_ReceivingTaxes".Translate(string.Join(", ", deliveryNames));
+            }
         }
     }
 }

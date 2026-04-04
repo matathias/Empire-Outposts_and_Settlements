@@ -4,7 +4,7 @@
     <author>Matathias</author>
     <packageId>Matathias.EmpireVOE</packageId>
     <supportedVersions><li>1.6</li></supportedVersions>
-    <description>Integrates Vanilla Outposts Expanded with Empire's military and tax systems. Outposts become raid targets with 24-hour warnings, defensive outposts can auto-defend nearby Empire settlements, and you can redirect tax deliveries and silver payments to VOE outposts.</description>
+    <description>Integrates Vanilla Outposts Expanded with several of Empire's systems.</description>
     <modDependencies>
         <li>
             <packageId>Matathias.Empire</packageId>
@@ -21,4 +21,5 @@
         <li>vanillaexpanded.outposts</li>
         <li>Matathias.Empire.Specialists</li>
     </loadAfter>
+    <modIconPath IgnoreIfNoMatchingField="True">UI/Icons/EmpireLogo</modIconPath>
 </ModMetaData>

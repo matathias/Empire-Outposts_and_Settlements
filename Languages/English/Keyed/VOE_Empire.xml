@@ -47,4 +47,38 @@
     <VOE_TownIncorporated>{0} incorporated</VOE_TownIncorporated>
     <VOE_TownIncorporatedDesc>The town {0} has been incorporated into your new settlement {1}. {2} residents have been transferred.</VOE_TownIncorporatedDesc>
     <VOE_TownBonusDesc>Town workforce bonus</VOE_TownBonusDesc>
+
+    <!-- Science Linking -->
+    <VOE_ScienceLinkLabel>Link to Settlement</VOE_ScienceLinkLabel>
+    <VOE_ScienceLinkDesc>Link this science outpost to an Empire settlement to provide a research production bonus. While linked, the outpost's own research contribution is redirected.\n\nCurrently linked to: {0}</VOE_ScienceLinkDesc>
+    <VOE_ScienceLinkBonusDesc>Science outpost link</VOE_ScienceLinkBonusDesc>
+    <VOE_AlreadyLinked>already linked</VOE_AlreadyLinked>
+    <VOE_Tiles>tiles</VOE_Tiles>
+
+    <!-- Encampment Recovery -->
+    <VOE_EncampmentRecovery>{0}: recovery accelerated</VOE_EncampmentRecovery>
+    <VOE_EncampmentRecoveryDesc>Nearby encampments have accelerated military recovery for {0}, reducing cooldown by {1} days. ({2} encampment(s) contributing)</VOE_EncampmentRecoveryDesc>
+
+    <!-- Inspect String -->
+    <VOE_LinkedTo>Linked to: {0}</VOE_LinkedTo>
+    <VOE_NotLinked>Not linked to settlement</VOE_NotLinked>
+    <VOE_DefenseStatusAttacked>Status: Under attack</VOE_DefenseStatusAttacked>
+    <VOE_DefenseStatusCooldown>Status: Cooldown ({0} remaining)</VOE_DefenseStatusCooldown>
+    <VOE_DefenseStatusReady>Status: Ready</VOE_DefenseStatusReady>
+    <VOE_FinancingFor>Financing: {0}</VOE_FinancingFor>
+    <VOE_ReceivingTaxes>Receiving taxes from: {0}</VOE_ReceivingTaxes>
+
+    <!-- Settings -->
+    <VOE_ScienceLinkHeader>Science Outpost Linking</VOE_ScienceLinkHeader>
+    <VOE_ScienceBonusPerPawn>Research bonus per pawn</VOE_ScienceBonusPerPawn>
+    <VOE_ScienceSkillScaling>Scale by Intellectual skill</VOE_ScienceSkillScaling>
+    <VOE_ScienceSkillScalingDesc>Research bonus is multiplied by average Intellectual skill / 10.</VOE_ScienceSkillScalingDesc>
+    <VOE_ScienceLinkRange>Science link max range (tiles)</VOE_ScienceLinkRange>
+    <VOE_EncampmentRecoveryHeader>Encampment Recovery</VOE_EncampmentRecoveryHeader>
+    <VOE_EncampmentBaseReduction>Base recovery reduction</VOE_EncampmentBaseReduction>
+    <VOE_EncampmentMedicineScaling>Medicine skill scaling</VOE_EncampmentMedicineScaling>
+    <VOE_EncampmentMaxReduction>Max recovery reduction</VOE_EncampmentMaxReduction>
+    <VOE_EncampmentRange>Encampment range (tiles)</VOE_EncampmentRange>
+    <VOE_ThreatScalingHeader>Threat Scaling</VOE_ThreatScalingHeader>
+    <VOE_OutpostThreatPerPawn>Threat per outpost pawn</VOE_OutpostThreatPerPawn>
 </LanguageData>

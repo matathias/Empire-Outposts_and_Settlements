@@ -26,6 +26,10 @@ namespace EmpireVOE
         // settlement loadID → outpost loadID hash. Absence = no financing outpost.
         private Dictionary<int, int> financingOutposts = new Dictionary<int, int>();
 
+        // --- Science link state (serialized) ---
+        // settlement ID → science outpost loadID hash. Absence = no linked science outpost.
+        private Dictionary<int, int> scienceLinks = new Dictionary<int, int>();
+
         // --- Cooldown state (serialized) ---
         // outpost ID hash → tick when cooldown ends
         private Dictionary<int, int> cooldownEndTicks = new Dictionary<int, int>();
@@ -51,6 +55,7 @@ namespace EmpireVOE
             Scribe_Collections.Look(ref autoDefendStates, "voeAutoDefendStates", LookMode.Value, LookMode.Value);
             Scribe_Collections.Look(ref deliveryDestinations, "voeDeliveryDestinations", LookMode.Value, LookMode.Value);
             Scribe_Collections.Look(ref financingOutposts, "voeFinancingOutposts", LookMode.Value, LookMode.Value);
+            Scribe_Collections.Look(ref scienceLinks, "voeScienceLinks", LookMode.Value, LookMode.Value);
             Scribe_Collections.Look(ref cooldownEndTicks, "voeCooldownEndTicks", LookMode.Value, LookMode.Value);
             if (autoDefendStates is null)
                 autoDefendStates = new Dictionary<int, bool>();
@@ -58,6 +63,8 @@ namespace EmpireVOE
                 deliveryDestinations = new Dictionary<int, int>();
             if (financingOutposts is null)
                 financingOutposts = new Dictionary<int, int>();
+            if (scienceLinks is null)
+                scienceLinks = new Dictionary<int, int>();
             if (cooldownEndTicks is null)
                 cooldownEndTicks = new Dictionary<int, int>();
         }
@@ -83,6 +90,19 @@ namespace EmpireVOE
             {
                 RaidTargetRegistry.Unregister(target);
                 raidTargets.Remove(outpost);
+            }
+
+            if (outpost is Outpost_Science && instance?.scienceLinks != null)
+            {
+                int outpostHash = outpost.GetUniqueLoadID().GetHashCode();
+                List<int> toRemove = new List<int>();
+                foreach (KeyValuePair<int, int> kvp in instance.scienceLinks)
+                {
+                    if (kvp.Value == outpostHash)
+                        toRemove.Add(kvp.Key);
+                }
+                foreach (int key in toRemove)
+                    instance.scienceLinks.Remove(key);
             }
 
             if (outpost is Outpost_Defensive defensive)
@@ -238,6 +258,128 @@ namespace EmpireVOE
             instance?.cooldownEndTicks?.Remove(outpost.GetUniqueLoadID().GetHashCode());
         }
 
+        // --- Science link accessors ---
+
+        public static Outpost_Science GetLinkedScienceOutpost(WorldSettlementFC settlement)
+        {
+            if (instance?.scienceLinks is null || settlement is null)
+                return null;
+            if (!instance.scienceLinks.TryGetValue(settlement.ID, out int outpostHash))
+                return null;
+            foreach (Outpost_Science o in Find.WorldObjects.AllWorldObjects.OfType<Outpost_Science>())
+            {
+                if (o.GetUniqueLoadID().GetHashCode() == outpostHash)
+                    return o;
+            }
+            instance.scienceLinks.Remove(settlement.ID);
+            return null;
+        }
+
+        public static WorldSettlementFC GetLinkedSettlement(Outpost_Science outpost)
+        {
+            if (instance?.scienceLinks is null || outpost is null)
+                return null;
+            int outpostHash = outpost.GetUniqueLoadID().GetHashCode();
+            FactionFC faction = FactionCache.FactionComp;
+            if (faction is null) return null;
+            foreach (KeyValuePair<int, int> kvp in instance.scienceLinks)
+            {
+                if (kvp.Value != outpostHash) continue;
+                foreach (WorldSettlementFC s in faction.settlements)
+                {
+                    if (s.ID == kvp.Key)
+                        return s;
+                }
+                instance.scienceLinks.Remove(kvp.Key);
+                return null;
+            }
+            return null;
+        }
+
+        public static void SetScienceLink(WorldSettlementFC settlement, Outpost_Science outpost)
+        {
+            if (instance?.scienceLinks is null || settlement is null) return;
+            if (outpost is null)
+            {
+                instance.scienceLinks.Remove(settlement.ID);
+            }
+            else
+            {
+                // Enforce 1:1: clear any existing link for this outpost
+                int outpostHash = outpost.GetUniqueLoadID().GetHashCode();
+                int existingKey = -1;
+                foreach (KeyValuePair<int, int> kvp in instance.scienceLinks)
+                {
+                    if (kvp.Value == outpostHash)
+                    {
+                        existingKey = kvp.Key;
+                        break;
+                    }
+                }
+                if (existingKey != -1)
+                    instance.scienceLinks.Remove(existingKey);
+                instance.scienceLinks[settlement.ID] = outpostHash;
+            }
+        }
+
+        public static bool IsLinkedToSettlement(Outpost_Science outpost)
+        {
+            if (instance?.scienceLinks is null || outpost is null)
+                return false;
+            int outpostHash = outpost.GetUniqueLoadID().GetHashCode();
+            foreach (int val in instance.scienceLinks.Values)
+            {
+                if (val == outpostHash) return true;
+            }
+            return false;
+        }
+
+        // --- Reverse-lookup helpers (for inspect string) ---
+
+        public static List<string> GetFinancedSettlementNames(Outpost outpost)
+        {
+            List<string> names = new List<string>();
+            if (instance?.financingOutposts is null || outpost is null) return names;
+            int outpostHash = outpost.GetUniqueLoadID().GetHashCode();
+            FactionFC faction = FactionCache.FactionComp;
+            if (faction is null) return names;
+            foreach (KeyValuePair<int, int> kvp in instance.financingOutposts)
+            {
+                if (kvp.Value != outpostHash) continue;
+                foreach (WorldSettlementFC s in faction.settlements)
+                {
+                    if (s.ID == kvp.Key)
+                    {
+                        names.Add(s.Name);
+                        break;
+                    }
+                }
+            }
+            return names;
+        }
+
+        public static List<string> GetDeliverySourceNames(Outpost outpost)
+        {
+            List<string> names = new List<string>();
+            if (instance?.deliveryDestinations is null || outpost is null) return names;
+            int outpostHash = outpost.GetUniqueLoadID().GetHashCode();
+            FactionFC faction = FactionCache.FactionComp;
+            if (faction is null) return names;
+            foreach (KeyValuePair<int, int> kvp in instance.deliveryDestinations)
+            {
+                if (kvp.Value != outpostHash) continue;
+                foreach (WorldSettlementFC s in faction.settlements)
+                {
+                    if (s.ID == kvp.Key)
+                    {
+                        names.Add(s.Name);
+                        break;
+                    }
+                }
+            }
+            return names;
+        }
+
         /// <summary>
         /// Unregisters all outpost wrappers from all registries. Called when the user
         /// disables integration at runtime via settings.
@@ -258,6 +400,7 @@ namespace EmpireVOE
             tabEntries.Clear();
 
             SilverPaymentRegistry.Unregister(OutpostFinancer.Instance);
+            ThreatScalingRegistry.Unregister(VOECompatInit.ThreatContributor);
         }
 
         /// <summary>
@@ -268,6 +411,7 @@ namespace EmpireVOE
         {
             if (Find.World is null) return;
             SilverPaymentRegistry.Register(OutpostFinancer.Instance);
+            ThreatScalingRegistry.Register(VOECompatInit.ThreatContributor);
             List<Outpost> outposts = Find.WorldObjects.AllWorldObjects.OfType<Outpost>().ToList();
             foreach (Outpost outpost in outposts)
             {
