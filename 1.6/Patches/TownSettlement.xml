@@ -17,6 +17,14 @@
 		</value>
 	</Operation>
 
+	<!-- Add WorldObjectComp_EncampmentBonus to all Empire settlement defs that have a comps list -->
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/FactionColonies.WorldSettlementDef[comps]/comps</xpath>
+		<value>
+			<li Class="EmpireVOE.WorldObjectCompProperties_EncampmentBonus" />
+		</value>
+	</Operation>
+
 	<!-- Update VOE Town outpost description to mention Empire integration -->
 	<Operation Class="PatchOperationReplace">
 		<xpath>Defs/Outposts.OutpostDef[defName="Outpost_Town"]/description</xpath>

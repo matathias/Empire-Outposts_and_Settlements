@@ -9,9 +9,9 @@ namespace EmpireVOE
         public static bool disableIntegration = false;
         public static bool debugLogging = false;
 
-        // Science Linking
-        public static float scienceBonusPerPawn = 0.5f;
-        public static bool scienceSkillScaling = true;
+        // Skill-based bonuses (shared by science link and town conversion)
+        public static float additivePerLevel = 0.025f;
+        public static int skillFloor = 0;
         public static int scienceLinkRange = 20;
 
         // Encampment Recovery
@@ -19,6 +19,7 @@ namespace EmpireVOE
         public static float encampmentMedicineScaling = 0.01f;
         public static float encampmentMaxReduction = 0.50f;
         public static int encampmentRange = 20;
+        public static float encampmentHealRatePerLevel = 0.02f;
 
         // Threat Scaling
         public static float outpostThreatPerPawn = 0.5f;
@@ -26,19 +27,15 @@ namespace EmpireVOE
         // Town Settlement feature
         public static bool requireTownForSettlement = false;
         public static bool convertTownPawns = true;
-        public static bool pawnSkillBonuses = true;
-        public static float additiveBonus = 0.2f;
-        public static int skillThreshold = 10;
-        public static bool scalingBonus = true;
 
         public override void ExposeData()
         {
             base.ExposeData();
             Scribe_Values.Look(ref disableIntegration, "disableIntegration", false);
             Scribe_Values.Look(ref debugLogging, "debugLogging", false);
-            // Science Linking
-            Scribe_Values.Look(ref scienceBonusPerPawn, "scienceBonusPerPawn", 0.5f);
-            Scribe_Values.Look(ref scienceSkillScaling, "scienceSkillScaling", true);
+            // Skill-based bonuses
+            Scribe_Values.Look(ref additivePerLevel, "additivePerLevel", 0.025f);
+            Scribe_Values.Look(ref skillFloor, "skillFloor", 0);
             Scribe_Values.Look(ref scienceLinkRange, "scienceLinkRange", 20);
 
             // Encampment Recovery
@@ -46,16 +43,14 @@ namespace EmpireVOE
             Scribe_Values.Look(ref encampmentMedicineScaling, "encampmentMedicineScaling", 0.01f);
             Scribe_Values.Look(ref encampmentMaxReduction, "encampmentMaxReduction", 0.50f);
             Scribe_Values.Look(ref encampmentRange, "encampmentRange", 20);
+            Scribe_Values.Look(ref encampmentHealRatePerLevel, "encampmentHealRatePerLevel", 0.02f);
 
             // Threat Scaling
             Scribe_Values.Look(ref outpostThreatPerPawn, "outpostThreatPerPawn", 0.5f);
 
+            // Town Settlement
             Scribe_Values.Look(ref requireTownForSettlement, "requireTownForSettlement", false);
             Scribe_Values.Look(ref convertTownPawns, "convertTownPawns", true);
-            Scribe_Values.Look(ref pawnSkillBonuses, "pawnSkillBonuses", true);
-            Scribe_Values.Look(ref additiveBonus, "additiveBonus", 0.2f);
-            Scribe_Values.Look(ref skillThreshold, "skillThreshold", 10);
-            Scribe_Values.Look(ref scalingBonus, "scalingBonus", true);
         }
     }
 
@@ -121,41 +116,17 @@ namespace EmpireVOE
                     "  " + "VOE_ConvertTownPawns".Translate(),
                     ref EmpireVOESettings.convertTownPawns,
                     "VOE_ConvertTownPawnsDesc".Translate());
-
-                if (EmpireVOESettings.convertTownPawns)
-                {
-                    ls.CheckboxLabeled(
-                        "    " + "VOE_PawnSkillBonuses".Translate(),
-                        ref EmpireVOESettings.pawnSkillBonuses,
-                        "VOE_PawnSkillBonusesDesc".Translate());
-
-                    if (EmpireVOESettings.pawnSkillBonuses)
-                    {
-                        ls.Label("    " + "VOE_AdditiveBonus".Translate() + ": " + EmpireVOESettings.additiveBonus.ToString("F2"));
-                        EmpireVOESettings.additiveBonus = ls.Slider(EmpireVOESettings.additiveBonus, 0.05f, 1f);
-
-                        ls.Label("    " + "VOE_SkillThreshold".Translate() + ": " + EmpireVOESettings.skillThreshold);
-                        EmpireVOESettings.skillThreshold = (int)ls.Slider(EmpireVOESettings.skillThreshold, 1, 30);
-
-                        ls.CheckboxLabeled(
-                            "    " + "VOE_ScalingBonus".Translate(),
-                            ref EmpireVOESettings.scalingBonus,
-                            "VOE_ScalingBonusDesc".Translate());
-                    }
-                }
             }
 
             ls.GapLine();
 
-            // Science Linking section
-            ls.Label("VOE_ScienceLinkHeader".Translate());
-            ls.Label("  " + "VOE_ScienceBonusPerPawn".Translate() + ": " + EmpireVOESettings.scienceBonusPerPawn.ToString("F2"));
-            EmpireVOESettings.scienceBonusPerPawn = ls.Slider(EmpireVOESettings.scienceBonusPerPawn, 0.1f, 2f);
+            // Skill-Based Bonuses section (shared by science link + town conversion)
+            ls.Label("VOE_SkillBonusHeader".Translate());
+            ls.Label("  " + "VOE_AdditivePerLevel".Translate() + ": " + EmpireVOESettings.additivePerLevel.ToString("F3"));
+            EmpireVOESettings.additivePerLevel = (float)System.Math.Round(ls.Slider(EmpireVOESettings.additivePerLevel, 0.005f, 0.1f), 3);
 
-            ls.CheckboxLabeled(
-                "  " + "VOE_ScienceSkillScaling".Translate(),
-                ref EmpireVOESettings.scienceSkillScaling,
-                "VOE_ScienceSkillScalingDesc".Translate());
+            ls.Label("  " + "VOE_SkillFloor".Translate() + ": " + EmpireVOESettings.skillFloor);
+            EmpireVOESettings.skillFloor = (int)ls.Slider(EmpireVOESettings.skillFloor, 0, 10);
 
             ls.Label("  " + "VOE_ScienceLinkRange".Translate() + ": " + EmpireVOESettings.scienceLinkRange);
             EmpireVOESettings.scienceLinkRange = (int)ls.Slider(EmpireVOESettings.scienceLinkRange, 5, 50);
@@ -175,6 +146,9 @@ namespace EmpireVOE
 
             ls.Label("  " + "VOE_EncampmentRange".Translate() + ": " + EmpireVOESettings.encampmentRange);
             EmpireVOESettings.encampmentRange = (int)ls.Slider(EmpireVOESettings.encampmentRange, 5, 50);
+
+            ls.Label("  " + "VOE_EncampmentHealRatePerLevel".Translate() + ": " + EmpireVOESettings.encampmentHealRatePerLevel.ToString("F3"));
+            EmpireVOESettings.encampmentHealRatePerLevel = (float)System.Math.Round(ls.Slider(EmpireVOESettings.encampmentHealRatePerLevel, 0f, 0.1f), 3);
 
             ls.GapLine();
 

@@ -38,12 +38,6 @@
     <VOE_RequireTownDesc>Empire settlements can only be founded on Town outposts.</VOE_RequireTownDesc>
     <VOE_ConvertTownPawns>Convert Town pawns</VOE_ConvertTownPawns>
     <VOE_ConvertTownPawnsDesc>Town pawns are transferred to the new settlement on creation.</VOE_ConvertTownPawnsDesc>
-    <VOE_PawnSkillBonuses>Apply skill bonuses</VOE_PawnSkillBonuses>
-    <VOE_PawnSkillBonusesDesc>When specialists are not available, apply production bonuses based on Town pawn skills.</VOE_PawnSkillBonusesDesc>
-    <VOE_AdditiveBonus>Bonus per threshold</VOE_AdditiveBonus>
-    <VOE_SkillThreshold>Skill threshold</VOE_SkillThreshold>
-    <VOE_ScalingBonus>Scaling bonus</VOE_ScalingBonus>
-    <VOE_ScalingBonusDesc>Multiply bonus by number of thresholds met (otherwise flat).</VOE_ScalingBonusDesc>
     <VOE_NotATown>Empire settlements must be founded on Town outposts.</VOE_NotATown>
     <VOE_TownIncorporated>{0} incorporated</VOE_TownIncorporated>
     <VOE_TownIncorporatedDesc>The town {0} has been incorporated into your new settlement {1}. {2} residents have been transferred.</VOE_TownIncorporatedDesc>
@@ -69,17 +63,22 @@
     <VOE_FinancingFor>Financing: {0}</VOE_FinancingFor>
     <VOE_ReceivingTaxes>Receiving taxes from: {0}</VOE_ReceivingTaxes>
 
-    <!-- Settings -->
-    <VOE_ScienceLinkHeader>Science Outpost Linking</VOE_ScienceLinkHeader>
-    <VOE_ScienceBonusPerPawn>Research bonus per pawn</VOE_ScienceBonusPerPawn>
-    <VOE_ScienceSkillScaling>Scale by Intellectual skill</VOE_ScienceSkillScaling>
-    <VOE_ScienceSkillScalingDesc>Research bonus is multiplied by average Intellectual skill / 10.</VOE_ScienceSkillScalingDesc>
+    <!-- Skill-Based Bonuses Settings -->
+    <VOE_SkillBonusHeader>Skill-Based Bonuses</VOE_SkillBonusHeader>
+    <VOE_AdditivePerLevel>Additive bonus per skill level</VOE_AdditivePerLevel>
+    <VOE_SkillFloor>Skill floor</VOE_SkillFloor>
     <VOE_ScienceLinkRange>Science link max range (tiles)</VOE_ScienceLinkRange>
-    <VOE_EncampmentRecoveryHeader>Encampment Recovery</VOE_EncampmentRecoveryHeader>
-    <VOE_EncampmentBaseReduction>Base recovery reduction</VOE_EncampmentBaseReduction>
-    <VOE_EncampmentMedicineScaling>Medicine skill scaling</VOE_EncampmentMedicineScaling>
-    <VOE_EncampmentMaxReduction>Max recovery reduction</VOE_EncampmentMaxReduction>
+
+    <!-- Encampment Recovery Settings -->
+    <VOE_EncampmentRecoveryHeader>Encampment Effects</VOE_EncampmentRecoveryHeader>
+    <VOE_EncampmentBaseReduction>Base cooldown reduction</VOE_EncampmentBaseReduction>
+    <VOE_EncampmentMedicineScaling>Medicine skill scaling (cooldown)</VOE_EncampmentMedicineScaling>
+    <VOE_EncampmentMaxReduction>Max cooldown reduction</VOE_EncampmentMaxReduction>
     <VOE_EncampmentRange>Encampment range (tiles)</VOE_EncampmentRange>
+    <VOE_EncampmentHealRatePerLevel>Heal rate bonus per Medicine level</VOE_EncampmentHealRatePerLevel>
+    <VOE_EncampmentHealRateDesc>{0} nearby encampment(s): +{1}% merc heal rate</VOE_EncampmentHealRateDesc>
+
+    <!-- Threat Scaling Settings -->
     <VOE_ThreatScalingHeader>Threat Scaling</VOE_ThreatScalingHeader>
     <VOE_OutpostThreatPerPawn>Threat per outpost pawn</VOE_OutpostThreatPerPawn>
 

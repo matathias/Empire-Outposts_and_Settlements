@@ -3,7 +3,7 @@
     <name>Empire Refactored: Vanilla Outposts Expanded Integration</name>
     <author>Matathias</author>
     <packageId>Matathias.EmpireRefVOE</packageId>
-    <modVersion>0.1.0</modVersion>
+    <modVersion>0.2.0</modVersion>
     <supportedVersions><li>1.6</li></supportedVersions>
     <description>Integrates Vanilla Outposts Expanded with several of Empire's systems.</description>
     <modDependencies>

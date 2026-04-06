@@ -164,12 +164,8 @@ namespace EmpireVOE
                 }
                 else
                 {
-                    // No Specialists submod — apply skill bonuses if enabled
-                    Dictionary<string, double> bonuses = null;
-                    if (EmpireVOESettings.pawnSkillBonuses)
-                    {
-                        bonuses = CalculateSkillBonuses(townPawns);
-                    }
+                    // No Specialists submod — apply skill bonuses
+                    Dictionary<string, double> bonuses = CalculateSkillBonuses(townPawns);
 
                     // Transfer pawns to Empire faction
                     Faction empireFaction = FactionCache.PlayerColonyFaction;
@@ -184,7 +180,7 @@ namespace EmpireVOE
                     }
 
                     // Apply bonuses to the TownBonus comp
-                    if (bonuses != null && bonuses.Count > 0)
+                    if (bonuses.Count > 0)
                     {
                         WorldObjectComp_TownBonus bonusComp = settlement.GetComponent<WorldObjectComp_TownBonus>();
                         if (bonusComp != null)
@@ -213,47 +209,28 @@ namespace EmpireVOE
 
         /// <summary>
         /// Calculates per-resource production bonuses from town pawn skills.
-        /// Uses each ResourceTypeDef's associatedSkills field for dynamic mapping.
+        /// Uses the same per-skill-level formula as the Specialists submod.
         /// </summary>
         private Dictionary<string, double> CalculateSkillBonuses(List<Pawn> pawns)
         {
             Dictionary<string, double> bonuses = new Dictionary<string, double>();
-            int threshold = EmpireVOESettings.skillThreshold;
-            if (threshold < 1) threshold = 1;
 
             foreach (ResourceTypeDef rtd in DefDatabase<ResourceTypeDef>.AllDefsListForReading)
             {
                 if (rtd.associatedSkills is null || rtd.associatedSkills.Count == 0) continue;
 
-                // Sum total skill levels across all pawns for each associated skill, then average
-                double totalSkill = 0;
-                foreach (SkillDef skillDef in rtd.associatedSkills)
+                double bonus = 0;
+                foreach (Pawn pawn in pawns)
                 {
-                    int skillTotal = 0;
-                    foreach (Pawn pawn in pawns)
+                    if (pawn.skills is null) continue;
+                    foreach (SkillDef skillDef in rtd.associatedSkills)
                     {
-                        if (pawn.skills == null) continue;
                         SkillRecord record = pawn.skills.GetSkill(skillDef);
-                        if (record != null && !record.TotallyDisabled)
-                        {
-                            skillTotal += record.Level;
-                        }
+                        if (record is null || record.TotallyDisabled) continue;
+                        int level = record.Level;
+                        if (level >= EmpireVOESettings.skillFloor)
+                            bonus += level * EmpireVOESettings.additivePerLevel;
                     }
-                    totalSkill += skillTotal;
-                }
-                totalSkill /= rtd.associatedSkills.Count;
-
-                int thresholds = (int)(totalSkill / threshold);
-                if (thresholds < 1) continue;
-
-                double bonus;
-                if (EmpireVOESettings.scalingBonus)
-                {
-                    bonus = EmpireVOESettings.additiveBonus * thresholds;
-                }
-                else
-                {
-                    bonus = EmpireVOESettings.additiveBonus;
                 }
 
                 if (bonus > 0)

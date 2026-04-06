@@ -47,6 +47,9 @@ namespace EmpireVOE
             OutpostRaidTarget target = new OutpostRaidTarget(__instance);
             WorldComponent_VOETracker.RegisterOutpost(__instance, target);
 
+            if (__instance is Outpost_Encampment)
+                EncampmentCache.Invalidate();
+
             if (__instance is Outpost_Defensive defensive)
             {
                 DefensiveAutoDefender defender = new DefensiveAutoDefender(defensive);
@@ -66,6 +69,9 @@ namespace EmpireVOE
         private static void Postfix(Outpost __instance)
         {
             WorldComponent_VOETracker.UnregisterOutpost(__instance);
+
+            if (__instance is Outpost_Encampment)
+                EncampmentCache.Invalidate();
         }
     }
 

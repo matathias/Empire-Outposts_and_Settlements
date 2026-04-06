@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using FactionColonies;
 using Outposts;
 using RimWorld;
@@ -57,19 +55,15 @@ namespace EmpireVOE
             Outpost_Science linked = WorldComponent_VOETracker.GetLinkedScienceOutpost(settlement);
             if (linked is null || linked.Destroyed) return 0;
 
-            List<Pawn> pawns = linked.CapablePawns.ToList();
-            if (pawns.Count == 0) return 0;
-
-            double bonus = pawns.Count * EmpireVOESettings.scienceBonusPerPawn;
-
-            if (EmpireVOESettings.scienceSkillScaling)
+            double bonus = 0;
+            foreach (Pawn pawn in linked.CapablePawns)
             {
-                double avgIntellectual = pawns
-                    .Where(p => p.skills != null)
-                    .Select(p => (double)p.skills.GetSkill(SkillDefOf.Intellectual).Level)
-                    .DefaultIfEmpty(0)
-                    .Average();
-                bonus *= avgIntellectual / 10.0;
+                if (pawn.skills is null) continue;
+                SkillRecord skill = pawn.skills.GetSkill(SkillDefOf.Intellectual);
+                if (skill is null) continue;
+                int level = skill.Level;
+                if (level >= EmpireVOESettings.skillFloor)
+                    bonus += level * EmpireVOESettings.additivePerLevel;
             }
 
             return bonus;
