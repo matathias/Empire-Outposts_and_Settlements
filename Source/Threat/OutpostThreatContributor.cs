@@ -22,9 +22,7 @@ namespace EmpireVOE
             double total = 0;
             foreach (WorldObject wo in Find.WorldObjects.AllWorldObjects)
             {
-                Outpost outpost = wo as Outpost;
-                if (outpost is null) continue;
-                if (outpost.Faction != Faction.OfPlayer) continue;
+                if (!(wo is Outpost outpost) || outpost.Faction != Faction.OfPlayer) continue;
 
                 float typeMultiplier = (outpost is Outpost_Defensive) ? DefensiveMultiplier : 1.0f;
                 total += outpost.PawnCount * EmpireVOESettings.outpostThreatPerPawn * typeMultiplier;

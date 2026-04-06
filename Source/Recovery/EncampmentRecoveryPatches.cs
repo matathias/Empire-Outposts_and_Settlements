@@ -25,13 +25,15 @@ namespace EmpireVOE
 
             WorldSettlementFC settlement = __instance.WorldSettlement;
             if (settlement is null) return;
+            
+            FactionFC faction = FactionCache.FactionComp;
+            if (faction is null) return;
 
             // Find encampments within range
             List<Outpost_Encampment> nearbyEncampments = new List<Outpost_Encampment>();
             foreach (WorldObject wo in Find.WorldObjects.AllWorldObjects)
             {
-                Outpost_Encampment enc = wo as Outpost_Encampment;
-                if (enc is null) continue;
+                if (!(wo is Outpost_Encampment enc)) continue;
                 if (enc.PawnCount == 0) continue;
                 float distance = Find.WorldGrid.ApproxDistanceInTiles(enc.Tile, settlement.Tile);
                 if (distance <= EmpireVOESettings.encampmentRange)
@@ -43,9 +45,6 @@ namespace EmpireVOE
             if (nearbyEncampments.Count == 0) return;
 
             // Find the just-created cooldown event (highest timeTillTrigger at this tile)
-            FactionFC faction = FactionCache.FactionComp;
-            if (faction is null) return;
-
             FCEvent cooldownEvent = null;
             int highestTrigger = -1;
             foreach (FCEvent evt in faction.events)

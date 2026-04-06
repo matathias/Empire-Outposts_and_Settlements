@@ -24,12 +24,10 @@ namespace EmpireVOE
     /// </summary>
     public class WorldObjectComp_ScienceLink : WorldObjectComp, IResourceProductionModifier
     {
-        private const string ResearchDefName = "RTD_Research";
-
         public double GetResourceAdditiveModifier(ResourceFC resource)
         {
             if (EmpireVOESettings.disableIntegration) return 0;
-            if (resource?.def is null || resource.def.defName != ResearchDefName) return 0;
+            if (resource?.def is null || resource.def != ResourceTypeDefOf.RTD_Research) return 0;
             return CalculateBonus();
         }
 
