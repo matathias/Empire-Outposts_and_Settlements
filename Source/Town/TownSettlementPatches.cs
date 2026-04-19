@@ -27,17 +27,17 @@ namespace EmpireVOE
 
             if (tile == -1)
             {
-                reason?.Append("selectedInvalidTile".Translate());
+                reason?.Append("FCSelectedInvalidTile".Translate());
                 __result = false;
                 return false;
             }
 
-            // Planet layer check (copied from original)
+            // Planet layer check (mirrors WorldTileChecker)
             if (settlementdef.planetLayers.Count == 0)
             {
                 if (tile.Layer != Find.WorldGrid.Surface)
                 {
-                    reason?.Append("InvalidPlanetLayer".Translate());
+                    reason?.Append("FCInvalidPlanetLayer".Translate());
                     __result = false;
                     return false;
                 }
@@ -46,7 +46,7 @@ namespace EmpireVOE
             {
                 if (!settlementdef.planetLayers.Contains(tile.Layer.Def))
                 {
-                    reason?.Append("InvalidPlanetLayer".Translate());
+                    reason?.Append("FCInvalidPlanetLayer".Translate());
                     __result = false;
                     return false;
                 }
@@ -61,36 +61,13 @@ namespace EmpireVOE
                 return false;
             }
 
-            // Biome restrictions from settlement type
-            if (settlementdef.allowedBiomes != null && settlementdef.allowedBiomes.Count > 0)
+            // Delegate biome and settlement-type-specific validation to SettlementTypeExtension
+            // (same chain WorldTileChecker uses after its own planet-layer check).
+            SettlementTypeExtension ext = settlementdef.GetSettlementTypeExtension();
+            if (ext != null && !ext.TileIsValidForSettlement(tile, reason))
             {
-                bool foundAllowed = false;
-                foreach (BiomeDef biome in tile.Tile.Biomes)
-                {
-                    if (settlementdef.allowedBiomes.Contains(biome))
-                    {
-                        foundAllowed = true;
-                        break;
-                    }
-                }
-                if (!foundAllowed)
-                {
-                    reason?.Append("NotAllowedBiome".Translate(settlementdef.LabelCap));
-                    __result = false;
-                    return false;
-                }
-            }
-            if (settlementdef.blockedBiomes != null && settlementdef.blockedBiomes.Count > 0)
-            {
-                foreach (BiomeDef biome in tile.Tile.Biomes)
-                {
-                    if (settlementdef.blockedBiomes.Contains(biome))
-                    {
-                        reason?.Append("NotAllowedBiome".Translate(settlementdef.LabelCap));
-                        __result = false;
-                        return false;
-                    }
-                }
+                __result = false;
+                return false;
             }
 
             __result = true;

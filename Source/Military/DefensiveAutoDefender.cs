@@ -40,11 +40,11 @@ namespace EmpireVOE
                                      && !_busy
                                      && !WorldComponent_VOETracker.IsOnCooldown(outpost);
 
-        public militaryForce CreateDefendingForce()
+        public MilitaryForce CreateDefendingForce()
         {
             double level = MilitaryLevel;
             double efficiency = CalculateEfficiency();
-            return new militaryForce(level, efficiency, null, Faction.OfPlayer);
+            return new MilitaryForce(level, efficiency, null, Faction.OfPlayer);
         }
 
         public void OnDefenseStarted(WorldObject target)

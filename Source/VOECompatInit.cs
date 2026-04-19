@@ -86,9 +86,19 @@ namespace EmpireVOE
         {
             if (EmpireVOESettings.disableIntegration) return;
 
-            FCEvent evt = FactionCache.FactionComp?.events.FirstOrDefault(e =>
-                e.def == FCEventDefOf.settlementBeingAttacked
-                && e.settlementFCDefending == __instance);
+            FCEvent evt = null;
+            IReadOnlyList<FCEvent> attackEvents = FactionCache.FactionComp?.GetEventsByDef(FCEventDefOf.settlementBeingAttacked);
+            if (attackEvents != null)
+            {
+                for (int i = 0; i < attackEvents.Count; i++)
+                {
+                    if (attackEvents[i].settlementFCDefending == __instance)
+                    {
+                        evt = attackEvents[i];
+                        break;
+                    }
+                }
+            }
 
             if (evt is null) return;
 

@@ -30,9 +30,16 @@ namespace EmpireVOE
             FactionFC faction = FactionCache.FactionComp;
             if (faction is null) return;
 
-            FCEvent evt = faction.events.FirstOrDefault(e =>
-                e.def == FCEventDefOf.settlementBeingAttacked
-                && e.settlementFCDefending == outpost);
+            FCEvent evt = null;
+            IReadOnlyList<FCEvent> attackEvents = faction.GetEventsByDef(FCEventDefOf.settlementBeingAttacked);
+            for (int i = 0; i < attackEvents.Count; i++)
+            {
+                if (attackEvents[i].settlementFCDefending == outpost)
+                {
+                    evt = attackEvents[i];
+                    break;
+                }
+            }
             if (evt is null) return;
 
             List<FloatMenuOption> options = new List<FloatMenuOption>();
@@ -60,7 +67,7 @@ namespace EmpireVOE
 
                         // Create new defending force from the selected settlement
                         evt.militaryForceDefending =
-                            militaryForce.CreateMilitaryForceFromSettlement(s);
+                            MilitaryForce.CreateMilitaryForceFromSettlement(s);
                         evt.externalDefenderSource = null;
 
                         // Send the settlement's military to defend the outpost

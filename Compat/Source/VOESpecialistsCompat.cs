@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using FactionColonies;
 using FactionColonies.Specialists;
 using RimWorld;
@@ -34,17 +33,53 @@ namespace EmpireVOE.Specialists
 
             foreach (Pawn pawn in pawns)
             {
-                SpecialistRole role = SpecialistRole.Resident;
-
                 SkillRecord best = BestNonDisabledSkill(pawn);
                 if (best != null && best.Level >= SpecialistSkillThreshold
                     && comp.SpecialistCount < comp.MaxSpecialists)
                 {
-                    role = SpecialistRole.Specialist;
+                    SpecialistRoleDef bestRole = FindBestRole(pawn);
+                    // AssignSpecialist handles per-role maxPerSettlement caps internally
+                    comp.AssignSpecialist(pawn, bestRole);
+                }
+                else
+                {
+                    // null role = Resident
+                    comp.AssignSpecialist(pawn, null);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Finds the SpecialistRoleDef with the highest weighted skill score for this pawn.
+        /// Returns null if no roles are defined (pawn will be assigned as Resident).
+        /// </summary>
+        private static SpecialistRoleDef FindBestRole(Pawn pawn)
+        {
+            if (pawn.skills is null) return null;
+
+            SpecialistRoleDef bestRole = null;
+            float bestScore = -1f;
+
+            foreach (SpecialistRoleDef role in DefDatabase<SpecialistRoleDef>.AllDefsListForReading)
+            {
+                if (role.skillWeights is null || role.skillWeights.Count == 0) continue;
+
+                float score = 0f;
+                foreach (SkillWeight sw in role.skillWeights)
+                {
+                    SkillRecord record = pawn.skills.GetSkill(sw.skill);
+                    if (record is null || record.TotallyDisabled) continue;
+                    score += record.Level * sw.weight;
                 }
 
-                comp.AssignPawn(pawn, role);
+                if (score > bestScore)
+                {
+                    bestScore = score;
+                    bestRole = role;
+                }
             }
+
+            return bestRole;
         }
 
         private static SkillRecord BestNonDisabledSkill(Pawn pawn)

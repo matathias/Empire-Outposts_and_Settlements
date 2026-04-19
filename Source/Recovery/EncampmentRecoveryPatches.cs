@@ -33,7 +33,7 @@ namespace EmpireVOE
             // Find the just-created cooldown event (highest timeTillTrigger at this tile)
             FCEvent cooldownEvent = null;
             int highestTrigger = -1;
-            foreach (FCEvent evt in faction.events)
+            foreach (FCEvent evt in faction.Events)
             {
                 if (evt.def != FCEventDefOf.cooldownMilitary) continue;
                 if (evt.location != settlement.Tile) continue;

@@ -14,4 +14,18 @@
 		<li>Matathias</li>
 		</authors>
 	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
+		<defName>VOE_0_2_1</defName>
+		<label>Updates</label>
+		<description>Updates the code to account for changes to Empire Refactored and Specialists &amp; Governors.</description>
+		<releaseDate>2026-04-19</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Many code updates to keep up with the base mod and other submods</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
 </Defs>
