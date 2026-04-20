@@ -28,4 +28,18 @@
 		<li>Matathias</li>
 		</authors>
 	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
+		<defName>VOE_0_2_2</defName>
+		<label>Tax Redirection Update</label>
+		<description>Updates the tax redirection code after an update to the base mod.</description>
+		<releaseDate>2026-04-19</releaseDate>
+		<patchNoteType>Patch</patchNoteType>
+		<patchNoteLines>
+		<li>Use the new ITaxDeliveryInterceptor interface from the base mod to intercept and modify tax events</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
 </Defs>

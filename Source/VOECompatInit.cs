@@ -21,12 +21,14 @@ namespace EmpireVOE
             SilverPaymentRegistry.Register(OutpostFinancer.Instance);
             LifecycleRegistry.Register(_townConversionHandler);
             ThreatScalingRegistry.Register(ThreatContributor);
+            TaxDeliveryRegistry.Register(OutpostDeliveryInterceptor.Instance);
             EmpireCacheUtil.RegisterCacheInvalidator("EmpireVOE", () =>
             {
                 // Re-register after InvalidateAll clears all registries
                 SilverPaymentRegistry.Register(OutpostFinancer.Instance);
                 LifecycleRegistry.Register(_townConversionHandler);
                 ThreatScalingRegistry.Register(ThreatContributor);
+                TaxDeliveryRegistry.Register(OutpostDeliveryInterceptor.Instance);
             });
             VOELog.MessageForce("Empire - Vanilla Outposts Expanded integration loaded.");
         }
