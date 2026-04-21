@@ -22,7 +22,7 @@ namespace EmpireVOE
     {
         public double GetStatModifier(FCStatDef stat)
         {
-            if (EmpireVOESettings.disableIntegration) return stat.IdentityValue;
+            if (!EmpireVOESettings.EncampmentActive) return stat.IdentityValue;
             if (stat != FCStatDefOf.mercHealRateMultiplier) return stat.IdentityValue;
 
             WorldSettlementFC settlement = parent as WorldSettlementFC;
@@ -36,7 +36,7 @@ namespace EmpireVOE
 
         public string GetStatModifierDesc(FCStatDef stat)
         {
-            if (EmpireVOESettings.disableIntegration) return null;
+            if (!EmpireVOESettings.EncampmentActive) return null;
             if (stat != FCStatDefOf.mercHealRateMultiplier) return null;
 
             WorldSettlementFC settlement = parent as WorldSettlementFC;

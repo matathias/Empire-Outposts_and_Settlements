@@ -16,7 +16,7 @@ namespace EmpireVOE
         public static void Postfix(Outpost_Defensive __instance, ref bool __result, ref string reason)
         {
             if (__result) return;
-            if (EmpireVOESettings.disableIntegration) return;
+            if (!EmpireVOESettings.MilitaryActive) return;
 
             WorldObjectComp_EmpireDefensive comp = __instance.GetComponent<WorldObjectComp_EmpireDefensive>();
             if (comp is null || !comp.IsOnCooldown) return;

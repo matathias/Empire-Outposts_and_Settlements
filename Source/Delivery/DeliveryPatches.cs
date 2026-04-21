@@ -17,7 +17,7 @@ namespace EmpireVOE
 
         public void OnTaxEventCreated(TaxDeliveryContext context)
         {
-            if (EmpireVOESettings.disableIntegration) return;
+            if (!EmpireVOESettings.DeliveryActive) return;
 
             FCEvent fcevent = context.Event;
             WorldSettlementFC settlement = context.Settlement;
@@ -55,7 +55,7 @@ namespace EmpireVOE
 
         public bool TryDeliverGoods(TaxDeliveryContext context)
         {
-            if (EmpireVOESettings.disableIntegration) return false;
+            if (!EmpireVOESettings.DeliveryActive) return false;
 
             FCEvent evt = context.Event;
             if (evt.source == -1) return false;
@@ -129,7 +129,7 @@ namespace EmpireVOE
     {
         public static void Postfix(ref int __result)
         {
-            if (EmpireVOESettings.disableIntegration) return;
+            if (!EmpireVOESettings.FinancingActive) return;
 
             foreach (Outpost outpost in WorldObjectComp_OutpostLinks.GetAllDistinctFinancingOutposts())
             {

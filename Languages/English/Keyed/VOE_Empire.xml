@@ -33,6 +33,22 @@
     <VOE_DebugLogging>Debug logging</VOE_DebugLogging>
     <VOE_DebugLoggingDesc>Enable verbose debug logging for EmpireVOE integration.</VOE_DebugLoggingDesc>
 
+    <!-- Per-Feature Toggles -->
+    <VOE_EnableMilitary>Military Integration</VOE_EnableMilitary>
+    <VOE_EnableMilitaryDesc>Outposts can be raided, defensive outposts auto-defend nearby settlements, and outposts appear in the military tab.</VOE_EnableMilitaryDesc>
+    <VOE_EnableDelivery>Tax Delivery Routing</VOE_EnableDelivery>
+    <VOE_EnableDeliveryDesc>Route settlement tax deliveries to outposts instead of the player's tax map.</VOE_EnableDeliveryDesc>
+    <VOE_EnableFinancing>Outpost Financing</VOE_EnableFinancing>
+    <VOE_EnableFinancingDesc>Outposts can fund settlement payments from their stored silver.</VOE_EnableFinancingDesc>
+    <VOE_EnableScienceLink>Science Linking</VOE_EnableScienceLink>
+    <VOE_EnableScienceLinkDesc>Science outposts can be linked to settlements to boost research production.</VOE_EnableScienceLinkDesc>
+    <VOE_EnableEncampment>Encampment Recovery</VOE_EnableEncampment>
+    <VOE_EnableEncampmentDesc>Nearby encampments reduce military cooldowns and boost merc heal rate.</VOE_EnableEncampmentDesc>
+    <VOE_EnableTownConversion>Town Conversion</VOE_EnableTownConversion>
+    <VOE_EnableTownConversionDesc>VOE Town outposts can be converted into Empire settlements.</VOE_EnableTownConversionDesc>
+    <VOE_EnableThreatScaling>Threat Scaling</VOE_EnableThreatScaling>
+    <VOE_EnableThreatScalingDesc>Outposts contribute to Empire's overall threat level, making enemy raids harder.</VOE_EnableThreatScalingDesc>
+
     <!-- Town Settlement Feature -->
     <VOE_RequireTown>Require Town for settlement</VOE_RequireTown>
     <VOE_RequireTownDesc>Empire settlements can only be founded on Town outposts.</VOE_RequireTownDesc>
@@ -64,13 +80,11 @@
     <VOE_ReceivingTaxes>Receiving taxes from: {0}</VOE_ReceivingTaxes>
 
     <!-- Skill-Based Bonuses Settings -->
-    <VOE_SkillBonusHeader>Skill-Based Bonuses</VOE_SkillBonusHeader>
     <VOE_AdditivePerLevel>Additive bonus per skill level</VOE_AdditivePerLevel>
     <VOE_SkillFloor>Skill floor</VOE_SkillFloor>
     <VOE_ScienceLinkRange>Science link max range (tiles)</VOE_ScienceLinkRange>
 
     <!-- Encampment Recovery Settings -->
-    <VOE_EncampmentRecoveryHeader>Encampment Effects</VOE_EncampmentRecoveryHeader>
     <VOE_EncampmentBaseReduction>Base cooldown reduction</VOE_EncampmentBaseReduction>
     <VOE_EncampmentMedicineScaling>Medicine skill scaling (cooldown)</VOE_EncampmentMedicineScaling>
     <VOE_EncampmentMaxReduction>Max cooldown reduction</VOE_EncampmentMaxReduction>
@@ -79,7 +93,6 @@
     <VOE_EncampmentHealRateDesc>{0} nearby encampment(s): +{1}% merc heal rate</VOE_EncampmentHealRateDesc>
 
     <!-- Threat Scaling Settings -->
-    <VOE_ThreatScalingHeader>Threat Scaling</VOE_ThreatScalingHeader>
     <VOE_OutpostThreatPerPawn>Threat per outpost pawn</VOE_OutpostThreatPerPawn>
 
     <!-- Patch Notes -->

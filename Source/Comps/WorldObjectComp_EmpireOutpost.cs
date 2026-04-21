@@ -30,7 +30,7 @@ namespace EmpireVOE
         public override void Initialize(WorldObjectCompProperties props)
         {
             base.Initialize(props);
-            if (EmpireVOESettings.disableIntegration) return;
+            if (!EmpireVOESettings.MilitaryActive) return;
             Register();
         }
 
@@ -44,7 +44,7 @@ namespace EmpireVOE
 
         public override IEnumerable<Gizmo> GetGizmos()
         {
-            if (EmpireVOESettings.disableIntegration) yield break;
+            if (!EmpireVOESettings.MilitaryActive) yield break;
 
             FCEvent evt = FindAttackEvent();
             if (evt is null) yield break;
@@ -55,15 +55,21 @@ namespace EmpireVOE
         public override string CompInspectStringExtra()
         {
             if (EmpireVOESettings.disableIntegration) return null;
-            if (raidTarget is null) return null;
 
             List<string> lines = new List<string>();
 
-            // Military level
-            lines.Add("VOE_MilitaryLevel".Translate(raidTarget.MilitaryLevel * FCSettings.defenderAdvantage));
+            // Military level + defensive status
+            if (EmpireVOESettings.enableMilitary && raidTarget is object)
+            {
+                lines.Add("VOE_MilitaryLevel".Translate(raidTarget.MilitaryLevel * FCSettings.defenderAdvantage));
+
+                WorldObjectComp_EmpireDefensive defComp = parent.GetComponent<WorldObjectComp_EmpireDefensive>();
+                if (defComp is object)
+                    lines.Add(defComp.GetStatusInspectString(raidTarget.IsUnderAttack));
+            }
 
             // Science link status
-            if (parent is Outpost_Science science)
+            if (EmpireVOESettings.enableScienceLink && parent is Outpost_Science science)
             {
                 List<string> linkedNames = GetLinkedSettlementNames(science);
                 if (linkedNames.Count > 0)
@@ -72,23 +78,23 @@ namespace EmpireVOE
                     lines.Add("VOE_NotLinked".Translate());
             }
 
-            // Defensive outpost status
-            WorldObjectComp_EmpireDefensive defComp = parent.GetComponent<WorldObjectComp_EmpireDefensive>();
-            if (defComp is object)
+            // Financing info (reverse lookup)
+            if (EmpireVOESettings.enableFinancing)
             {
-                lines.Add(defComp.GetStatusInspectString(raidTarget.IsUnderAttack));
+                List<string> financedNames = GetFinancedSettlementNames();
+                if (financedNames.Count > 0)
+                    lines.Add("VOE_FinancingFor".Translate(string.Join(", ", financedNames)));
             }
 
-            // Financing info (reverse lookup)
-            List<string> financedNames = GetFinancedSettlementNames();
-            if (financedNames.Count > 0)
-                lines.Add("VOE_FinancingFor".Translate(string.Join(", ", financedNames)));
-
             // Delivery source info (reverse lookup)
-            List<string> deliveryNames = GetDeliverySourceNames();
-            if (deliveryNames.Count > 0)
-                lines.Add("VOE_ReceivingTaxes".Translate(string.Join(", ", deliveryNames)));
+            if (EmpireVOESettings.enableDelivery)
+            {
+                List<string> deliveryNames = GetDeliverySourceNames();
+                if (deliveryNames.Count > 0)
+                    lines.Add("VOE_ReceivingTaxes".Translate(string.Join(", ", deliveryNames)));
+            }
 
+            if (lines.Count == 0) return null;
             return string.Join("\n", lines);
         }
 
@@ -112,16 +118,24 @@ namespace EmpireVOE
 
         // --- Static helpers for runtime toggle ---
 
-        public static void UnregisterAll()
+        public static void ToggleMilitary(bool enable)
         {
+            if (Find.World is null) return;
             foreach (Outpost outpost in Find.WorldObjects.AllWorldObjects.OfType<Outpost>())
             {
                 WorldObjectComp_EmpireOutpost comp = outpost.GetComponent<WorldObjectComp_EmpireOutpost>();
-                comp?.Unregister();
+                if (enable) comp?.Register();
+                else comp?.Unregister();
 
                 WorldObjectComp_EmpireDefensive defComp = outpost.GetComponent<WorldObjectComp_EmpireDefensive>();
-                defComp?.Unregister();
+                if (enable) defComp?.Register();
+                else defComp?.Unregister();
             }
+        }
+
+        public static void UnregisterAll()
+        {
+            ToggleMilitary(false);
             SilverPaymentRegistry.Unregister(OutpostFinancer.Instance);
             ThreatScalingRegistry.Unregister(VOECompatInit.ThreatContributor);
         }
@@ -131,14 +145,8 @@ namespace EmpireVOE
             if (Find.World is null) return;
             SilverPaymentRegistry.Register(OutpostFinancer.Instance);
             ThreatScalingRegistry.Register(VOECompatInit.ThreatContributor);
-            foreach (Outpost outpost in Find.WorldObjects.AllWorldObjects.OfType<Outpost>())
-            {
-                WorldObjectComp_EmpireOutpost comp = outpost.GetComponent<WorldObjectComp_EmpireOutpost>();
-                comp?.Register();
-
-                WorldObjectComp_EmpireDefensive defComp = outpost.GetComponent<WorldObjectComp_EmpireDefensive>();
-                defComp?.Register();
-            }
+            if (EmpireVOESettings.enableMilitary)
+                ToggleMilitary(true);
         }
 
         // --- Private helpers ---

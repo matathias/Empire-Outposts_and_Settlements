@@ -41,8 +41,10 @@ namespace EmpireVOE
             bool hasOutposts = Find.WorldObjects.AllWorldObjects.OfType<Outpost>().Any();
             if (!hasOutposts) yield break;
 
-            yield return CreateDeliveryGizmo();
-            yield return CreateFinancingGizmo();
+            if (EmpireVOESettings.enableDelivery)
+                yield return CreateDeliveryGizmo();
+            if (EmpireVOESettings.enableFinancing)
+                yield return CreateFinancingGizmo();
         }
 
         /// <summary>

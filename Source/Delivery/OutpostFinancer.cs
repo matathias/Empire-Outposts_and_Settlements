@@ -18,7 +18,7 @@ namespace EmpireVOE
 
         public void ModifyPayment(SilverPaymentContext context)
         {
-            if (EmpireVOESettings.disableIntegration) return;
+            if (!EmpireVOESettings.FinancingActive) return;
             if (context.Settlement is null) return;
 
             WorldObjectComp_OutpostLinks links = context.Settlement.GetComponent<WorldObjectComp_OutpostLinks>();

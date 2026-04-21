@@ -74,7 +74,7 @@ namespace EmpireVOE
 
         public override IEnumerable<Gizmo> GetGizmos()
         {
-            if (EmpireVOESettings.disableIntegration) yield break;
+            if (!EmpireVOESettings.ScienceLinkActive) yield break;
 
             // Only show gizmo if there are science outposts on the map
             bool hasScienceOutposts = Find.WorldObjects.AllWorldObjects.OfType<Outpost_Science>().Any();
@@ -87,7 +87,7 @@ namespace EmpireVOE
 
         public double GetResourceAdditiveModifier(ResourceFC resource)
         {
-            if (EmpireVOESettings.disableIntegration) return 0;
+            if (!EmpireVOESettings.ScienceLinkActive) return 0;
             if (resource?.def is null || resource.def != ResourceTypeDefOf.RTD_Research) return 0;
             return CalculateBonus();
         }

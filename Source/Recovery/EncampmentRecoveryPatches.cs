@@ -19,7 +19,7 @@ namespace EmpireVOE
     {
         private static void Postfix(WorldObjectComp_SettlementMilitary __instance)
         {
-            if (EmpireVOESettings.disableIntegration) return;
+            if (!EmpireVOESettings.EncampmentActive) return;
 
             WorldSettlementFC settlement = __instance.WorldSettlement;
             if (settlement is null) return;

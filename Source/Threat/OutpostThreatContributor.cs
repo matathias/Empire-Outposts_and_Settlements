@@ -17,7 +17,7 @@ namespace EmpireVOE
 
         public double GetAdditiveContribution(FactionFC faction)
         {
-            if (EmpireVOESettings.disableIntegration) return 0;
+            if (!EmpireVOESettings.ThreatScalingActive) return 0;
 
             double total = 0;
             foreach (WorldObject wo in Find.WorldObjects.AllWorldObjects)

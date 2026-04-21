@@ -24,7 +24,7 @@ namespace EmpireVOE
     {
         private static void Prefix(Outpost_Science __instance)
         {
-            if (EmpireVOESettings.disableIntegration) return;
+            if (!EmpireVOESettings.ScienceLinkActive) return;
             if (WorldObjectComp_ScienceLink.IsAnySettlementLinked(__instance))
             {
                 ScienceResearchSuppression.suppressResearch = true;

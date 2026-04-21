@@ -23,7 +23,7 @@ namespace EmpireVOE
     {
         static bool Prefix(PlanetTile tile, WorldSettlementDef settlementdef, StringBuilder reason, ref bool __result)
         {
-            if (!EmpireVOESettings.requireTownForSettlement) return true;
+            if (!EmpireVOESettings.TownConversionActive || !EmpireVOESettings.requireTownForSettlement) return true;
 
             if (tile == -1)
             {
@@ -109,7 +109,7 @@ namespace EmpireVOE
 
         public override void OnSettlementCreated(WorldSettlementFC settlement)
         {
-            if (!EmpireVOESettings.requireTownForSettlement) return;
+            if (!EmpireVOESettings.TownConversionActive || !EmpireVOESettings.requireTownForSettlement) return;
 
             Outpost_Town town = TownSettlementUtil.FindTownOnTile(settlement.Tile);
             if (town is null) return;

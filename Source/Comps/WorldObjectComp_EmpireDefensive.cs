@@ -66,7 +66,7 @@ namespace EmpireVOE
         public override void Initialize(WorldObjectCompProperties props)
         {
             base.Initialize(props);
-            if (EmpireVOESettings.disableIntegration) return;
+            if (!EmpireVOESettings.MilitaryActive) return;
             Register();
         }
 
