@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
+		<defName>VOE_0_3_0</defName>
+		<label>Comp Update</label>
+		<description>Refactors the mod to rely more on WorldObjectComps instead of a central WorldComponent.</description>
+		<releaseDate>2026-04-20</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Breaks down the monolithic WorldComponent into a handful of WorldObjectComps</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
+</Defs>

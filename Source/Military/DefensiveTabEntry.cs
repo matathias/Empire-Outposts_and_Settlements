@@ -15,11 +15,13 @@ namespace EmpireVOE
     {
         private readonly Outpost_Defensive outpost;
         private readonly DefensiveAutoDefender defender;
+        private readonly WorldObjectComp_EmpireDefensive comp;
 
         public DefensiveTabEntry(Outpost_Defensive outpost, DefensiveAutoDefender defender)
         {
             this.outpost = outpost;
             this.defender = defender;
+            comp = outpost.GetComponent<WorldObjectComp_EmpireDefensive>();
         }
 
         public WorldObject WorldObject => outpost;
@@ -30,23 +32,23 @@ namespace EmpireVOE
 
         public bool AutoDefend
         {
-            get => WorldComponent_VOETracker.GetAutoDefend(outpost);
-            set => WorldComponent_VOETracker.SetAutoDefend(outpost, value);
+            get => comp.autoDefend;
+            set => comp.autoDefend = value;
         }
 
-        public bool IsUnderAttack => WorldComponent_VOETracker.GetRaidTarget(outpost)?.IsUnderAttack ?? false;
+        public bool IsUnderAttack => outpost.GetComponent<WorldObjectComp_EmpireOutpost>()?.raidTarget?.IsUnderAttack ?? false;
 
-        public bool IsBusy => defender.Busy || IsUnderAttack || WorldComponent_VOETracker.IsOnCooldown(outpost);
+        public bool IsBusy => defender.Busy || IsUnderAttack || comp.IsOnCooldown;
 
         public string StatusLabel
         {
             get
             {
                 if (IsUnderAttack) return "FCMilStatusUnderAttack".Translate();
-                if (WorldComponent_VOETracker.IsOnCooldown(outpost))
+                if (comp.IsOnCooldown)
                 {
                     string label = "FCMilStatusCooldown".Translate();
-                    int ticksLeft = WorldComponent_VOETracker.GetCooldownTicksLeft(outpost);
+                    int ticksLeft = comp.CooldownTicksLeft;
                     if (ticksLeft > 0) label += " " + ticksLeft.ToTimeString();
                     return label;
                 }

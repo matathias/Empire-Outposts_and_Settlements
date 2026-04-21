@@ -92,9 +92,9 @@ namespace EmpireVOE
             if (prev != EmpireVOESettings.disableIntegration)
             {
                 if (EmpireVOESettings.disableIntegration)
-                    WorldComponent_VOETracker.UnregisterAll();
+                    WorldObjectComp_EmpireOutpost.UnregisterAll();
                 else
-                    WorldComponent_VOETracker.ReregisterAll();
+                    WorldObjectComp_EmpireOutpost.ReregisterAll();
             }
 
             ls.CheckboxLabeled(

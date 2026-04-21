@@ -31,14 +31,15 @@ namespace EmpireVOE
                 return;
             }
 
-            Outpost outpost = WorldComponent_VOETracker.GetDeliveryDestination(settlement);
+            WorldObjectComp_OutpostLinks links = settlement.GetComponent<WorldObjectComp_OutpostLinks>();
+            Outpost outpost = links?.GetDeliveryOutpost();
             if (outpost is null) return;
 
-            // Validate outpost still exists
+            // Validate outpost still exists on the world map
             if (Find.WorldObjects.WorldObjectAt<Outpost>(outpost.Tile) is null)
             {
                 Messages.Message("VOE_InvalidDeliveryOutpost".Translate(settlement.Name), MessageTypeDefOf.NeutralEvent);
-                WorldComponent_VOETracker.SetDeliveryDestination(settlement, null);
+                links.deliveryOutpost = null;
                 return;
             }
 
@@ -97,7 +98,11 @@ namespace EmpireVOE
 
             // Clear the stale delivery destination
             if (source is object)
-                WorldComponent_VOETracker.SetDeliveryDestination(source, null);
+            {
+                WorldObjectComp_OutpostLinks links = source.GetComponent<WorldObjectComp_OutpostLinks>();
+                if (links is object)
+                    links.deliveryOutpost = null;
+            }
 
             // Create redirect event to tax map
             FCEvent redirect = FCEventMaker.MakeEvent(FCEventDefOf.taxColony);
@@ -126,7 +131,7 @@ namespace EmpireVOE
         {
             if (EmpireVOESettings.disableIntegration) return;
 
-            foreach (Outpost outpost in WorldComponent_VOETracker.GetAllDistinctFinancingOutposts())
+            foreach (Outpost outpost in WorldObjectComp_OutpostLinks.GetAllDistinctFinancingOutposts())
             {
                 if (Find.WorldObjects.WorldObjectAt<Outpost>(outpost.Tile) is null)
                     continue;

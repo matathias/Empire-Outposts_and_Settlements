@@ -17,15 +17,17 @@ namespace EmpireVOE
     public class DefensiveAutoDefender : IAutoDefender
     {
         private readonly Outpost_Defensive outpost;
+        private readonly WorldObjectComp_EmpireDefensive comp;
         private bool _busy;
         private WorldObject _defendingTarget;
 
         public bool Busy => _busy;
-        public string DefendingTargetName => _defendingTarget != null ? _defendingTarget.LabelCap : "";
+        public string DefendingTargetName => _defendingTarget is object ? _defendingTarget.LabelCap : "";
 
         public DefensiveAutoDefender(Outpost_Defensive outpost)
         {
             this.outpost = outpost;
+            comp = outpost.GetComponent<WorldObjectComp_EmpireDefensive>();
         }
 
         public WorldObject WorldObject => outpost;
@@ -34,11 +36,11 @@ namespace EmpireVOE
 
         public int Range => outpost.Range;
 
-        public bool CanAutoDefend => WorldComponent_VOETracker.GetAutoDefend(outpost)
+        public bool CanAutoDefend => comp.autoDefend
                                      && outpost.PawnCount > 1
                                      && !outpost.Packing
                                      && !_busy
-                                     && !WorldComponent_VOETracker.IsOnCooldown(outpost);
+                                     && !comp.IsOnCooldown;
 
         public MilitaryForce CreateDefendingForce()
         {
@@ -72,7 +74,7 @@ namespace EmpireVOE
                 foreach (Pawn pawn in outpost.AllPawns.InRandomOrder().Take(injuries))
                 {
                     BodyPartRecord part = pawn.health.hediffSet.GetRandomNotMissingPart(DamageDefOf.Cut);
-                    if (part != null)
+                    if (part is object)
                     {
                         pawn.TakeDamage(new DamageInfo(DamageDefOf.Cut, Rand.Range(5f, 15f), 0f,
                             -1f, null, part));
@@ -81,7 +83,7 @@ namespace EmpireVOE
                 // Extra day cooldown on loss
                 cooldown += GenDate.TicksPerDay;
             }
-            WorldComponent_VOETracker.SetCooldown(outpost, cooldown);
+            comp.SetCooldown(cooldown);
         }
 
         /// <summary>
@@ -142,7 +144,7 @@ namespace EmpireVOE
             if (pawns is null) return;
             foreach (Pawn pawn in pawns)
             {
-                if (pawn != null && !pawn.Dead && !pawn.Destroyed)
+                if (pawn is object && !pawn.Dead && !pawn.Destroyed)
                     outpost.AddPawn(pawn);
             }
         }

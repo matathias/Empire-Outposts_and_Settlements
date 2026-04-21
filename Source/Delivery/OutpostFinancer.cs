@@ -21,14 +21,15 @@ namespace EmpireVOE
             if (EmpireVOESettings.disableIntegration) return;
             if (context.Settlement is null) return;
 
-            Outpost outpost = WorldComponent_VOETracker.GetFinancingOutpost(context.Settlement);
+            WorldObjectComp_OutpostLinks links = context.Settlement.GetComponent<WorldObjectComp_OutpostLinks>();
+            Outpost outpost = links?.GetFinancingOutpost();
             if (outpost is null) return;
 
             // Validate outpost still exists on the world map
-            if (Find.WorldObjects.WorldObjectAt<Outpost>(outpost.Tile) == null)
+            if (Find.WorldObjects.WorldObjectAt<Outpost>(outpost.Tile) is null)
             {
                 DeliveryUtil.DebugLog("Financing outpost no longer exists, clearing for " + context.Settlement.Name);
-                WorldComponent_VOETracker.SetFinancingOutpost(context.Settlement, null);
+                links.financingOutpost = null;
                 return;
             }
 
