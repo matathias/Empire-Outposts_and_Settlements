@@ -58,7 +58,7 @@ namespace EmpireVOE
             if (!EmpireVOESettings.DeliveryActive) return false;
 
             FCEvent evt = context.Event;
-            if (evt.source == -1) return false;
+            if (!evt.source.Valid) return false;
 
             Map taxMap = FindFC.TaxMap;
             if (taxMap is object && evt.location == taxMap.Tile) return false;

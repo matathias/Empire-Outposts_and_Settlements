@@ -79,7 +79,7 @@ namespace EmpireVOE
     /// </summary>
     public static class EncampmentCache
     {
-        private static readonly Dictionary<int, EncampmentCacheEntry> cache = new Dictionary<int, EncampmentCacheEntry>();
+        private static readonly Dictionary<PlanetTile, EncampmentCacheEntry> cache = new Dictionary<PlanetTile, EncampmentCacheEntry>();
 
         public static EncampmentCacheEntry GetOrBuild(WorldSettlementFC settlement)
         {

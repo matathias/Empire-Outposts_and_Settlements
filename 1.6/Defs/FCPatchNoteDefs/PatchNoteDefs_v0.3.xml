@@ -70,4 +70,18 @@
 		<li>Matathias</li>
 		</authors>
 	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
+		<defName>VOE_0_3_5</defName>
+		<label>PlanetTile Update</label>
+		<description>Updates the mod to use PlanetTile instead of int wherever possible. Rimworld allows for PlanetTile to be cast down to an int, but you lose layer info when you do that, which is a bad thing when it&apos;s possible to have Empire settlements on multiple different layers.</description>
+		<releaseDate>2026-06-03</releaseDate>
+		<patchNoteType>Patch</patchNoteType>
+		<patchNoteLines>
+		<li>Updates the mod to use PlanetTile instead of int</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
 </Defs>

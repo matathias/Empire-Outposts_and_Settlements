@@ -12,7 +12,7 @@ namespace EmpireVOE
     public class WorldComponent_VOETracker : WorldComponent
     {
         // One-tick flags consumed same tick they are set — not serialized.
-        private static readonly HashSet<int> redirectedSettlements = new HashSet<int>();
+        private static readonly HashSet<PlanetTile> redirectedSettlements = new HashSet<PlanetTile>();
 
         public WorldComponent_VOETracker(World world) : base(world)
         {
@@ -24,17 +24,17 @@ namespace EmpireVOE
             redirectedSettlements.Clear();
         }
 
-        public static bool IsRedirected(int settlementTile)
+        public static bool IsRedirected(PlanetTile settlementTile)
         {
             return redirectedSettlements.Contains(settlementTile);
         }
 
-        public static void SetRedirected(int settlementTile)
+        public static void SetRedirected(PlanetTile settlementTile)
         {
             redirectedSettlements.Add(settlementTile);
         }
 
-        public static void ClearRedirected(int settlementTile)
+        public static void ClearRedirected(PlanetTile settlementTile)
         {
             redirectedSettlements.Remove(settlementTile);
         }

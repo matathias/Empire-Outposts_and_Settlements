@@ -25,7 +25,7 @@ namespace EmpireVOE
         {
             if (!EmpireVOESettings.TownConversionActive || !EmpireVOESettings.requireTownForSettlement) return true;
 
-            if (tile == -1)
+            if (!tile.Valid)
             {
                 reason?.Append("FCSelectedInvalidTile".Translate());
                 __result = false;

@@ -26,7 +26,7 @@ namespace EmpireVOE
 
         public string Name => outpost.Name ?? outpost.def.label;
 
-        public int Tile =>outpost.Tile;
+        public PlanetTile Tile => outpost.Tile;
 
         public int MilitaryLevel => Math.Max(0, outpost.PawnCount / 3);
 
