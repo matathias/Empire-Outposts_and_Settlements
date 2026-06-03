@@ -104,7 +104,7 @@ namespace EmpireVOE
         {
             if (raidTarget is object) return;
             raidTarget = new OutpostRaidTarget(Outpost);
-            RaidTargetRegistry.Register(raidTarget);
+            EmpireRegistry.Register(raidTarget);
             if (parent is Outpost_Encampment)
                 EncampmentCache.Invalidate();
         }
@@ -112,7 +112,7 @@ namespace EmpireVOE
         internal void Unregister()
         {
             if (raidTarget is null) return;
-            RaidTargetRegistry.Unregister(raidTarget);
+            EmpireRegistry.Unregister(raidTarget);
             raidTarget = null;
         }
 
@@ -136,15 +136,15 @@ namespace EmpireVOE
         public static void UnregisterAll()
         {
             ToggleMilitary(false);
-            SilverPaymentRegistry.Unregister(OutpostFinancer.Instance);
-            ThreatScalingRegistry.Unregister(VOECompatInit.ThreatContributor);
+            EmpireRegistry.Unregister(OutpostFinancer.Instance);
+            EmpireRegistry.Unregister(VOECompatInit.ThreatContributor);
         }
 
         public static void ReregisterAll()
         {
             if (Find.World is null) return;
-            SilverPaymentRegistry.Register(OutpostFinancer.Instance);
-            ThreatScalingRegistry.Register(VOECompatInit.ThreatContributor);
+            EmpireRegistry.Register(OutpostFinancer.Instance);
+            EmpireRegistry.Register(VOECompatInit.ThreatContributor);
             if (EmpireVOESettings.enableMilitary)
                 ToggleMilitary(true);
         }
@@ -153,7 +153,7 @@ namespace EmpireVOE
 
         private FCEvent FindAttackEvent()
         {
-            IReadOnlyList<FCEvent> attackEvents = FactionCache.FactionComp?.GetEventsByDef(FCEventDefOf.settlementBeingAttacked);
+            IReadOnlyList<FCEvent> attackEvents = FindFC.FactionComp?.GetEventsByDef(FCEventDefOf.settlementBeingAttacked);
             if (attackEvents is null) return null;
             for (int i = 0; i < attackEvents.Count; i++)
             {
@@ -166,7 +166,7 @@ namespace EmpireVOE
         private List<string> GetLinkedSettlementNames(Outpost_Science science)
         {
             List<string> names = new List<string>();
-            FactionFC faction = FactionCache.FactionComp;
+            FactionFC faction = FindFC.FactionComp;
             if (faction is null) return names;
             foreach (WorldSettlementFC s in faction.settlements)
             {
@@ -180,7 +180,7 @@ namespace EmpireVOE
         private List<string> GetFinancedSettlementNames()
         {
             List<string> names = new List<string>();
-            FactionFC faction = FactionCache.FactionComp;
+            FactionFC faction = FindFC.FactionComp;
             if (faction is null) return names;
             Outpost outpost = Outpost;
             foreach (WorldSettlementFC s in faction.settlements)
@@ -195,7 +195,7 @@ namespace EmpireVOE
         private List<string> GetDeliverySourceNames()
         {
             List<string> names = new List<string>();
-            FactionFC faction = FactionCache.FactionComp;
+            FactionFC faction = FindFC.FactionComp;
             if (faction is null) return names;
             Outpost outpost = Outpost;
             foreach (WorldSettlementFC s in faction.settlements)

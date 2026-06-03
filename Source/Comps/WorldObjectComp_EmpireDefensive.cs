@@ -103,20 +103,20 @@ namespace EmpireVOE
             if (defender is object) return;
             defender = new DefensiveAutoDefender(Outpost);
             tabEntry = new DefensiveTabEntry(Outpost, defender);
-            AutoDefenderRegistry.Register(defender);
-            MilitaryTabRegistry.Register(tabEntry);
+            EmpireRegistry.Register(defender);
+            EmpireRegistry.Register(tabEntry);
         }
 
         internal void Unregister()
         {
             if (defender is object)
             {
-                AutoDefenderRegistry.Unregister(defender);
+                EmpireRegistry.Unregister(defender);
                 defender = null;
             }
             if (tabEntry is object)
             {
-                MilitaryTabRegistry.Unregister(tabEntry);
+                EmpireRegistry.Unregister(tabEntry);
                 tabEntry = null;
             }
         }

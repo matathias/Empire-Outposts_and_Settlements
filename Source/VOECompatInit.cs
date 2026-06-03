@@ -15,17 +15,17 @@ namespace EmpireVOE
         static VOECompatInit()
         {
             new Harmony("com.Matathias.EmpireVOE").PatchAll(Assembly.GetExecutingAssembly());
-            SilverPaymentRegistry.Register(OutpostFinancer.Instance);
-            LifecycleRegistry.Register(_townConversionHandler);
-            ThreatScalingRegistry.Register(ThreatContributor);
-            TaxDeliveryRegistry.Register(OutpostDeliveryInterceptor.Instance);
+            EmpireRegistry.Register(OutpostFinancer.Instance);
+            EmpireRegistry.Register(_townConversionHandler);
+            EmpireRegistry.Register(ThreatContributor);
+            EmpireRegistry.Register(OutpostDeliveryInterceptor.Instance);
             EmpireCacheUtil.RegisterCacheInvalidator("EmpireVOE", () =>
             {
                 // Re-register after InvalidateAll clears all registries
-                SilverPaymentRegistry.Register(OutpostFinancer.Instance);
-                LifecycleRegistry.Register(_townConversionHandler);
-                ThreatScalingRegistry.Register(ThreatContributor);
-                TaxDeliveryRegistry.Register(OutpostDeliveryInterceptor.Instance);
+                EmpireRegistry.Register(OutpostFinancer.Instance);
+                EmpireRegistry.Register(_townConversionHandler);
+                EmpireRegistry.Register(ThreatContributor);
+                EmpireRegistry.Register(OutpostDeliveryInterceptor.Instance);
             });
             VOELog.MessageForce("Empire - Vanilla Outposts Expanded integration loaded.");
         }

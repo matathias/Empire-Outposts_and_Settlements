@@ -24,7 +24,7 @@ namespace EmpireVOE
             WorldSettlementFC settlement = __instance.WorldSettlement;
             if (settlement is null) return;
 
-            FactionFC faction = FactionCache.FactionComp;
+            FactionFC faction = FindFC.FactionComp;
             if (faction is null) return;
 
             EncampmentCacheEntry entry = EncampmentCache.GetOrBuild(settlement);

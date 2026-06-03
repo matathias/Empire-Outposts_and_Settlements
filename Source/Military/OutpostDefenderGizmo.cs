@@ -27,7 +27,7 @@ namespace EmpireVOE
 
         private static void ShowDefenderMenu(Outpost outpost)
         {
-            FactionFC faction = FactionCache.FactionComp;
+            FactionFC faction = FindFC.FactionComp;
             if (faction is null) return;
 
             FCEvent evt = null;

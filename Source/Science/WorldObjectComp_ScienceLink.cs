@@ -50,7 +50,7 @@ namespace EmpireVOE
         private static void RebuildLinkedSet()
         {
             linkedOutposts.Clear();
-            FactionFC faction = FactionCache.FactionComp;
+            FactionFC faction = FindFC.FactionComp;
             if (faction is null) return;
             foreach (WorldSettlementFC s in faction.settlements)
             {

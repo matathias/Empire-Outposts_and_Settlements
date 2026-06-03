@@ -38,7 +38,7 @@ namespace EmpireVOE
                         levelList.Add(new DebugMenuOption("Level " + chosenLevel, DebugMenuOptionMode.Action, delegate
                         {
                             double efficiency;
-                            MilitaryForce.GetMilitaryLevelAndEfficiencyFromTechLevel(
+                            MilitaryUtil.GetTechLevelBaseline(
                                 enemyFaction.def.techLevel, out double _, out efficiency);
                             MilitaryForce attackingForce = new MilitaryForce(chosenLevel, efficiency, null, enemyFaction);
                             VOELog.MessageForce("Debug - Attack VOE Outpost - " + t.Name

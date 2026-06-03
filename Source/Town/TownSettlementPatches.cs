@@ -98,7 +98,7 @@ namespace EmpireVOE
     /// When the Specialists compat DLL is loaded, it sets <see cref="SpecialistsCallback"/>
     /// to handle pawn assignment directly. Otherwise, falls back to skill-based production bonuses.
     /// </summary>
-    public class TownConversionHandler : LifecycleParticipantBase
+    public class TownConversionHandler : ISettlementListener
     {
         /// <summary>
         /// Set by the Specialists compat DLL when Matathias.Empire.Specialists is active.
@@ -107,7 +107,13 @@ namespace EmpireVOE
         /// </summary>
         public static Action<WorldSettlementFC, List<Pawn>> SpecialistsCallback;
 
-        public override void OnSettlementCreated(WorldSettlementFC settlement)
+        public void OnSettlementRemoved(WorldSettlementFC settlement) { }
+        public void OnSettlementUpgraded(WorldSettlementFC settlement, int oldLevel, int newLevel) { }
+        public void OnSettlementTypeChanged(WorldSettlementFC settlement, WorldSettlementDef oldDef, WorldSettlementDef newDef) { }
+        public void OnBuildingConstructed(WorldSettlementFC settlement, BuildingFCDef building, int slot) { }
+        public void OnBuildingDeconstructed(WorldSettlementFC settlement, BuildingFCDef building, int slot) { }
+
+        public void OnSettlementCreated(WorldSettlementFC settlement)
         {
             if (!EmpireVOESettings.TownConversionActive || !EmpireVOESettings.requireTownForSettlement) return;
 
@@ -145,7 +151,7 @@ namespace EmpireVOE
                     Dictionary<string, double> bonuses = CalculateSkillBonuses(townPawns);
 
                     // Transfer pawns to Empire faction
-                    Faction empireFaction = FactionCache.PlayerColonyFaction;
+                    Faction empireFaction = FindFC.EmpireFaction;
                     foreach (Pawn pawn in townPawns)
                     {
                         pawn.SetFaction(empireFaction);

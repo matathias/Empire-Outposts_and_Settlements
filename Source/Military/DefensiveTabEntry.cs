@@ -47,7 +47,7 @@ namespace EmpireVOE
                 if (IsUnderAttack) return "FCMilStatusUnderAttack".Translate();
                 if (comp.IsOnCooldown)
                 {
-                    string label = "FCMilStatusCooldown".Translate();
+                    string label = "FCMilStatusTraveling".Translate();
                     int ticksLeft = comp.CooldownTicksLeft;
                     if (ticksLeft > 0) label += " " + ticksLeft.ToTimeString();
                     return label;

@@ -60,7 +60,7 @@ namespace EmpireVOE
             FCEvent evt = context.Event;
             if (evt.source == -1) return false;
 
-            Map taxMap = FactionCache.FactionComp.TaxMap;
+            Map taxMap = FindFC.TaxMap;
             if (taxMap is object && evt.location == taxMap.Tile) return false;
 
             Outpost destination = Find.WorldObjects.WorldObjectAt<Outpost>(evt.location);
@@ -114,7 +114,7 @@ namespace EmpireVOE
             redirect.hasCustomDescription = true;
 
             WorldComponent_VOETracker.SetRedirected(evt.source);
-            FactionCache.FactionComp.AddEvent(redirect);
+            FindFC.EventManager.AddEvent(redirect);
             return true;
         }
     }

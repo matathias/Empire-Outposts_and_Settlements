@@ -76,7 +76,7 @@ namespace EmpireVOE
         /// </summary>
         public static IEnumerable<Outpost> GetAllDistinctFinancingOutposts()
         {
-            FactionFC faction = FactionCache.FactionComp;
+            FactionFC faction = FindFC.FactionComp;
             if (faction is null) yield break;
 
             HashSet<Outpost> seen = new HashSet<Outpost>();
