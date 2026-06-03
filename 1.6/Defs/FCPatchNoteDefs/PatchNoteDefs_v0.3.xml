@@ -41,4 +41,19 @@
 		<li>Matathias</li>
 		</authors>
 	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
+		<defName>VOE_0_3_3</defName>
+		<label>Obselesence Update</label>
+		<description>Replaces the choose-a-defender float menu with opening up the base mod&apos;s choose-a-defender window.</description>
+		<releaseDate>2026-06-03</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Entirely removes OutpostDefenderGizmo, replacing it with a call to Dialog_DefendSettlement</li>
+		<li>Replaces an obsolete reference to settlementFCDefending in FindAttackEvent() with linkedOperation?.targetObject</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
 </Defs>

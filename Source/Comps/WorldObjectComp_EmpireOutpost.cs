@@ -49,7 +49,13 @@ namespace EmpireVOE
             FCEvent evt = FindAttackEvent();
             if (evt is null) yield break;
 
-            yield return OutpostDefenderGizmo.CreateGizmo(Outpost);
+            yield return new Command_Action
+            {
+                defaultLabel = "VOE_ChangeDefender".Translate(),
+                defaultDesc = "VOE_ChangeDefenderDesc".Translate(),
+                icon = TexLoad.iconMilitary,
+                action = () => Find.WindowStack.Add(new Dialog_DefendSettlement(evt))
+            };
         }
 
         public override string CompInspectStringExtra()
@@ -157,7 +163,7 @@ namespace EmpireVOE
             if (attackEvents is null) return null;
             for (int i = 0; i < attackEvents.Count; i++)
             {
-                if (attackEvents[i].settlementFCDefending == parent)
+                if (attackEvents[i].linkedOperation?.targetObject == parent)
                     return attackEvents[i];
             }
             return null;
