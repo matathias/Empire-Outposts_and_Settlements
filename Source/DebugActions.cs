@@ -38,12 +38,12 @@ namespace EmpireVOE
                         levelList.Add(new DebugMenuOption("Level " + chosenLevel, DebugMenuOptionMode.Action, delegate
                         {
                             double efficiency;
-                            MilitaryUtil.GetTechLevelBaseline(
+                            MilitaryDeploymentUtil.GetTechLevelBaseline(
                                 enemyFaction.def.techLevel, out double _, out efficiency);
                             MilitaryForce attackingForce = new MilitaryForce(chosenLevel, efficiency, null, enemyFaction);
                             VOELog.MessageForce("Debug - Attack VOE Outpost - " + t.Name
                                 + " (level " + chosenLevel + ", efficiency " + efficiency + ")");
-                            MilitaryUtilFC.AttackRaidTarget(attackingForce, t, enemyFaction);
+                            MilitaryOperationsUtil.AttackRaidTarget(attackingForce, t, enemyFaction);
                         }));
                     }
                     Find.WindowStack.Add(new Dialog_DebugOptionListLister(levelList));

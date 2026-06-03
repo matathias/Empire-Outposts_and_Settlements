@@ -9,7 +9,7 @@ namespace EmpireVOE
 {
     /// <summary>
     /// Provides a "Change Defender" gizmo on outposts when they are under attack.
-    /// Cannot use MilitaryUtilFC.ChangeDefendingMilitaryForce() because it calls
+    /// Cannot use MilitaryOperationsUtil.ChangeDefendingMilitaryForce() because it calls
     /// WorldObjectAt<WorldSettlementFC>(evt.location) which returns null for outpost tiles.
     /// </summary>
     public static class OutpostDefenderGizmo
@@ -47,14 +47,14 @@ namespace EmpireVOE
             {
                 if (settlement.MilitaryComp is null) continue;
                 if (!settlement.MilitaryComp.IsMilitaryValid()) continue;
-                if (settlement.MilitaryComp.IsMilitaryBusy()) continue;
+                if (settlement.MilitaryComp.IsMilitaryBusy(silent: true)) continue;
 
                 WorldSettlementFC s = settlement;
                 int level = s.MilitaryComp.settlementMilitaryLevel;
                 options.Add(new FloatMenuOption(
                     s.Name + " " + "ShortMilitary".Translate() + " " + level +
                         " - " + "FCAvailable".Translate() + ": " +
-                        (!s.MilitaryComp.IsMilitaryBusySilent()).ToString(),
+                        (!s.MilitaryComp.IsMilitaryBusy(silent: true)).ToString(),
                     delegate
                     {
                         // Return previous defender's military if it was an Empire settlement
