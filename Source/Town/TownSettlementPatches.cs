@@ -52,13 +52,18 @@ namespace EmpireVOE
                 }
             }
 
-            // Require Outpost_Town on tile
-            Outpost_Town town = TownSettlementUtil.FindTownOnTile(tile);
-            if (town is null)
+            // Require Outpost_Town only on surface tiles. VOE Towns don't exist off-surface,
+            // so settlement types that allow non-surface layers can be placed there freely.
+            if (tile.Layer == Find.WorldGrid.Surface)
             {
-                reason?.Append("VOE_NotATown".Translate());
-                __result = false;
-                return false;
+                Outpost_Town town = TownSettlementUtil.FindTownOnTile(tile);
+                if (town is null)
+                {
+                    bool allowsOffSurface = settlementdef.planetLayers.Any(l => l != Find.WorldGrid.Surface.Def);
+                    reason?.Append((allowsOffSurface ? "VOE_NotATownOrbitAllowed" : "VOE_NotATown").Translate());
+                    __result = false;
+                    return false;
+                }
             }
 
             // Delegate biome and settlement-type-specific validation to SettlementTypeExtension

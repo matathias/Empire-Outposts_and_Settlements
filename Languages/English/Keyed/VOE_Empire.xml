@@ -55,6 +55,7 @@
     <VOE_ConvertTownPawns>Convert Town pawns</VOE_ConvertTownPawns>
     <VOE_ConvertTownPawnsDesc>Town pawns are transferred to the new settlement on creation.</VOE_ConvertTownPawnsDesc>
     <VOE_NotATown>Empire settlements must be founded on Town outposts.</VOE_NotATown>
+    <VOE_NotATownOrbitAllowed>On the surface, Empire settlements must be founded on Town outposts. Non-surface tiles have no Town requirement.</VOE_NotATownOrbitAllowed>
     <VOE_TownIncorporated>{0} incorporated</VOE_TownIncorporated>
     <VOE_TownIncorporatedDesc>The town {0} has been incorporated into your new settlement {1}. {2} residents have been transferred.</VOE_TownIncorporatedDesc>
     <VOE_TownBonusDesc>Town workforce bonus</VOE_TownBonusDesc>

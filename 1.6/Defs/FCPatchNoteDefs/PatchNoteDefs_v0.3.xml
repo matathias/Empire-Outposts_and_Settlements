@@ -56,4 +56,18 @@
 		<li>Matathias</li>
 		</authors>
 	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
+		<defName>VOE_0_3_4</defName>
+		<label>Off-surface Settlements</label>
+		<description>Allows settling appropriate Empire settlements on non-surface layers even when the &quot;Can only found on VOE Towns&quot; restriction is enabled. Otherwise, orbital settlements are entirely blocked off.</description>
+		<releaseDate>2026-06-03</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Change the IsValidTileForNewSettlement prefix to only apply to tiles on the surface layer</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
 </Defs>
