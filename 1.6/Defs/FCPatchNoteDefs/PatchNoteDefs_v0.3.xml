@@ -84,4 +84,18 @@
 		<li>Matathias</li>
 		</authors>
 	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
+		<defName>VOE_0_3_6</defName>
+		<label>Road-builder Compat</label>
+		<description>Adds compatibility with Empire&apos;s road builder. When enabled, VOE outposts will be included in the road network calculations, and roads will be built between them and Empire settlements.</description>
+		<releaseDate>2026-06-13</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Add compat support with Empire&apos;s road builder</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
 </Defs>

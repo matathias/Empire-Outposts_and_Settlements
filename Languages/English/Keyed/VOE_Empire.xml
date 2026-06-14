@@ -48,6 +48,8 @@
     <VOE_EnableTownConversionDesc>VOE Town outposts can be converted into Empire settlements.</VOE_EnableTownConversionDesc>
     <VOE_EnableThreatScaling>Threat Scaling</VOE_EnableThreatScaling>
     <VOE_EnableThreatScalingDesc>Outposts contribute to Empire's overall threat level, making enemy raids harder.</VOE_EnableThreatScalingDesc>
+    <VOE_EnableRoads>Road Integration</VOE_EnableRoads>
+    <VOE_EnableRoadsDesc>The Empire road builder includes your outposts in its network, building roads to and between them alongside settlements.</VOE_EnableRoadsDesc>
 
     <!-- Town Settlement Feature -->
     <VOE_RequireTown>Require Town for settlement</VOE_RequireTown>

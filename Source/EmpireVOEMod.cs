@@ -18,6 +18,7 @@ namespace EmpireVOE
         public static bool enableEncampment = true;
         public static bool enableTownConversion = true;
         public static bool enableThreatScaling = true;
+        public static bool enableRoads = true;
 
         // Skill-based bonuses (used by science link and town conversion)
         public static float additivePerLevel = 0.025f;
@@ -46,6 +47,7 @@ namespace EmpireVOE
         public static bool EncampmentActive => !disableIntegration && enableEncampment;
         public static bool TownConversionActive => !disableIntegration && enableTownConversion;
         public static bool ThreatScalingActive => !disableIntegration && enableThreatScaling;
+        public static bool RoadsActive => !disableIntegration && enableRoads;
 
         public override void ExposeData()
         {
@@ -76,6 +78,9 @@ namespace EmpireVOE
 
             // Threat Scaling
             Scribe_Values.Look(ref outpostThreatPerPawn, "outpostThreatPerPawn", 0.5f);
+
+            // Road Integration
+            Scribe_Values.Look(ref enableRoads, "enableRoads", true);
 
             // Town Settlement
             Scribe_Values.Look(ref requireTownForSettlement, "requireTownForSettlement", false);
@@ -243,6 +248,20 @@ namespace EmpireVOE
             {
                 ls.Label("  " + "VOE_OutpostThreatPerPawn".Translate() + ": " + EmpireVOESettings.outpostThreatPerPawn.ToString("F2"));
                 EmpireVOESettings.outpostThreatPerPawn = ls.Slider(EmpireVOESettings.outpostThreatPerPawn, 0f, 2f);
+            }
+
+            ls.GapLine();
+
+            // --- Road Integration ---
+            bool prevRoads = EmpireVOESettings.enableRoads;
+            ls.CheckboxLabeled(
+                "VOE_EnableRoads".Translate(),
+                ref EmpireVOESettings.enableRoads,
+                "VOE_EnableRoadsDesc".Translate());
+            if (prevRoads != EmpireVOESettings.enableRoads)
+            {
+                // Force the road network to recompute so outpost nodes are added/removed.
+                FindFC.RoadBuilder?.FlagUpdateRoadQueues();
             }
 
             ls.Gap(12f);

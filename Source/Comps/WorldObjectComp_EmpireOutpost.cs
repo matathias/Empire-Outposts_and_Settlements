@@ -30,6 +30,9 @@ namespace EmpireVOE
         public override void Initialize(WorldObjectCompProperties props)
         {
             base.Initialize(props);
+            // Road integration is independent of the Military toggle: flag the road
+            // network to recompute so this outpost is picked up as a road node.
+            if (EmpireVOESettings.RoadsActive) FindFC.RoadBuilder?.FlagUpdateRoadQueues();
             if (!EmpireVOESettings.MilitaryActive) return;
             Register();
         }
@@ -38,6 +41,8 @@ namespace EmpireVOE
         {
             base.PostPostRemove();
             Unregister();
+            // Drop this outpost's road node; cached edges are invalidated automatically.
+            if (EmpireVOESettings.RoadsActive) FindFC.RoadBuilder?.FlagUpdateRoadQueues();
             if (parent is Outpost_Encampment)
                 EncampmentCache.Invalidate();
         }

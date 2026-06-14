@@ -19,6 +19,7 @@ namespace EmpireVOE
             EmpireRegistry.Register(_townConversionHandler);
             EmpireRegistry.Register(ThreatContributor);
             EmpireRegistry.Register(OutpostDeliveryInterceptor.Instance);
+            EmpireRegistry.Register(VOERoadNodeProvider.Instance);
             EmpireCacheUtil.RegisterCacheInvalidator("EmpireVOE", () =>
             {
                 // Re-register after InvalidateAll clears all registries
@@ -26,6 +27,7 @@ namespace EmpireVOE
                 EmpireRegistry.Register(_townConversionHandler);
                 EmpireRegistry.Register(ThreatContributor);
                 EmpireRegistry.Register(OutpostDeliveryInterceptor.Instance);
+                EmpireRegistry.Register(VOERoadNodeProvider.Instance);
             });
             VOELog.MessageForce("Empire - Vanilla Outposts Expanded integration loaded.");
         }
