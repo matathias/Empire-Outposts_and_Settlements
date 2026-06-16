@@ -49,18 +49,46 @@ namespace EmpireVOE
 
         public override IEnumerable<Gizmo> GetGizmos()
         {
-            if (!EmpireVOESettings.MilitaryActive) yield break;
-
-            FCEvent evt = FindAttackEvent();
-            if (evt is null) yield break;
-
-            yield return new Command_Action
+            // Military "Change Defender" gizmo
+            if (EmpireVOESettings.MilitaryActive)
             {
-                defaultLabel = "VOE_ChangeDefender".Translate(),
-                defaultDesc = "VOE_ChangeDefenderDesc".Translate(),
-                icon = TexLoad.iconMilitary,
-                action = () => Find.WindowStack.Add(new Dialog_DefendSettlement(evt))
-            };
+                FCEvent evt = FindAttackEvent();
+                if (evt is object)
+                {
+                    yield return new Command_Action
+                    {
+                        defaultLabel = "VOE_ChangeDefender".Translate(),
+                        defaultDesc = "VOE_ChangeDefenderDesc".Translate(),
+                        icon = TexLoad.iconMilitary,
+                        action = () => Find.WindowStack.Add(new Dialog_DefendSettlement(evt))
+                    };
+                }
+            }
+
+            // Outpost -> Settlement conversion gizmo
+            if (EmpireVOESettings.OutpostConversionActive && parent.Faction == Faction.OfPlayer)
+            {
+                List<WorldSettlementDef> types = OutpostConversionUtil.GetConvertibleTypes(Outpost);
+                if (types.Count > 0)
+                {
+                    Command_Action convert = new Command_Action
+                    {
+                        defaultLabel = "VOE_ConvertToSettlement".Translate(),
+                        defaultDesc = "VOE_ConvertToSettlementDesc".Translate(),
+                        icon = TexCommand.Install,
+                        action = () => Find.WindowStack.Add(new FCWindow_SettlementTypePicker(
+                            types,
+                            selected => OutpostConversionUtil.ConvertOutpost(Outpost, selected),
+                            "VOE_ConvertPickType"))
+                    };
+                    if (!OutpostConversionUtil.CanConvertNow(Outpost, out string convertReason))
+                    {
+                        convert.Disabled = true;
+                        convert.disabledReason = convertReason;
+                    }
+                    yield return convert;
+                }
+            }
         }
 
         public override string CompInspectStringExtra()
@@ -103,6 +131,16 @@ namespace EmpireVOE
                 List<string> deliveryNames = GetDeliverySourceNames();
                 if (deliveryNames.Count > 0)
                     lines.Add("VOE_ReceivingTaxes".Translate(string.Join(", ", deliveryNames)));
+            }
+
+            // Outpost -> Settlement conversion availability
+            if (EmpireVOESettings.OutpostConversionActive && OutpostConversionUtil.GetConvertibleTypes(Outpost).Count > 0)
+            {
+                int remaining = OutpostConversionUtil.DelayDaysRemaining(Outpost);
+                if (remaining > 0)
+                    lines.Add("VOE_ConvertAvailableInDays".Translate(remaining.ToString()));
+                else
+                    lines.Add("VOE_ConvertReady".Translate());
             }
 
             if (lines.Count == 0) return null;

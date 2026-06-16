@@ -17,21 +17,25 @@ namespace EmpireVOE
         public static bool enableFinancing = true;
         public static bool enableScienceLink = true;
         public static bool enableEncampment = true;
-        public static bool enableTownConversion = true;
+        public static bool enableOutpostConversion = true;
         public static bool enableRoads = true;
 
-        // Skill-based bonuses (used by science link and town conversion)
+        // Skill-based bonuses (used by science link and outpost conversion)
         public static float additivePerLevel = 0.025f;
         public static int skillFloor = 0;
-        public static int scienceLinkRange = 20;
+        public static int scienceLinkRange = 10;
 
         // Encampment Recovery
-        public static int encampmentRange = 20;
+        public static int encampmentRange = 10;
         public static float encampmentHealRatePerLevel = 0.02f;
 
-        // Town Settlement feature
-        public static bool requireTownForSettlement = false;
-        public static bool convertTownPawns = true;
+        // Outpost -> Settlement conversion feature
+        public static bool requireOutpostForSettlement = false;
+        public static bool convertOutpostPawns = true;
+        public static float reducedFoundingCostFactor = 0.5f;
+        public static bool enableConversionDelay = true;
+        public static int conversionDelayDays = 30;
+        public static float townFlatAdditive = 0.5f;
 
         // VOE Town spawn requirement (absorbed from "VOE Towns Count Outposts")
         public static int townMinSettlements = 0;
@@ -46,7 +50,7 @@ namespace EmpireVOE
         public static bool FinancingActive => !disableIntegration && enableFinancing;
         public static bool ScienceLinkActive => !disableIntegration && enableScienceLink;
         public static bool EncampmentActive => !disableIntegration && enableEncampment;
-        public static bool TownConversionActive => !disableIntegration && enableTownConversion;
+        public static bool OutpostConversionActive => !disableIntegration && enableOutpostConversion;
         public static bool RoadsActive => !disableIntegration && enableRoads;
 
         public override void ExposeData()
@@ -61,23 +65,27 @@ namespace EmpireVOE
             Scribe_Values.Look(ref enableFinancing, "enableFinancing", true);
             Scribe_Values.Look(ref enableScienceLink, "enableScienceLink", true);
             Scribe_Values.Look(ref enableEncampment, "enableEncampment", true);
-            Scribe_Values.Look(ref enableTownConversion, "enableTownConversion", true);
+            Scribe_Values.Look(ref enableOutpostConversion, "enableOutpostConversion", true);
 
             // Skill-based bonuses
             Scribe_Values.Look(ref additivePerLevel, "additivePerLevel", 0.025f);
             Scribe_Values.Look(ref skillFloor, "skillFloor", 0);
-            Scribe_Values.Look(ref scienceLinkRange, "scienceLinkRange", 20);
+            Scribe_Values.Look(ref scienceLinkRange, "scienceLinkRange", 10);
 
             // Encampment Recovery
-            Scribe_Values.Look(ref encampmentRange, "encampmentRange", 20);
+            Scribe_Values.Look(ref encampmentRange, "encampmentRange", 10);
             Scribe_Values.Look(ref encampmentHealRatePerLevel, "encampmentHealRatePerLevel", 0.02f);
 
             // Road Integration
             Scribe_Values.Look(ref enableRoads, "enableRoads", true);
 
-            // Town Settlement
-            Scribe_Values.Look(ref requireTownForSettlement, "requireTownForSettlement", false);
-            Scribe_Values.Look(ref convertTownPawns, "convertTownPawns", true);
+            // Outpost -> Settlement conversion
+            Scribe_Values.Look(ref requireOutpostForSettlement, "requireOutpostForSettlement", false);
+            Scribe_Values.Look(ref convertOutpostPawns, "convertOutpostPawns", true);
+            Scribe_Values.Look(ref reducedFoundingCostFactor, "reducedFoundingCostFactor", 0.5f);
+            Scribe_Values.Look(ref enableConversionDelay, "enableConversionDelay", true);
+            Scribe_Values.Look(ref conversionDelayDays, "conversionDelayDays", 30);
+            Scribe_Values.Look(ref townFlatAdditive, "townFlatAdditive", 0.5f);
 
             // VOE Town spawn requirement (absorbed from "VOE Towns Count Outposts")
             Scribe_Values.Look(ref townMinSettlements, "townMinSettlements", 0);
@@ -235,26 +243,40 @@ namespace EmpireVOE
 
             ls.GapLine();
 
-            // --- Town Conversion ---
+            // --- Outpost -> Settlement Conversion ---
             ls.CheckboxLabeled(
-                "VOE_EnableTownConversion".Translate(),
-                ref EmpireVOESettings.enableTownConversion,
-                "VOE_EnableTownConversionDesc".Translate());
+                "VOE_EnableOutpostConversion".Translate(),
+                ref EmpireVOESettings.enableOutpostConversion,
+                "VOE_EnableOutpostConversionDesc".Translate());
 
-            if (EmpireVOESettings.enableTownConversion)
+            if (EmpireVOESettings.enableOutpostConversion)
             {
                 ls.CheckboxLabeled(
-                    "  " + "VOE_RequireTown".Translate(),
-                    ref EmpireVOESettings.requireTownForSettlement,
-                    "VOE_RequireTownDesc".Translate());
+                    "  " + "VOE_ConvertOutpostPawns".Translate(),
+                    ref EmpireVOESettings.convertOutpostPawns,
+                    "VOE_ConvertOutpostPawnsDesc".Translate());
 
-                if (EmpireVOESettings.requireTownForSettlement)
+                ls.Label("  " + "VOE_ReducedFoundingCostFactor".Translate() + ": " + EmpireVOESettings.reducedFoundingCostFactor.ToString("P0"));
+                EmpireVOESettings.reducedFoundingCostFactor = (float)System.Math.Round(ls.Slider(EmpireVOESettings.reducedFoundingCostFactor, 0.1f, 1f), 2);
+
+                ls.Label("  " + "VOE_TownFlatAdditive".Translate() + ": " + EmpireVOESettings.townFlatAdditive.ToString("F2"));
+                EmpireVOESettings.townFlatAdditive = (float)System.Math.Round(ls.Slider(EmpireVOESettings.townFlatAdditive, 0f, 2f), 2);
+
+                ls.CheckboxLabeled(
+                    "  " + "VOE_EnableConversionDelay".Translate(),
+                    ref EmpireVOESettings.enableConversionDelay,
+                    "VOE_EnableConversionDelayDesc".Translate());
+
+                if (EmpireVOESettings.enableConversionDelay)
                 {
-                    ls.CheckboxLabeled(
-                        "    " + "VOE_ConvertTownPawns".Translate(),
-                        ref EmpireVOESettings.convertTownPawns,
-                        "VOE_ConvertTownPawnsDesc".Translate());
+                    ls.Label("    " + "VOE_ConversionDelayDays".Translate() + ": " + EmpireVOESettings.conversionDelayDays);
+                    EmpireVOESettings.conversionDelayDays = (int)ls.Slider(EmpireVOESettings.conversionDelayDays, 0, 60);
                 }
+
+                ls.CheckboxLabeled(
+                    "  " + "VOE_RequireOutpost".Translate(),
+                    ref EmpireVOESettings.requireOutpostForSettlement,
+                    "VOE_RequireOutpostDesc".Translate());
             }
 
             ls.GapLine();

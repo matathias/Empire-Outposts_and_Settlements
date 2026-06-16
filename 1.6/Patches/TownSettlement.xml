@@ -5,11 +5,11 @@
 	<!-- Settlement comps                                              -->
 	<!-- ============================================================ -->
 
-	<!-- Add WorldObjectComp_TownBonus to all Empire settlement defs that have a comps list -->
+	<!-- Add WorldObjectComp_OutpostBonus to all Empire settlement defs that have a comps list -->
 	<Operation Class="PatchOperationAdd">
 		<xpath>Defs/FactionColonies.WorldSettlementDef[comps]/comps</xpath>
 		<value>
-			<li Class="EmpireVOE.WorldObjectCompProperties_TownBonus" />
+			<li Class="EmpireVOE.WorldObjectCompProperties_OutpostBonus" />
 		</value>
 	</Operation>
 
@@ -38,10 +38,27 @@
 	</Operation>
 
 	<!-- ============================================================ -->
-	<!-- Outpost comps — ensure comps node exists, then add entries    -->
+	<!-- Outpost comps                                                 -->
 	<!-- ============================================================ -->
 
-	<!-- Outpost_Defensive -->
+	<!-- Add the core Empire integration comp to ALL outposts via their shared abstract parent
+	     (VEF's OutpostBase). Children inherit and merge the parent's comps list, so this single
+	     patch covers every outpost type - including ones from other VEF-based outpost mods -
+	     instead of enumerating each defName. -->
+	<Operation Class="PatchOperationConditional">
+		<xpath>Defs/WorldObjectDef[@Name="OutpostBase"]/comps</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>Defs/WorldObjectDef[@Name="OutpostBase"]</xpath>
+			<value><comps /></value>
+		</nomatch>
+	</Operation>
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/WorldObjectDef[@Name="OutpostBase"]/comps</xpath>
+		<value>
+			<li Class="EmpireVOE.WorldObjectCompProperties_EmpireOutpost" />
+		</value>
+	</Operation>
+
 	<Operation Class="PatchOperationConditional">
 		<xpath>Defs/WorldObjectDef[defName="Outpost_Defensive"]/comps</xpath>
 		<nomatch Class="PatchOperationAdd">
@@ -52,128 +69,7 @@
 	<Operation Class="PatchOperationAdd">
 		<xpath>Defs/WorldObjectDef[defName="Outpost_Defensive"]/comps</xpath>
 		<value>
-			<li Class="EmpireVOE.WorldObjectCompProperties_EmpireOutpost" />
 			<li Class="EmpireVOE.WorldObjectCompProperties_EmpireDefensive" />
-		</value>
-	</Operation>
-
-	<!-- Outpost_Science -->
-	<Operation Class="PatchOperationConditional">
-		<xpath>Defs/WorldObjectDef[defName="Outpost_Science"]/comps</xpath>
-		<nomatch Class="PatchOperationAdd">
-			<xpath>Defs/WorldObjectDef[defName="Outpost_Science"]</xpath>
-			<value><comps /></value>
-		</nomatch>
-	</Operation>
-	<Operation Class="PatchOperationAdd">
-		<xpath>Defs/WorldObjectDef[defName="Outpost_Science"]/comps</xpath>
-		<value>
-			<li Class="EmpireVOE.WorldObjectCompProperties_EmpireOutpost" />
-		</value>
-	</Operation>
-
-	<!-- Outpost_Town -->
-	<Operation Class="PatchOperationConditional">
-		<xpath>Defs/WorldObjectDef[defName="Outpost_Town"]/comps</xpath>
-		<nomatch Class="PatchOperationAdd">
-			<xpath>Defs/WorldObjectDef[defName="Outpost_Town"]</xpath>
-			<value><comps /></value>
-		</nomatch>
-	</Operation>
-	<Operation Class="PatchOperationAdd">
-		<xpath>Defs/WorldObjectDef[defName="Outpost_Town"]/comps</xpath>
-		<value>
-			<li Class="EmpireVOE.WorldObjectCompProperties_EmpireOutpost" />
-		</value>
-	</Operation>
-
-	<!-- Outpost_Encampment -->
-	<Operation Class="PatchOperationConditional">
-		<xpath>Defs/WorldObjectDef[defName="Outpost_Encampment"]/comps</xpath>
-		<nomatch Class="PatchOperationAdd">
-			<xpath>Defs/WorldObjectDef[defName="Outpost_Encampment"]</xpath>
-			<value><comps /></value>
-		</nomatch>
-	</Operation>
-	<Operation Class="PatchOperationAdd">
-		<xpath>Defs/WorldObjectDef[defName="Outpost_Encampment"]/comps</xpath>
-		<value>
-			<li Class="EmpireVOE.WorldObjectCompProperties_EmpireOutpost" />
-		</value>
-	</Operation>
-
-	<!-- Outpost_Farming -->
-	<Operation Class="PatchOperationConditional">
-		<xpath>Defs/WorldObjectDef[defName="Outpost_Farming"]/comps</xpath>
-		<nomatch Class="PatchOperationAdd">
-			<xpath>Defs/WorldObjectDef[defName="Outpost_Farming"]</xpath>
-			<value><comps /></value>
-		</nomatch>
-	</Operation>
-	<Operation Class="PatchOperationAdd">
-		<xpath>Defs/WorldObjectDef[defName="Outpost_Farming"]/comps</xpath>
-		<value>
-			<li Class="EmpireVOE.WorldObjectCompProperties_EmpireOutpost" />
-		</value>
-	</Operation>
-
-	<!-- Outpost_Mining -->
-	<Operation Class="PatchOperationConditional">
-		<xpath>Defs/WorldObjectDef[defName="Outpost_Mining"]/comps</xpath>
-		<nomatch Class="PatchOperationAdd">
-			<xpath>Defs/WorldObjectDef[defName="Outpost_Mining"]</xpath>
-			<value><comps /></value>
-		</nomatch>
-	</Operation>
-	<Operation Class="PatchOperationAdd">
-		<xpath>Defs/WorldObjectDef[defName="Outpost_Mining"]/comps</xpath>
-		<value>
-			<li Class="EmpireVOE.WorldObjectCompProperties_EmpireOutpost" />
-		</value>
-	</Operation>
-
-	<!-- Outpost_Drilling -->
-	<Operation Class="PatchOperationConditional">
-		<xpath>Defs/WorldObjectDef[defName="Outpost_Drilling"]/comps</xpath>
-		<nomatch Class="PatchOperationAdd">
-			<xpath>Defs/WorldObjectDef[defName="Outpost_Drilling"]</xpath>
-			<value><comps /></value>
-		</nomatch>
-	</Operation>
-	<Operation Class="PatchOperationAdd">
-		<xpath>Defs/WorldObjectDef[defName="Outpost_Drilling"]/comps</xpath>
-		<value>
-			<li Class="EmpireVOE.WorldObjectCompProperties_EmpireOutpost" />
-		</value>
-	</Operation>
-
-	<!-- Outpost_Hunting -->
-	<Operation Class="PatchOperationConditional">
-		<xpath>Defs/WorldObjectDef[defName="Outpost_Hunting"]/comps</xpath>
-		<nomatch Class="PatchOperationAdd">
-			<xpath>Defs/WorldObjectDef[defName="Outpost_Hunting"]</xpath>
-			<value><comps /></value>
-		</nomatch>
-	</Operation>
-	<Operation Class="PatchOperationAdd">
-		<xpath>Defs/WorldObjectDef[defName="Outpost_Hunting"]/comps</xpath>
-		<value>
-			<li Class="EmpireVOE.WorldObjectCompProperties_EmpireOutpost" />
-		</value>
-	</Operation>
-
-	<!-- Outpost_Artillery -->
-	<Operation Class="PatchOperationConditional">
-		<xpath>Defs/WorldObjectDef[defName="Outpost_Artillery"]/comps</xpath>
-		<nomatch Class="PatchOperationAdd">
-			<xpath>Defs/WorldObjectDef[defName="Outpost_Artillery"]</xpath>
-			<value><comps /></value>
-		</nomatch>
-	</Operation>
-	<Operation Class="PatchOperationAdd">
-		<xpath>Defs/WorldObjectDef[defName="Outpost_Artillery"]/comps</xpath>
-		<value>
-			<li Class="EmpireVOE.WorldObjectCompProperties_EmpireOutpost" />
 		</value>
 	</Operation>
 

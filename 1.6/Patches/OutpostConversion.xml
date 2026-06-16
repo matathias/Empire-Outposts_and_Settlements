@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+	<!-- ============================================================ -->
+	<!-- Outpost -> Settlement conversion mappings                     -->
+	<!--                                                               -->
+	<!-- allowedSettlementTypes are plain defName strings, resolved    -->
+	<!-- leniently at runtime: names whose mod isn't loaded are simply -->
+	<!-- dropped (no cross-reference error). The Cities & Fields       -->
+	<!-- (Empire-UrbanRural) types below therefore only take effect    -->
+	<!-- when that submod is installed.                                -->
+	<!-- ============================================================ -->
+
+	<!-- Outpost_Town: can become ANY unlocked surface settlement type, and grants the town flat additive. -->
+	<Operation Class="PatchOperationConditional">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Town"]/modExtensions</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>Defs/WorldObjectDef[defName="Outpost_Town"]</xpath>
+			<value><modExtensions /></value>
+		</nomatch>
+	</Operation>
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Town"]/modExtensions</xpath>
+		<value>
+			<li Class="EmpireVOE.OutpostConversionExtension">
+				<allowAnySettlementType>true</allowAnySettlementType>
+				<grantsTownAdditive>true</grantsTownAdditive>
+			</li>
+		</value>
+	</Operation>
+
+	<!-- Outpost_Logging -> Lumber Camp (Cities & Fields) -->
+	<Operation Class="PatchOperationConditional">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Logging"]/modExtensions</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>Defs/WorldObjectDef[defName="Outpost_Logging"]</xpath>
+			<value><modExtensions /></value>
+		</nomatch>
+	</Operation>
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Logging"]/modExtensions</xpath>
+		<value>
+			<li Class="EmpireVOE.OutpostConversionExtension">
+				<allowedSettlementTypes>
+					<li>WorldSettlementDef_LumberCamp</li>
+				</allowedSettlementTypes>
+			</li>
+		</value>
+	</Operation>
+
+	<!-- Outpost_Mining -> Mining Camp (Cities & Fields) -->
+	<Operation Class="PatchOperationConditional">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Mining"]/modExtensions</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>Defs/WorldObjectDef[defName="Outpost_Mining"]</xpath>
+			<value><modExtensions /></value>
+		</nomatch>
+	</Operation>
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Mining"]/modExtensions</xpath>
+		<value>
+			<li Class="EmpireVOE.OutpostConversionExtension">
+				<allowedSettlementTypes>
+					<li>WorldSettlementDef_Mine</li>
+				</allowedSettlementTypes>
+			</li>
+		</value>
+	</Operation>
+
+	<!-- Outpost_Farming -> Farming Hamlet (Cities & Fields) -->
+	<Operation Class="PatchOperationConditional">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Farming"]/modExtensions</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>Defs/WorldObjectDef[defName="Outpost_Farming"]</xpath>
+			<value><modExtensions /></value>
+		</nomatch>
+	</Operation>
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Farming"]/modExtensions</xpath>
+		<value>
+			<li Class="EmpireVOE.OutpostConversionExtension">
+				<allowedSettlementTypes>
+					<li>WorldSettlementDef_Farm</li>
+				</allowedSettlementTypes>
+			</li>
+		</value>
+	</Operation>
+
+	<!-- Outpost_Hunting -> Ranch (Cities & Fields) -->
+	<Operation Class="PatchOperationConditional">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Hunting"]/modExtensions</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>Defs/WorldObjectDef[defName="Outpost_Hunting"]</xpath>
+			<value><modExtensions /></value>
+		</nomatch>
+	</Operation>
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Hunting"]/modExtensions</xpath>
+		<value>
+			<li Class="EmpireVOE.OutpostConversionExtension">
+				<allowedSettlementTypes>
+					<li>WorldSettlementDef_Ranch</li>
+				</allowedSettlementTypes>
+			</li>
+		</value>
+	</Operation>
+
+	<!-- Outpost_Drilling -> Chemfuel Refinery (Cities & Fields) -->
+	<Operation Class="PatchOperationConditional">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Drilling"]/modExtensions</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>Defs/WorldObjectDef[defName="Outpost_Drilling"]</xpath>
+			<value><modExtensions /></value>
+		</nomatch>
+	</Operation>
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Drilling"]/modExtensions</xpath>
+		<value>
+			<li Class="EmpireVOE.OutpostConversionExtension">
+				<allowedSettlementTypes>
+					<li>WorldSettlementDef_Refinery</li>
+				</allowedSettlementTypes>
+			</li>
+		</value>
+	</Operation>
+
+</Patch>

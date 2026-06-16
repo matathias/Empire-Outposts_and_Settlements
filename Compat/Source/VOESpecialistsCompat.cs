@@ -18,7 +18,7 @@ namespace EmpireVOE.Specialists
 
         static VOESpecialistsCompat()
         {
-            TownConversionHandler.SpecialistsCallback = AssignTownPawns;
+            OutpostConversionUtil.SpecialistsCallback = AssignTownPawns;
             VOELog.MessageForce("EmpireVOE - Specialists compat loaded.");
         }
 

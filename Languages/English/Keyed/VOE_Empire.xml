@@ -44,21 +44,44 @@
     <VOE_EnableScienceLinkDesc>Science outposts can be linked to settlements to boost research production.</VOE_EnableScienceLinkDesc>
     <VOE_EnableEncampment>Encampment Recovery</VOE_EnableEncampment>
     <VOE_EnableEncampmentDesc>Nearby encampments boost the heal rate of mercenaries at your settlements.</VOE_EnableEncampmentDesc>
-    <VOE_EnableTownConversion>Town Conversion</VOE_EnableTownConversion>
-    <VOE_EnableTownConversionDesc>VOE Town outposts can be converted into Empire settlements.</VOE_EnableTownConversionDesc>
+    <VOE_EnableOutpostConversion>Outpost Conversion</VOE_EnableOutpostConversion>
+    <VOE_EnableOutpostConversionDesc>VOE outposts can be converted into Empire settlements via a gizmo. Towns can become any settlement type; production outposts can become their matching specialized type (e.g. a logging outpost becomes a lumber camp) when a submod that adds those types is installed.</VOE_EnableOutpostConversionDesc>
     <VOE_EnableRoads>Road Integration</VOE_EnableRoads>
     <VOE_EnableRoadsDesc>The Empire road builder includes your outposts in its network, building roads to and between them alongside settlements.</VOE_EnableRoadsDesc>
 
-    <!-- Town Settlement Feature -->
-    <VOE_RequireTown>Require Town for settlement</VOE_RequireTown>
-    <VOE_RequireTownDesc>Empire settlements can only be founded on Town outposts.</VOE_RequireTownDesc>
-    <VOE_ConvertTownPawns>Convert Town pawns</VOE_ConvertTownPawns>
-    <VOE_ConvertTownPawnsDesc>Town pawns are transferred to the new settlement on creation.</VOE_ConvertTownPawnsDesc>
-    <VOE_NotATown>Empire settlements must be founded on Town outposts.</VOE_NotATown>
-    <VOE_NotATownOrbitAllowed>On the surface, Empire settlements must be founded on Town outposts. Non-surface tiles have no Town requirement.</VOE_NotATownOrbitAllowed>
-    <VOE_TownIncorporated>{0} incorporated</VOE_TownIncorporated>
-    <VOE_TownIncorporatedDesc>The town {0} has been incorporated into your new settlement {1}. {2} residents have been transferred.</VOE_TownIncorporatedDesc>
-    <VOE_TownBonusDesc>Town workforce bonus</VOE_TownBonusDesc>
+    <!-- Outpost -> Settlement Conversion Feature -->
+    <VOE_ConvertOutpostPawns>Fold outpost pawns into settlement</VOE_ConvertOutpostPawns>
+    <VOE_ConvertOutpostPawnsDesc>When an outpost is converted, its workers join the new settlement: assigned as specialists/residents with Empire Refactored: Specialists &amp; Governors installed, otherwise converted into skill-based production bonuses.</VOE_ConvertOutpostPawnsDesc>
+    <VOE_ReducedFoundingCostFactor>Conversion cost (fraction of founding cost)</VOE_ReducedFoundingCostFactor>
+    <VOE_TownFlatAdditive>Town flat production additive</VOE_TownFlatAdditive>
+    <VOE_EnableConversionDelay>Require establishment time before conversion</VOE_EnableConversionDelay>
+    <VOE_EnableConversionDelayDesc>An outpost cannot be converted into a settlement until it has existed for the configured number of days.</VOE_EnableConversionDelayDesc>
+    <VOE_ConversionDelayDays>Days before an outpost can be converted</VOE_ConversionDelayDays>
+    <VOE_RequireOutpost>Found settlements only via outposts</VOE_RequireOutpost>
+    <VOE_RequireOutpostDesc>Empire settlements can no longer be founded directly. Instead, establish an outpost and convert it. On the Found Settlement screen, the Settle button becomes "Send a Caravan".</VOE_RequireOutpostDesc>
+
+    <!-- Outpost bonus / conversion messages -->
+    <VOE_OutpostBonusDesc>Outpost workforce bonus</VOE_OutpostBonusDesc>
+    <VOE_ConvertToSettlement>Convert to settlement</VOE_ConvertToSettlement>
+    <VOE_ConvertToSettlementDesc>Transform this outpost into an Empire settlement. Its workers join the settlement and the outpost is replaced.</VOE_ConvertToSettlementDesc>
+    <VOE_ConvertPickType>Convert outpost into which settlement type?</VOE_ConvertPickType>
+    <VOE_ConvertReady>Can be converted into a settlement</VOE_ConvertReady>
+    <VOE_ConvertAvailableInDays>Can be converted in {0} day(s)</VOE_ConvertAvailableInDays>
+    <VOE_ConvertNoPawns>This outpost has no workers to form a settlement.</VOE_ConvertNoPawns>
+    <VOE_ConvertBusyPacking>This outpost is being packed up.</VOE_ConvertBusyPacking>
+    <VOE_ConvertBusyAttacked>This outpost is under attack.</VOE_ConvertBusyAttacked>
+    <VOE_ConvertBusyDefending>This outpost's forces are away defending {0}.</VOE_ConvertBusyDefending>
+    <VOE_ConvertInvalidType>This outpost cannot be converted into that settlement type.</VOE_ConvertInvalidType>
+    <VOE_OutpostIncorporated>{0} incorporated</VOE_OutpostIncorporated>
+    <VOE_OutpostIncorporatedDesc>The outpost {0} has been incorporated into your new settlement {1}. {2} worker(s) have joined the settlement.</VOE_OutpostIncorporatedDesc>
+
+    <!-- Found-screen restriction -->
+    <VOE_MustFoundViaOutpost>Settlements must be founded by establishing an outpost and converting it.</VOE_MustFoundViaOutpost>
+    <VOE_SendCaravan>Send a Caravan</VOE_SendCaravan>
+    <VOE_SendCaravanNoColony>You need a colony to form a caravan from.</VOE_SendCaravanNoColony>
+    <VOE_OutpostRequirementsTitle>Outposts required</VOE_OutpostRequirementsTitle>
+    <VOE_OutpostRequirementsDesc>To found a {0}, establish and convert one of these outposts:</VOE_OutpostRequirementsDesc>
+    <VOE_OutpostRequirementsNone>No outpost type can become this settlement type. Check that the required submod is installed.</VOE_OutpostRequirementsNone>
 
     <!-- Settings Tabs -->
     <VOE_TabIntegration>Integration</VOE_TabIntegration>
@@ -133,6 +156,10 @@
     <VOE_CodexScienceHeader>Current research links:</VOE_CodexScienceHeader>
     <VOE_CodexScienceNone>No science outpost is linked to a settlement.</VOE_CodexScienceNone>
     <VOE_CodexScienceLine>{0}: linked to {1} ({2} researcher(s))</VOE_CodexScienceLine>
+
+    <VOE_CodexConversionHeader>Outposts that can become settlements:</VOE_CodexConversionHeader>
+    <VOE_CodexConversionNone>You have no outposts that can be converted into a settlement.</VOE_CodexConversionNone>
+    <VOE_CodexConversionLine>{0} -&gt; {1} ({2})</VOE_CodexConversionLine>
 
     <!-- Patch Notes -->
     <VOE_PatchTitle>Patch Notes: VOE Integration</VOE_PatchTitle>

@@ -128,4 +128,18 @@
 		<li>Matathias</li>
 		</authors>
 	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
+		<defName>VOE_0_3_9</defName>
+		<label>Outpost Conversion Expansion</label>
+		<description>Rework how the outpost -&gt; settlement conversion mechanism works. Includes better UI integration, as well as the possibility for non-Town outposts to be turned into settlements.</description>
+		<releaseDate>2026-06-16</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Rework the outpost -&gt; settlement conversion mechanism to integrate better with the UI and support more outposts than just Towns</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
 </Defs>
