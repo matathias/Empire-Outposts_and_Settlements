@@ -86,8 +86,36 @@
     <VOE_EncampmentHealRatePerLevel>Heal rate bonus per Medicine level</VOE_EncampmentHealRatePerLevel>
     <VOE_EncampmentHealRateDesc>{0} nearby encampment(s): +{1}% merc heal rate</VOE_EncampmentHealRateDesc>
 
-    <!-- Threat Scaling Settings -->
-    <VOE_OutpostThreatPerPawn>Threat per outpost pawn</VOE_OutpostThreatPerPawn>
+    <!-- Codex Live Data (dynamic providers) -->
+    <VOE_CodexFeatureDisabled>This feature is turned off in the mod settings.</VOE_CodexFeatureDisabled>
+    <VOE_CodexNoSettlements>You have not founded any settlements yet.</VOE_CodexNoSettlements>
+
+    <VOE_CodexOverviewDisabled>All Empire-Vanilla Outposts Expanded integration is currently disabled in the mod settings.</VOE_CodexOverviewDisabled>
+    <VOE_CodexOverviewFeatures>Active integrations:</VOE_CodexOverviewFeatures>
+    <VOE_CodexOverviewNoOutposts>No outposts have been established yet.</VOE_CodexOverviewNoOutposts>
+    <VOE_CodexOverviewOutposts>Outposts established: {0}</VOE_CodexOverviewOutposts>
+    <VOE_CodexOverviewOutpostLine>  {0}: {1}</VOE_CodexOverviewOutpostLine>
+
+    <VOE_CodexDefensiveHeader>Defensive outposts:</VOE_CodexDefensiveHeader>
+    <VOE_CodexDefensiveNone>You have no defensive outposts.</VOE_CodexDefensiveNone>
+    <VOE_CodexDefensiveLine>{0} - military level {1}, range {2}</VOE_CodexDefensiveLine>
+    <VOE_CodexDefensiveAutoOn>Auto-defend: on</VOE_CodexDefensiveAutoOn>
+    <VOE_CodexDefensiveAutoOff>Auto-defend: off</VOE_CodexDefensiveAutoOff>
+
+    <VOE_CodexEncampmentHeader>Encampment coverage:</VOE_CodexEncampmentHeader>
+    <VOE_CodexEncampmentNone>No settlements have an encampment within range.</VOE_CodexEncampmentNone>
+
+    <VOE_CodexDeliveryHeader>Current tax routing:</VOE_CodexDeliveryHeader>
+    <VOE_CodexDeliveryNone>All settlements deliver their taxes to your tax map.</VOE_CodexDeliveryNone>
+    <VOE_CodexDeliveryLine>{0}: delivering to {1}</VOE_CodexDeliveryLine>
+
+    <VOE_CodexFinancingHeader>Current financing:</VOE_CodexFinancingHeader>
+    <VOE_CodexFinancingNone>No settlement is financed by an outpost.</VOE_CodexFinancingNone>
+    <VOE_CodexFinancingLine>{0}: financed by {1}</VOE_CodexFinancingLine>
+
+    <VOE_CodexScienceHeader>Current research links:</VOE_CodexScienceHeader>
+    <VOE_CodexScienceNone>No science outpost is linked to a settlement.</VOE_CodexScienceNone>
+    <VOE_CodexScienceLine>{0}: linked to {1} ({2} researcher(s))</VOE_CodexScienceLine>
 
     <!-- Patch Notes -->
     <VOE_PatchTitle>Patch Notes: VOE Integration</VOE_PatchTitle>

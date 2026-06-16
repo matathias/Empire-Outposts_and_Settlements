@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    VOE Integration - Codex Category Definitions
+
+    These CodexCategoryDefs group the submod's Codex entries in the in-game
+    Empire Codex. Entries are auto-discovered from the DefDatabase and grouped
+    by category.modId, so no base-mod changes or registration are needed.
+
+    NOTE: modId must be the package id in ALL LOWERCASE. RimWorld stores
+    ModContentPack.PackageId lowercased, and CodexCategoryDef.PackMatchesModId
+    compares against it directly. The packageId here is "Matathias.EmpireRefVOE",
+    so the lowercased modId is "matathias.empirerefvoe". Mixed case still groups
+    the entries, but the left-pane group header degrades to the raw packageId and
+    the banner fallback stops working.
+
+    displayOrder 25/35 slots these after the base Military (20) and Settlements
+    (30) categories.
+-->
+<Defs>
+
+    <FactionColonies.CodexCategoryDef>
+        <defName>CodexCat_VOE_Operations</defName>
+        <label>Outpost Operations</label>
+        <description>How Vanilla Outposts Expanded outposts plug into the Empire's military: raids against outposts, defensive auto-defend, and battlefield recovery.</description>
+        <color>(0.74, 0.33, 0.28)</color>
+        <displayOrder>25</displayOrder>
+        <modId>matathias.empirerefvoe</modId>
+        <bannerPath>UI/Banners/Banner-VOEIntegration</bannerPath>
+    </FactionColonies.CodexCategoryDef>
+
+    <FactionColonies.CodexCategoryDef>
+        <defName>CodexCat_VOE_Economy</defName>
+        <label>Outpost Economy</label>
+        <description>How outposts feed the Empire's economy and infrastructure: tax delivery, financing, research linking, town conversion, and roads.</description>
+        <color>(0.20, 0.55, 0.55)</color>
+        <displayOrder>35</displayOrder>
+        <modId>matathias.empirerefvoe</modId>
+        <bannerPath>UI/Banners/Banner-VOEIntegration</bannerPath>
+    </FactionColonies.CodexCategoryDef>
+
+</Defs>
