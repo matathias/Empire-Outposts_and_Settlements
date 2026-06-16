@@ -295,7 +295,7 @@ namespace EmpireVOE
 
             ls.Gap(12f);
             if (ls.ButtonText("VOE_OpenPatchNotes".Translate()))
-                Find.WindowStack.Add(new PatchNotesDisplayWindow("matathias.empirevoe", "VOE_PatchTitle".Translate()));
+                Find.WindowStack.Add(new PatchNotesDisplayWindow("matathias.empirerefvoe", "VOE_PatchTitle".Translate()));
 
             integrationContentHeight = ls.CurHeight;
             ls.End();
