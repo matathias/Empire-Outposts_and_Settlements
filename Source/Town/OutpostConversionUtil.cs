@@ -24,6 +24,14 @@ namespace EmpireVOE
         /// </summary>
         public static Action<WorldSettlementFC, List<Pawn>> SpecialistsCallback;
 
+        /// <summary>
+        /// True while <see cref="ConvertOutpost"/> runs its founding-cost validation. The
+        /// founding-restriction validator honors this so a conversion — the intended way to found a
+        /// settlement when "require outpost" is on — isn't vetoed by that same restriction.
+        /// Single-threaded (RimWorld main thread), so a plain static flag is safe.
+        /// </summary>
+        public static bool IsConverting;
+
         // --- Convertible-type resolution ---
 
         /// <summary>
@@ -158,7 +166,17 @@ namespace EmpireVOE
             int reducedSilver = (int)(ColonyUtil.GetFoundingCost(type, biome, faction) * factor);
 
             StringBuilder reason = new StringBuilder();
-            if (!FoundingValidatorRegistry.CanFound(tile, type, reason, factor))
+            bool canFound;
+            IsConverting = true;
+            try
+            {
+                canFound = FoundingValidatorRegistry.CanFound(tile, type, reason, factor);
+            }
+            finally
+            {
+                IsConverting = false;
+            }
+            if (!canFound)
             {
                 Messages.Message(reason.ToString(), MessageTypeDefOf.RejectInput);
                 return false;

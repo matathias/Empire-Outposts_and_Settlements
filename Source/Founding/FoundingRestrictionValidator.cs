@@ -15,6 +15,9 @@ namespace EmpireVOE
         public bool CanFoundSettlement(PlanetTile tile, WorldSettlementDef type, out string reason, float costMultiplier)
         {
             reason = null;
+            // An outpost conversion is the intended way to found a settlement when the restriction is
+            // on, so don't block it — only block genuine direct-founding attempts.
+            if (OutpostConversionUtil.IsConverting) return true;
             if (EmpireVOESettings.OutpostConversionActive && EmpireVOESettings.requireOutpostForSettlement)
             {
                 reason = "VOE_MustFoundViaOutpost".Translate();
