@@ -10,12 +10,11 @@ using VOE;
 namespace EmpireVOE
 {
     /// <summary>
-    /// Per-encampment precomputed Medicine data, used by both heal rate comp and cooldown reduction.
+    /// Per-encampment precomputed Medicine data backing the merc heal-rate bonus.
     /// </summary>
     public class EncampmentData
     {
         public readonly Outpost_Encampment encampment;
-        public readonly double avgMedicine;
         public readonly double healRateContribution;
 
         public EncampmentData(Outpost_Encampment enc)
@@ -24,20 +23,16 @@ namespace EmpireVOE
             List<Pawn> pawns = enc.CapablePawns.ToList();
             if (pawns.Count == 0)
             {
-                avgMedicine = 0;
                 healRateContribution = 0;
                 return;
             }
 
-            double totalMedicine = 0;
             foreach (Pawn p in pawns)
             {
                 if (p.skills is null) continue;
                 int level = EffectiveLevel(p.skills.GetSkill(SkillDefOf.Medicine)?.Level ?? 0);
-                totalMedicine += level;
                 healRateContribution += level * EmpireVOESettings.encampmentHealRatePerLevel;
             }
-            avgMedicine = totalMedicine / pawns.Count;
         }
 
         private static int EffectiveLevel(int level)

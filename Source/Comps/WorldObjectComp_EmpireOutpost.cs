@@ -148,14 +148,12 @@ namespace EmpireVOE
         {
             ToggleMilitary(false);
             EmpireRegistry.Unregister(OutpostFinancer.Instance);
-            EmpireRegistry.Unregister(VOECompatInit.ThreatContributor);
         }
 
         public static void ReregisterAll()
         {
             if (Find.World is null) return;
             EmpireRegistry.Register(OutpostFinancer.Instance);
-            EmpireRegistry.Register(VOECompatInit.ThreatContributor);
             if (EmpireVOESettings.enableMilitary)
                 ToggleMilitary(true);
         }

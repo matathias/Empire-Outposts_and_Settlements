@@ -43,11 +43,9 @@
     <VOE_EnableScienceLink>Science Linking</VOE_EnableScienceLink>
     <VOE_EnableScienceLinkDesc>Science outposts can be linked to settlements to boost research production.</VOE_EnableScienceLinkDesc>
     <VOE_EnableEncampment>Encampment Recovery</VOE_EnableEncampment>
-    <VOE_EnableEncampmentDesc>Nearby encampments reduce military cooldowns and boost merc heal rate.</VOE_EnableEncampmentDesc>
+    <VOE_EnableEncampmentDesc>Nearby encampments boost the heal rate of mercenaries at your settlements.</VOE_EnableEncampmentDesc>
     <VOE_EnableTownConversion>Town Conversion</VOE_EnableTownConversion>
     <VOE_EnableTownConversionDesc>VOE Town outposts can be converted into Empire settlements.</VOE_EnableTownConversionDesc>
-    <VOE_EnableThreatScaling>Threat Scaling</VOE_EnableThreatScaling>
-    <VOE_EnableThreatScalingDesc>Outposts contribute to Empire's overall threat level, making enemy raids harder.</VOE_EnableThreatScalingDesc>
     <VOE_EnableRoads>Road Integration</VOE_EnableRoads>
     <VOE_EnableRoadsDesc>The Empire road builder includes your outposts in its network, building roads to and between them alongside settlements.</VOE_EnableRoadsDesc>
 
@@ -69,10 +67,6 @@
     <VOE_AlreadyLinked>already linked</VOE_AlreadyLinked>
     <VOE_Tiles>tiles</VOE_Tiles>
 
-    <!-- Encampment Recovery -->
-    <VOE_EncampmentRecovery>{0}: recovery accelerated</VOE_EncampmentRecovery>
-    <VOE_EncampmentRecoveryDesc>Nearby encampments have accelerated military recovery for {0}, reducing cooldown by {1} days. ({2} encampment(s) contributing)</VOE_EncampmentRecoveryDesc>
-
     <!-- Inspect String -->
     <VOE_LinkedTo>Linked to: {0}</VOE_LinkedTo>
     <VOE_NotLinked>Not linked to settlement</VOE_NotLinked>
@@ -88,9 +82,6 @@
     <VOE_ScienceLinkRange>Science link max range (tiles)</VOE_ScienceLinkRange>
 
     <!-- Encampment Recovery Settings -->
-    <VOE_EncampmentBaseReduction>Base cooldown reduction</VOE_EncampmentBaseReduction>
-    <VOE_EncampmentMedicineScaling>Medicine skill scaling (cooldown)</VOE_EncampmentMedicineScaling>
-    <VOE_EncampmentMaxReduction>Max cooldown reduction</VOE_EncampmentMaxReduction>
     <VOE_EncampmentRange>Encampment range (tiles)</VOE_EncampmentRange>
     <VOE_EncampmentHealRatePerLevel>Heal rate bonus per Medicine level</VOE_EncampmentHealRatePerLevel>
     <VOE_EncampmentHealRateDesc>{0} nearby encampment(s): +{1}% merc heal rate</VOE_EncampmentHealRateDesc>
