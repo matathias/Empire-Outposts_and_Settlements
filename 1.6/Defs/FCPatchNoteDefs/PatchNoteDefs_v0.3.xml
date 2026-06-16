@@ -98,4 +98,20 @@
 		<li>Matathias</li>
 		</authors>
 	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
+		<defName>VOE_0_3_7</defName>
+		<label>Updates &amp; Info</label>
+		<description>Removes two subsystems that are now obsolete in the base mod, and adds Codex entries for the mod&apos;s mechanics</description>
+		<releaseDate>2026-06-16</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Remove cooldown-reduction from Encampments (cooldown in the base mod is now mostly based on travel distance)</li>
+		<li>Remove the threat-scaling contributor (the base mod doesn&apos;t use threat scaling anymore)</li>
+		<li>Add numerous Codex entries</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
 </Defs>
