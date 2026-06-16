@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using FactionColonies;
 using UnityEngine;
 using Verse;
@@ -31,6 +32,13 @@ namespace EmpireVOE
         // Town Settlement feature
         public static bool requireTownForSettlement = false;
         public static bool convertTownPawns = true;
+
+        // VOE Town spawn requirement (absorbed from "VOE Towns Count Outposts")
+        public static int townMinSettlements = 0;
+        public static int townMinOutposts = 0;
+        public static int townMinTotal = 3;
+        public static int townRange = 10;
+        public static bool townExcludeTowns = false;
 
         // Compound checks — master toggle + per-feature toggle
         public static bool MilitaryActive => !disableIntegration && enableMilitary;
@@ -70,12 +78,27 @@ namespace EmpireVOE
             // Town Settlement
             Scribe_Values.Look(ref requireTownForSettlement, "requireTownForSettlement", false);
             Scribe_Values.Look(ref convertTownPawns, "convertTownPawns", true);
+
+            // VOE Town spawn requirement (absorbed from "VOE Towns Count Outposts")
+            Scribe_Values.Look(ref townMinSettlements, "townMinSettlements", 0);
+            Scribe_Values.Look(ref townMinOutposts, "townMinOutposts", 0);
+            Scribe_Values.Look(ref townMinTotal, "townMinTotal", 3);
+            Scribe_Values.Look(ref townRange, "townRange", 10);
+            Scribe_Values.Look(ref townExcludeTowns, "townExcludeTowns", false);
         }
     }
 
     public class EmpireVOEMod : Mod
     {
         public static EmpireVOESettings settings;
+
+        // Settings window tab state
+        private static int settingsTab = 0;
+        private static readonly List<TabRecord> settingsTabs = new List<TabRecord>();
+        private static Vector2 integrationScroll = Vector2.zero;
+        private static Vector2 townsScroll = Vector2.zero;
+        private static float integrationContentHeight = 1000f;
+        private static float townsContentHeight = 1000f;
 
         public EmpireVOEMod(ModContentPack content) : base(content)
         {
@@ -99,8 +122,30 @@ namespace EmpireVOE
 
         public override void DoSettingsWindowContents(Rect inRect)
         {
+            settingsTabs.Clear();
+            settingsTabs.Add(new TabRecord("VOE_TabIntegration".Translate(), delegate { settingsTab = 0; }, settingsTab == 0));
+            settingsTabs.Add(new TabRecord("VOE_TabTowns".Translate(), delegate { settingsTab = 1; }, settingsTab == 1));
+
+            Rect contentRect = new Rect(inRect.x, inRect.y + 40f, inRect.width, inRect.height - 40f);
+            Widgets.DrawMenuSection(contentRect);
+            TabDrawer.DrawTabs(contentRect, settingsTabs);
+
+            Rect innerRect = contentRect.ContractedBy(10f);
+
+            switch (settingsTab)
+            {
+                case 0: DoIntegrationTab(innerRect); break;
+                case 1: DoTownsTab(innerRect); break;
+            }
+        }
+
+        private void DoIntegrationTab(Rect rect)
+        {
+            Rect viewRect = new Rect(0f, 0f, rect.width - 16f, integrationContentHeight);
+            Widgets.BeginScrollView(rect, ref integrationScroll, viewRect);
+
             Listing_Standard ls = new Listing_Standard();
-            ls.Begin(inRect);
+            ls.Begin(viewRect);
 
             // Master toggle
             bool prev = EmpireVOESettings.disableIntegration;
@@ -230,7 +275,44 @@ namespace EmpireVOE
             if (ls.ButtonText("VOE_OpenPatchNotes".Translate()))
                 Find.WindowStack.Add(new PatchNotesDisplayWindow("matathias.empirevoe", "VOE_PatchTitle".Translate()));
 
+            integrationContentHeight = ls.CurHeight;
             ls.End();
+            Widgets.EndScrollView();
+        }
+
+        private void DoTownsTab(Rect rect)
+        {
+            Rect viewRect = new Rect(0f, 0f, rect.width - 16f, townsContentHeight);
+            Widgets.BeginScrollView(rect, ref townsScroll, viewRect);
+
+            Listing_Standard ls = new Listing_Standard();
+            ls.Begin(viewRect);
+
+            ls.Label("VOE_TownRequirementsHeader".Translate());
+            ls.GapLine();
+
+            ls.Label("  " + "VOE_TownMinTotal".Translate() + ": " + EmpireVOESettings.townMinTotal);
+            EmpireVOESettings.townMinTotal = (int)ls.Slider(EmpireVOESettings.townMinTotal, 0, 20);
+
+            ls.Label("  " + "VOE_TownMinSettlements".Translate() + ": " + EmpireVOESettings.townMinSettlements);
+            EmpireVOESettings.townMinSettlements = (int)ls.Slider(EmpireVOESettings.townMinSettlements, 0, 20);
+
+            ls.Label("  " + "VOE_TownMinOutposts".Translate() + ": " + EmpireVOESettings.townMinOutposts);
+            EmpireVOESettings.townMinOutposts = (int)ls.Slider(EmpireVOESettings.townMinOutposts, 0, 20);
+
+            ls.Label("  " + "VOE_TownRange".Translate() + ": " + EmpireVOESettings.townRange);
+            EmpireVOESettings.townRange = (int)ls.Slider(EmpireVOESettings.townRange, 1, 50);
+
+            ls.Gap();
+
+            ls.CheckboxLabeled(
+                "VOE_TownExcludeTowns".Translate(),
+                ref EmpireVOESettings.townExcludeTowns,
+                "VOE_TownExcludeTownsDesc".Translate());
+
+            townsContentHeight = ls.CurHeight;
+            ls.End();
+            Widgets.EndScrollView();
         }
     }
 }

@@ -3,9 +3,13 @@
     <name>Empire Refactored: Vanilla Outposts Expanded Integration</name>
     <author>Matathias</author>
     <packageId>Matathias.EmpireRefVOE</packageId>
-    <modVersion>0.3.6</modVersion>
+    <modVersion>0.3.8</modVersion>
     <supportedVersions><li>1.6</li></supportedVersions>
     <description>Integrates Vanilla Outposts Expanded with several of Empire's systems.</description>
+    <incompatibleWith>
+        <!-- Folded into this mod: its Town spawn-requirement config and planet-layer fix are now built in. -->
+        <li>matathias.voetownscountoutposts</li>
+    </incompatibleWith>
     <modDependencies>
         <li>
             <packageId>Matathias.Empire</packageId>

@@ -60,6 +60,23 @@
     <VOE_TownIncorporatedDesc>The town {0} has been incorporated into your new settlement {1}. {2} residents have been transferred.</VOE_TownIncorporatedDesc>
     <VOE_TownBonusDesc>Town workforce bonus</VOE_TownBonusDesc>
 
+    <!-- Settings Tabs -->
+    <VOE_TabIntegration>Integration</VOE_TabIntegration>
+    <VOE_TabTowns>Towns</VOE_TabTowns>
+
+    <!-- VOE Town spawn requirement (absorbed from "VOE Towns Count Outposts") -->
+    <VOE_TownRequirementsHeader>Town spawn requirement</VOE_TownRequirementsHeader>
+    <VOE_TownMinTotal>Minimum number of nearby settlements and outposts</VOE_TownMinTotal>
+    <VOE_TownMinSettlements>Minimum number of nearby settlements</VOE_TownMinSettlements>
+    <VOE_TownMinOutposts>Minimum number of nearby outposts</VOE_TownMinOutposts>
+    <VOE_TownRange>Max range to look for settlements or outposts</VOE_TownRange>
+    <VOE_TownExcludeTowns>Exclude Towns from outpost count</VOE_TownExcludeTowns>
+    <VOE_TownExcludeTownsDesc>When on, other Town outposts are not counted toward the nearby-outpost requirement.</VOE_TownExcludeTownsDesc>
+    <VOE_TownNearbySettlements>Not enough nearby settlements, need {0} within {1} tiles</VOE_TownNearbySettlements>
+    <VOE_TownNearbyOutposts>Not enough nearby outposts, need {0} within {1} tiles</VOE_TownNearbyOutposts>
+    <VOE_TownNearbyTotal>Not enough nearby settlements or outposts, need {0} within {1} tiles</VOE_TownNearbyTotal>
+    <VOE_TownRequirements>Need at least {0} settlements or outposts within {1} tiles, of which at least {2} are settlements and {3} are outposts.</VOE_TownRequirements>
+
     <!-- Science Linking -->
     <VOE_ScienceLinkLabel>Link to Settlement</VOE_ScienceLinkLabel>
     <VOE_ScienceLinkDesc>Link this science outpost to an Empire settlement to provide a research production bonus. While linked, the outpost's own research contribution is redirected.\n\nCurrently linked to: {0}</VOE_ScienceLinkDesc>

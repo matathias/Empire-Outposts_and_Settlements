@@ -181,11 +181,12 @@
 	<!-- Town description update                                       -->
 	<!-- ============================================================ -->
 
-	<!-- Update VOE Town outpost description to mention Empire integration -->
+	<!-- Update VOE Town outpost description: hospitality/recruitment flavor (folded in from
+	     "VOE Towns Count Outposts") plus the Empire conversion note. -->
 	<Operation Class="PatchOperationReplace">
 		<xpath>Defs/WorldObjectDef[defName="Outpost_Town"]/description</xpath>
 		<value>
-			<description>A town that recruits new colonists over time based on social skill. Can be converted into an Empire settlement.</description>
+			<description>Places a temporary, autonomously-led town that is designed to provide hospitality to travelers and traders alike. Should a visitor find their lodging amicable they will be invited to join the town as a resident permanently. Can be converted into an Empire settlement.</description>
 		</value>
 	</Operation>
 

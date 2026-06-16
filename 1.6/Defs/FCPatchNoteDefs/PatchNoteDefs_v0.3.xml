@@ -114,4 +114,18 @@
 		<li>Matathias</li>
 		</authors>
 	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
+		<defName>VOE_0_3_8</defName>
+		<label>Town Fixes &amp; Config</label>
+		<description>Folds in my own older mod, &quot;Vanilla Outposts Expanded: Settings for Towns&quot;. Includes a bugfix for towns, as well as expanded configuration for them to replace the hard-coded constants of &quot;3 settlements within 10 tiles&quot;.</description>
+		<releaseDate>2026-06-16</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Fold in &quot;Vanilla Outposts Expanded: Settings for Towns&quot;</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
 </Defs>
