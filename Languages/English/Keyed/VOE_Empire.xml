@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-    <VOE_DisableIntegration>Disable VOE military integration</VOE_DisableIntegration>
-    <VOE_DisableIntegrationDesc>Disables all Empire-VOE military integration. Outposts will not be raided and defensive outposts will not auto-defend.</VOE_DisableIntegrationDesc>
+    <VOE_DisableIntegration>Disable all integration</VOE_DisableIntegration>
+    <VOE_DisableIntegrationDesc>Master switch. Turns off ALL Empire-VOE integration.</VOE_DisableIntegrationDesc>
     <VOE_OutpostDefended>{0} defended</VOE_OutpostDefended>
     <VOE_OutpostDefendedDesc>Your outpost {0} successfully repelled an enemy raid.</VOE_OutpostDefendedDesc>
     <VOE_OutpostRaided>{0} raided</VOE_OutpostRaided>
@@ -88,7 +88,7 @@
     <VOE_TabTowns>Towns</VOE_TabTowns>
 
     <!-- VOE Town spawn requirement (absorbed from "VOE Towns Count Outposts") -->
-    <VOE_TownRequirementsHeader>Town spawn requirement</VOE_TownRequirementsHeader>
+    <VOE_TownRequirementsHeader>Town Founding Requirements</VOE_TownRequirementsHeader>
     <VOE_TownMinTotal>Minimum number of nearby settlements and outposts</VOE_TownMinTotal>
     <VOE_TownMinSettlements>Minimum number of nearby settlements</VOE_TownMinSettlements>
     <VOE_TownMinOutposts>Minimum number of nearby outposts</VOE_TownMinOutposts>

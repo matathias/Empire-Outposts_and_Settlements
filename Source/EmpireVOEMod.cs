@@ -35,7 +35,7 @@ namespace EmpireVOE
         public static float reducedFoundingCostFactor = 0.5f;
         public static bool enableConversionDelay = true;
         public static int conversionDelayDays = 30;
-        public static float townFlatAdditive = 0.5f;
+        public static float townFlatAdditive = 0.25f;
 
         // VOE Town spawn requirement (absorbed from "VOE Towns Count Outposts")
         public static int townMinSettlements = 0;
@@ -85,7 +85,7 @@ namespace EmpireVOE
             Scribe_Values.Look(ref reducedFoundingCostFactor, "reducedFoundingCostFactor", 0.5f);
             Scribe_Values.Look(ref enableConversionDelay, "enableConversionDelay", true);
             Scribe_Values.Look(ref conversionDelayDays, "conversionDelayDays", 30);
-            Scribe_Values.Look(ref townFlatAdditive, "townFlatAdditive", 0.5f);
+            Scribe_Values.Look(ref townFlatAdditive, "townFlatAdditive", 0.25f);
 
             // VOE Town spawn requirement (absorbed from "VOE Towns Count Outposts")
             Scribe_Values.Look(ref townMinSettlements, "townMinSettlements", 0);
