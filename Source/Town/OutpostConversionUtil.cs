@@ -90,8 +90,10 @@ namespace EmpireVOE
 
         public static int DelayDaysRemaining(Outpost outpost)
         {
-            if (!EmpireVOESettings.enableConversionDelay) return 0;
-            return Math.Max(0, EmpireVOESettings.conversionDelayDays - DaysSinceEstablished(outpost));
+            return VOEFormulas.DelayDaysRemaining(
+                DaysSinceEstablished(outpost),
+                EmpireVOESettings.conversionDelayDays,
+                EmpireVOESettings.enableConversionDelay);
         }
 
         /// <summary>
@@ -293,9 +295,8 @@ namespace EmpireVOE
                     {
                         SkillRecord record = pawn.skills.GetSkill(skillDef);
                         if (record is null || record.TotallyDisabled) continue;
-                        int level = record.Level;
-                        if (level >= EmpireVOESettings.skillFloor)
-                            bonus += level * EmpireVOESettings.additivePerLevel;
+                        bonus += VOEFormulas.SkillContribution(
+                            record.Level, EmpireVOESettings.skillFloor, EmpireVOESettings.additivePerLevel);
                     }
                 }
 

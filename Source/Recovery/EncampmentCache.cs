@@ -30,14 +30,10 @@ namespace EmpireVOE
             foreach (Pawn p in pawns)
             {
                 if (p.skills is null) continue;
-                int level = EffectiveLevel(p.skills.GetSkill(SkillDefOf.Medicine)?.Level ?? 0);
-                healRateContribution += level * EmpireVOESettings.encampmentHealRatePerLevel;
+                int level = p.skills.GetSkill(SkillDefOf.Medicine)?.Level ?? 0;
+                healRateContribution += VOEFormulas.SkillContribution(
+                    level, EmpireVOESettings.skillFloor, EmpireVOESettings.encampmentHealRatePerLevel);
             }
-        }
-
-        private static int EffectiveLevel(int level)
-        {
-            return level >= EmpireVOESettings.skillFloor ? level : 0;
         }
     }
 

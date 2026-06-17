@@ -102,14 +102,14 @@ namespace EmpireVOE
                     p.skills.GetSkill(SkillDefOf.Melee).Level))
                 .DefaultIfEmpty(0)
                 .Average();
-            return Math.Max(1, (int)(pawnCount * (0.5 + avgCombat / 40.0)));
+            return VOEFormulas.MilitaryLevel(pawnCount, avgCombat);
         }
 
         /// <summary>
         /// Efficiency = skill-dominant (better fighters hit harder per round).
-        /// Pawn count has no effect — purely about quality.
+        /// Pawn count has no effect - purely about quality.
         /// Piecewise: quadratic 0-20, sqrt tail above 20 for diminishing returns.
-        /// Anchored at: skill 0 → 0.3, skill 10 → 1.0, skill 20 → 1.6.
+        /// Anchored at: skill 0 -> 0.3, skill 10 -> 1.0, skill 20 -> 1.6.
         /// Above 20: continues scaling but tapers strongly (for mods with skills beyond 20).
         /// </summary>
         private double CalculateEfficiency()
@@ -120,9 +120,7 @@ namespace EmpireVOE
                     p.skills.GetSkill(SkillDefOf.Melee).Level))
                 .DefaultIfEmpty(5)
                 .Average();
-            if (avgSkill <= 20.0)
-                return 0.3 + 0.075 * avgSkill - 0.0005 * avgSkill * avgSkill;
-            return 1.6 + 0.05 * Math.Sqrt(avgSkill - 20.0);
+            return VOEFormulas.Efficiency(avgSkill);
         }
 
         public List<Pawn> GetDefendingPawns()
