@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.Linq;
 using HarmonyLib;
 using Outposts;
+using RimWorld;
 using RimWorld.Planet;
 using Verse;
 using VOE;
@@ -56,6 +58,64 @@ namespace EmpireVOE
                 EmpireVOESettings.townMinSettlements, EmpireVOESettings.townMinOutposts).Requirement(passed);
 
             return false;
+        }
+    }
+
+    /// <summary>
+    /// Per-town "xenotype-pure recruiting" mode. When a town's WorldObjectComp_TownRecruiting
+    /// toggle is on, this prefix replaces VOE's Outpost_Town.Produce: each recruit is forced to
+    /// match the recruiting resident's xenotype (humans) or race (non-humans, implied by reusing
+    /// the recruiter's kindDef), and the per-roll recruit chance is scaled by the configurable
+    /// global multiplier EmpireVOESettings.townXenotypePureChanceMult. When the toggle is off (or
+    /// the comp is absent) the original method runs untouched, so there is no behavior change and
+    /// full compatibility with other Produce patches.
+    /// </summary>
+    [HarmonyPatch(typeof(Outpost_Town), nameof(Outpost_Town.Produce))]
+    public static class Patch_OutpostTown_Produce
+    {
+        static bool Prefix(Outpost_Town __instance)
+        {
+            WorldObjectComp_TownRecruiting comp = __instance.GetComponent<WorldObjectComp_TownRecruiting>();
+            if (comp is null || !comp.xenotypePure) return true;
+
+            float mult = EmpireVOESettings.townXenotypePureChanceMult;
+            List<Pawn> newPawns = new List<Pawn>();
+            foreach (Pawn pawn in __instance.CapablePawns)
+                if (Rand.Chance(pawn.skills.GetSkill(SkillDefOf.Social).Level * __instance.Chance / 100f * mult))
+                {
+                    Pawn newPawn = GenerateMatching(pawn);
+                    newPawn.SetFaction(pawn.Faction, pawn);
+                    newPawns.Add(newPawn);
+                }
+
+            if (newPawns.Any())
+                Find.LetterStack.ReceiveLetter("Outposts.Letters.Recruit.Label".Translate(__instance.Name),
+                    "Outposts.Letters.Recruit.Desc".Translate(__instance.Name, newPawns.Select(p => p.NameFullColored.ToString()).ToLineList("  - ")),
+                    LetterDefOf.PositiveEvent,
+                    new LookTargets(Gen.YieldSingle(__instance)));
+
+            foreach (Pawn pawn in newPawns) __instance.AddPawn(pawn);
+            return false;
+        }
+
+        /// <summary>
+        /// Generates a recruit matching the recruiter's xenotype. For non-human recruiters or
+        /// when Biotech is inactive, the recruiter's kindDef already fixes the race, so plain
+        /// generation suffices (the recruit shares the recruiter's race).
+        /// </summary>
+        static Pawn GenerateMatching(Pawn recruiter)
+        {
+            if (ModsConfig.BiotechActive && recruiter.genes is object)
+            {
+                bool unique = recruiter.genes.UniqueXenotype;
+                PawnGenerationRequest req = new PawnGenerationRequest(
+                    recruiter.kindDef, recruiter.Faction, PawnGenerationContext.NonPlayer,
+                    forcedXenotype: unique ? null : recruiter.genes.Xenotype,
+                    forcedCustomXenotype: unique ? recruiter.genes.CustomXenotype : null);
+                return PawnGenerator.GeneratePawn(req);
+            }
+
+            return PawnGenerator.GeneratePawn(recruiter.kindDef, recruiter.Faction);
         }
     }
 

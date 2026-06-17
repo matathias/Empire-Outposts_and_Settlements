@@ -100,6 +100,13 @@
     <VOE_TownNearbyTotal>Not enough nearby settlements or outposts, need {0} within {1} tiles</VOE_TownNearbyTotal>
     <VOE_TownRequirements>Need at least {0} settlements or outposts within {1} tiles, of which at least {2} are settlements and {3} are outposts.</VOE_TownRequirements>
 
+    <!-- VOE Town xenotype-pure recruiting -->
+    <VOE_TownXenoPureLabel>Same-Xenotype recruiting</VOE_TownXenoPureLabel>
+    <VOE_TownXenoPureDesc>When enabled, this town only recruits new residents matching the xenotype of the recruiting resident (or its race, for non-human residents). In exchange, recruitment happens less often.</VOE_TownXenoPureDesc>
+    <VOE_TownXenoPureHeader>Same-Xenotype Recruiting</VOE_TownXenoPureHeader>
+    <VOE_TownXenoPureChanceDesc>Per-town toggle (gizmo on the town's world map). While a town has same-xenotype recruiting on, its recruit chance is scaled by this multiplier.</VOE_TownXenoPureChanceDesc>
+    <VOE_TownXenoPureChance>Recruit chance multiplier</VOE_TownXenoPureChance>
+
     <!-- Science Linking -->
     <VOE_ScienceLinkLabel>Link science outposts</VOE_ScienceLinkLabel>
     <VOE_ScienceLinkDesc>Link nearby science outposts to this settlement for a research production bonus. While linked, an outpost's own research contribution is redirected to the Empire.\n\nLinked outposts: {0}</VOE_ScienceLinkDesc>

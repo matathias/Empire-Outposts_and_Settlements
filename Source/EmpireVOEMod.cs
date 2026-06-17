@@ -44,6 +44,10 @@ namespace EmpireVOE
         public static int townRange = 10;
         public static bool townExcludeTowns = false;
 
+        // VOE Town xenotype-pure recruiting (per-town toggle lives on WorldObjectComp_TownRecruiting;
+        // this is the global recruit-chance multiplier applied while a town has the mode on)
+        public static float townXenotypePureChanceMult = 0.5f;
+
         // Compound checks — master toggle + per-feature toggle
         public static bool MilitaryActive => !disableIntegration && enableMilitary;
         public static bool DeliveryActive => !disableIntegration && enableDelivery;
@@ -93,6 +97,9 @@ namespace EmpireVOE
             Scribe_Values.Look(ref townMinTotal, "townMinTotal", 3);
             Scribe_Values.Look(ref townRange, "townRange", 10);
             Scribe_Values.Look(ref townExcludeTowns, "townExcludeTowns", false);
+
+            // VOE Town xenotype-pure recruiting
+            Scribe_Values.Look(ref townXenotypePureChanceMult, "townXenotypePureChanceMult", 0.5f);
         }
     }
 
@@ -331,6 +338,13 @@ namespace EmpireVOE
                 "VOE_TownExcludeTowns".Translate(),
                 ref EmpireVOESettings.townExcludeTowns,
                 "VOE_TownExcludeTownsDesc".Translate());
+
+            ls.GapLine();
+
+            ls.Label("VOE_TownXenoPureHeader".Translate());
+            ls.Label("  " + "VOE_TownXenoPureChanceDesc".Translate());
+            ls.Label("  " + "VOE_TownXenoPureChance".Translate() + ": " + EmpireVOESettings.townXenotypePureChanceMult.ToString("P0"));
+            EmpireVOESettings.townXenotypePureChanceMult = (float)System.Math.Round(ls.Slider(EmpireVOESettings.townXenotypePureChanceMult, 0.05f, 1f), 2);
 
             townsContentHeight = ls.CurHeight;
             ls.End();
