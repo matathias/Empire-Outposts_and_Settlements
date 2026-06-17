@@ -9,14 +9,6 @@ namespace EmpireVOE
     /// </summary>
     public static class VOEFormulas
     {
-        /* Military level: pawn-count-dominant (more bodies = bigger force pool), skill is secondary.
-           Floors at 1 once there is at least one pawn. */
-        public static int MilitaryLevel(int pawnCount, double avgCombatSkill)
-        {
-            if (pawnCount == 0) return 0;
-            return Math.Max(1, (int)(pawnCount * (0.5 + avgCombatSkill / 40.0)));
-        }
-
         /* Efficiency: skill-dominant, pawn count irrelevant. Piecewise quadratic up to skill 20, then a
            sqrt tail for diminishing returns. Anchored at skill 0 -> 0.3, 10 -> 1.0, 20 -> 1.6 (both
            branches meet at 1.6 when skill == 20). */

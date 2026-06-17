@@ -18,11 +18,10 @@ namespace EmpireVOE
     {
         private readonly Outpost_Defensive outpost;
         private readonly WorldObjectComp_EmpireDefensive comp;
-        private bool _busy;
-        private WorldObject _defendingTarget;
 
-        public bool Busy => _busy;
-        public string DefendingTargetName => _defendingTarget is object ? _defendingTarget.LabelCap : "";
+        // Busy/target state lives on the comp so it persists across save/reload (this object is [Unsaved]).
+        public bool Busy => comp.defending;
+        public string DefendingTargetName => comp.defendingTarget is object ? comp.defendingTarget.LabelCap : "";
 
         public DefensiveAutoDefender(Outpost_Defensive outpost)
         {
@@ -39,7 +38,7 @@ namespace EmpireVOE
         public bool CanAutoDefend => comp.autoDefend
                                      && outpost.PawnCount > 1
                                      && !outpost.Packing
-                                     && !_busy
+                                     && !comp.defending
                                      && !comp.IsOnCooldown;
 
         public MilitaryForce CreateDefendingForce()
@@ -49,22 +48,28 @@ namespace EmpireVOE
             return new MilitaryForce(level, efficiency, null, Faction.OfPlayer);
         }
 
+        public void OnDefensePledged(WorldObject target)
+        {
+            comp.defending = true;
+            comp.defendingTarget = target;
+        }
+
         public void OnDefenseStarted(WorldObject target)
         {
-            _busy = true;
-            _defendingTarget = target;
+            comp.defending = true;
+            comp.defendingTarget = target;
         }
 
         public void OnDefenseReplaced()
         {
-            _busy = false;
-            _defendingTarget = null;
+            comp.defending = false;
+            comp.defendingTarget = null;
         }
 
         public void OnDefenseComplete(bool won, BattleResult result)
         {
-            _busy = false;
-            _defendingTarget = null;
+            comp.defending = false;
+            comp.defendingTarget = null;
 
             // 2-day base cooldown (shorter than Empire's 3-day since outposts are simpler)
             int cooldown = GenDate.TicksPerDay * 2;
@@ -87,22 +92,17 @@ namespace EmpireVOE
         }
 
         /// <summary>
-        /// Military Level = pawn-count-dominant (more bodies = bigger force pool).
-        /// Formula: pawnCount * (0.5 + avgSkill / 40)
-        /// Skill provides secondary scaling but pawn count always dominates.
-        /// 6 mid-skill pawns always beat 3 high-skill pawns.
+        /// Military Level = priced off the live garrison via the base mod's cost->level curve, so an
+        /// outpost's level is comparable to settlement squads (and ranks fairly in auto-defender
+        /// selection). SquadPowerRegistry.LevelFromPawns sums each capable pawn's MarketValue (body +
+        /// gear + implants), effectiveness-weighted, then inverts CalculateSquadBudget. Empty outpost
+        /// reads 0; any non-empty garrison floors at 1. Combat *efficiency* stays skill-based
+        /// (CalculateEfficiency) — level is "how much force", efficiency is "how well they fight".
         /// </summary>
         private int CalculateMilitaryLevel()
         {
-            int pawnCount = outpost.PawnCount;
-            if (pawnCount == 0) return 0;
-            double avgCombat = outpost.CapablePawns
-                .Select(p => (double)Math.Max(
-                    p.skills.GetSkill(SkillDefOf.Shooting).Level,
-                    p.skills.GetSkill(SkillDefOf.Melee).Level))
-                .DefaultIfEmpty(0)
-                .Average();
-            return VOEFormulas.MilitaryLevel(pawnCount, avgCombat);
+            if (outpost.PawnCount == 0) return 0;
+            return Math.Max(1, (int)Math.Round(SquadPowerRegistry.LevelFromPawns(outpost.CapablePawns)));
         }
 
         /// <summary>

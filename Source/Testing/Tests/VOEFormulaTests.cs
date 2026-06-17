@@ -9,29 +9,6 @@ namespace EmpireVOE
     /// </summary>
     public static class VOEFormulaTests
     {
-        /*-*-*- MilitaryLevel: pawnCount==0 -> 0, else max(1, (int)(pawnCount * (0.5 + avgSkill/40))) -*-*-*/
-
-        [EmpireTest("VOE.Formula")]
-        public static void MilitaryLevel_ZeroPawns_IsZero()
-        {
-            TestAssert.AreEqual(0, VOEFormulas.MilitaryLevel(0, 50.0));
-        }
-
-        [EmpireTest("VOE.Formula")]
-        public static void MilitaryLevel_OnePawnNoSkill_FloorsAtOne()
-        {
-            // (int)(1 * 0.5) = 0, floored up to 1
-            TestAssert.AreEqual(1, VOEFormulas.MilitaryLevel(1, 0.0));
-        }
-
-        [EmpireTest("VOE.Formula")]
-        public static void MilitaryLevel_PawnCountScales()
-        {
-            TestAssert.AreEqual(3, VOEFormulas.MilitaryLevel(6, 0.0));   // (int)(6 * 0.5)
-            TestAssert.AreEqual(6, VOEFormulas.MilitaryLevel(6, 20.0));  // (int)(6 * 1.0)
-            TestAssert.AreEqual(4, VOEFormulas.MilitaryLevel(3, 40.0));  // (int)(3 * 1.5) = 4
-        }
-
         /*-*-*- Efficiency: <=20 quadratic, >20 sqrt tail. Anchors: 0->0.3, 10->1.0, 20->1.6 -*-*-*/
 
         [EmpireTest("VOE.Formula")]

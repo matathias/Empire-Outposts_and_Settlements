@@ -47,10 +47,9 @@ namespace EmpireVOE
                 if (IsUnderAttack) return "FCMilStatusUnderAttack".Translate();
                 if (comp.IsOnCooldown)
                 {
-                    string label = "FCMilStatusTraveling".Translate();
-                    int ticksLeft = comp.CooldownTicksLeft;
-                    if (ticksLeft > 0) label += " " + ticksLeft.ToTimeString();
-                    return label;
+                    // Outpost pawns are returned instantly, so the squad "Returning Home" text is wrong
+                    // here — use a dedicated external-defender cooldown string.
+                    return "VOE_StatusRegrouping".Translate(comp.CooldownTicksLeft.ToTimeString());
                 }
                 if (defender.Busy)
                 {

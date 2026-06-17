@@ -25,6 +25,12 @@ namespace EmpireVOE
         public bool autoDefend;
         private int cooldownEndTick;
 
+        // Committed-to-an-op state, owned here (not on the [Unsaved] DefensiveAutoDefender) so it
+        // survives save/reload during the pre-battle warning window. Set on pledge/engagement, cleared
+        // on replacement/completion. See DefensiveAutoDefender's IAutoDefender hooks.
+        public bool defending;
+        public WorldObject defendingTarget;
+
         [Unsaved] public DefensiveAutoDefender defender;
         [Unsaved] public DefensiveTabEntry tabEntry;
 
@@ -75,6 +81,8 @@ namespace EmpireVOE
             base.PostExposeData();
             Scribe_Values.Look(ref autoDefend, "voeAutoDefend");
             Scribe_Values.Look(ref cooldownEndTick, "voeCooldownEndTick");
+            Scribe_Values.Look(ref defending, "voeDefending");
+            Scribe_References.Look(ref defendingTarget, "voeDefendingTarget");
         }
 
         public override void PostPostRemove()
