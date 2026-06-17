@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
     <VOE_DisableIntegration>Disable all integration</VOE_DisableIntegration>
-    <VOE_DisableIntegrationDesc>Master switch. Turns off ALL Empire-VOE integration.</VOE_DisableIntegrationDesc>
+    <VOE_DisableIntegrationDesc>Master switch. Turns off ALL integration between Empire Refactored and Vanilla Outposts Expanded.</VOE_DisableIntegrationDesc>
     <VOE_OutpostDefended>{0} defended</VOE_OutpostDefended>
     <VOE_OutpostDefendedDesc>Your outpost {0} successfully repelled an enemy raid.</VOE_OutpostDefendedDesc>
     <VOE_OutpostRaided>{0} raided</VOE_OutpostRaided>
@@ -29,9 +29,9 @@
     <VOE_PlayerTaxMap>Player Tax Map</VOE_PlayerTaxMap>
 
     <!-- Settings -->
-    <VOE_Title>Empire: Vanilla Outposts Expanded Integration</VOE_Title>
-    <VOE_DebugLogging>Debug logging</VOE_DebugLogging>
-    <VOE_DebugLoggingDesc>Enable verbose debug logging for EmpireVOE integration.</VOE_DebugLoggingDesc>
+    <VOE_Title>Empire: Outposts &amp; Settlements</VOE_Title>
+    <VOE_DebugLogging>Verbose logging</VOE_DebugLogging>
+    <VOE_DebugLoggingDesc>Enable verbose logging.</VOE_DebugLoggingDesc>
 
     <!-- Per-Feature Toggles -->
     <VOE_EnableMilitary>Military Integration</VOE_EnableMilitary>
@@ -45,7 +45,7 @@
     <VOE_EnableEncampment>Encampment Recovery</VOE_EnableEncampment>
     <VOE_EnableEncampmentDesc>Nearby encampments boost the heal rate of mercenaries at your settlements.</VOE_EnableEncampmentDesc>
     <VOE_EnableOutpostConversion>Outpost Conversion</VOE_EnableOutpostConversion>
-    <VOE_EnableOutpostConversionDesc>VOE outposts can be converted into Empire settlements via a gizmo. Towns can become any settlement type; production outposts can become their matching specialized type (e.g. a logging outpost becomes a lumber camp) when a submod that adds those types is installed.</VOE_EnableOutpostConversionDesc>
+    <VOE_EnableOutpostConversionDesc>Outposts can be converted into Empire settlements via a gizmo. Towns can become any settlement type; production outposts can become their matching specialized type (e.g. a logging outpost becomes a lumber camp) when a submod that adds those types is installed.</VOE_EnableOutpostConversionDesc>
     <VOE_EnableRoads>Road Integration</VOE_EnableRoads>
     <VOE_EnableRoadsDesc>The Empire road builder includes your outposts in its network, building roads to and between them alongside settlements.</VOE_EnableRoadsDesc>
 
@@ -174,6 +174,6 @@
     <VOE_CodexConversionLine>{0} -&gt; {1} ({2})</VOE_CodexConversionLine>
 
     <!-- Patch Notes -->
-    <VOE_PatchTitle>Patch Notes: VOE Integration</VOE_PatchTitle>
+    <VOE_PatchTitle>Patch Notes: Outposts &amp; Settlements</VOE_PatchTitle>
     <VOE_OpenPatchNotes>Open Patch Notes</VOE_OpenPatchNotes>
 </LanguageData>
