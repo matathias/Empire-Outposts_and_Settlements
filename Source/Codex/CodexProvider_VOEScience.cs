@@ -26,11 +26,14 @@ namespace EmpireVOE
             foreach (WorldSettlementFC s in faction.settlements)
             {
                 WorldObjectComp_ScienceLink link = s.GetComponent<WorldObjectComp_ScienceLink>();
-                Outpost_Science outpost = link?.linkedOutpost;
-                if (outpost is null || outpost.Destroyed) continue;
-                any = true;
-                result += "  " + "VOE_CodexScienceLine".Translate(
-                    s.Name, outpost.Name ?? outpost.def.label, CountResearchers(outpost)) + "\n";
+                if (link?.linkedOutposts is null) continue;
+                foreach (Outpost_Science outpost in link.linkedOutposts)
+                {
+                    if (outpost is null || outpost.Destroyed) continue;
+                    any = true;
+                    result += "  " + "VOE_CodexScienceLine".Translate(
+                        s.Name, outpost.Name ?? outpost.def.label, CountResearchers(outpost)) + "\n";
+                }
             }
 
             return any ? result.TrimEnd() : "VOE_CodexScienceNone".Translate().ToString();

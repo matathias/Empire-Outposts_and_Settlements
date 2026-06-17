@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+	<!-- ============================================================ -->
+	<!-- VOE: Additional Outposts (MrHydralisk.VOEAdditionalOutposts)   -->
+	<!--                                                               -->
+	<!-- This folder only loads when that mod is active (LoadFolders   -->
+	<!-- IfModActive), so the production-outpost defs below are        -->
+	<!-- guaranteed present - except the Odyssey-gated fishing outpost, -->
+	<!-- which is wrapped in an existence check.                       -->
+	<!--                                                               -->
+	<!-- allowedSettlementTypes are plain defName strings resolved     -->
+	<!-- leniently at runtime: Cities & Fields (Empire-UrbanRural)     -->
+	<!-- types only take effect when that submod is installed.         -->
+	<!-- ============================================================ -->
+
+	<!-- Outpost_Ranch -> Ranch (Cities & Fields) -->
+	<Operation Class="PatchOperationConditional">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Ranch"]/modExtensions</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>Defs/WorldObjectDef[defName="Outpost_Ranch"]</xpath>
+			<value><modExtensions /></value>
+		</nomatch>
+	</Operation>
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Ranch"]/modExtensions</xpath>
+		<value>
+			<li Class="EmpireVOE.OutpostConversionExtension">
+				<allowedSettlementTypes>
+					<li>WorldSettlementDef_Ranch</li>
+				</allowedSettlementTypes>
+			</li>
+		</value>
+	</Operation>
+
+	<!-- Outpost_Field_Hospital -> Herbalist camp (Cities & Fields) -->
+	<Operation Class="PatchOperationConditional">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Field_Hospital"]/modExtensions</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>Defs/WorldObjectDef[defName="Outpost_Field_Hospital"]</xpath>
+			<value><modExtensions /></value>
+		</nomatch>
+	</Operation>
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Field_Hospital"]/modExtensions</xpath>
+		<value>
+			<li Class="EmpireVOE.OutpostConversionExtension">
+				<allowedSettlementTypes>
+					<li>WorldSettlementDef_Herbalist</li>
+				</allowedSettlementTypes>
+			</li>
+		</value>
+	</Operation>
+
+	<!-- OutpostAO_Fishing -> Farm (Cities & Fields).
+	     Odyssey-DLC-gated def: only patch if it actually exists, otherwise the
+	     unconditional Add below would log a missing-xpath error. -->
+	<Operation Class="PatchOperationConditional">
+		<xpath>Defs/WorldObjectDef[defName="OutpostAO_Fishing"]</xpath>
+		<match Class="PatchOperationSequence">
+			<operations>
+				<li Class="PatchOperationConditional">
+					<xpath>Defs/WorldObjectDef[defName="OutpostAO_Fishing"]/modExtensions</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>Defs/WorldObjectDef[defName="OutpostAO_Fishing"]</xpath>
+						<value><modExtensions /></value>
+					</nomatch>
+				</li>
+				<li Class="PatchOperationAdd">
+					<xpath>Defs/WorldObjectDef[defName="OutpostAO_Fishing"]/modExtensions</xpath>
+					<value>
+						<li Class="EmpireVOE.OutpostConversionExtension">
+							<allowedSettlementTypes>
+								<li>WorldSettlementDef_Farm</li>
+							</allowedSettlementTypes>
+						</li>
+					</value>
+				</li>
+			</operations>
+		</match>
+	</Operation>
+
+	<!-- Outpost_Mercenary_Camp: combat pawns can auto-defend Empire settlements and
+	     appear in the military tab, the same way base VOE's Outpost_Defensive does. -->
+	<Operation Class="PatchOperationConditional">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Mercenary_Camp"]/comps</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>Defs/WorldObjectDef[defName="Outpost_Mercenary_Camp"]</xpath>
+			<value><comps /></value>
+		</nomatch>
+	</Operation>
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Mercenary_Camp"]/comps</xpath>
+		<value>
+			<li Class="EmpireVOE.WorldObjectCompProperties_EmpireDefensive" />
+		</value>
+	</Operation>
+
+</Patch>

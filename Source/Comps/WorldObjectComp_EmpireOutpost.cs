@@ -218,7 +218,7 @@ namespace EmpireVOE
             foreach (WorldSettlementFC s in faction.settlements)
             {
                 WorldObjectComp_ScienceLink link = s.GetComponent<WorldObjectComp_ScienceLink>();
-                if (link?.linkedOutpost == science)
+                if (link?.linkedOutposts is object && link.linkedOutposts.Contains(science))
                     names.Add(s.Name);
             }
             return names;

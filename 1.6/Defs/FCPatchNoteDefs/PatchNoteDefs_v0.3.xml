@@ -142,4 +142,18 @@
 		<li>Matathias</li>
 		</authors>
 	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
+		<defName>VOE_0_3_10</defName>
+		<label>More Science!</label>
+		<description>Lifts a restriction on research outposts.</description>
+		<releaseDate>2026-06-16</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Allow more than one research outpost to link to a settlement</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
 </Defs>

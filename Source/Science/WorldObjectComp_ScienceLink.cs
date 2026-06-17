@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using FactionColonies;
@@ -19,27 +18,26 @@ namespace EmpireVOE
     }
 
     /// <summary>
-    /// Provides an additive Research production bonus to the settlement based on a
-    /// linked Outpost_Science's pawn count and Intellectual skill. Also provides
-    /// the gizmo for linking/unlinking science outposts.
+    /// Provides an additive Research production bonus to the settlement based on the
+    /// linked Outpost_Science(s) pawn count and Intellectual skill. A settlement may
+    /// link several science outposts; an outpost may be linked by at most one
+    /// settlement (its own research contribution is redirected while linked, so
+    /// counting it from two settlements would double-dip). Also provides the gizmo
+    /// for linking/unlinking science outposts.
     /// </summary>
     public class WorldObjectComp_ScienceLink : WorldObjectComp, IResourceProductionModifier
     {
-        public Outpost_Science linkedOutpost;
+        public List<Outpost_Science> linkedOutposts = new List<Outpost_Science>();
 
         // Static set of all outposts that have at least one settlement linked to them.
         // Used by Patch_ScienceTick for O(1) lookup. Rebuilt lazily when dirty.
-        private static readonly HashSet<Outpost_Science> linkedOutposts = new HashSet<Outpost_Science>();
+        private static readonly HashSet<Outpost_Science> globallyLinkedOutposts = new HashSet<Outpost_Science>();
         private static bool linkedSetDirty = true;
 
         public static bool IsAnySettlementLinked(Outpost_Science outpost)
         {
-            if (linkedSetDirty)
-            {
-                RebuildLinkedSet();
-                linkedSetDirty = false;
-            }
-            return linkedOutposts.Contains(outpost);
+            EnsureLinkedSetFresh();
+            return globallyLinkedOutposts.Contains(outpost);
         }
 
         private static void MarkLinkedSetDirty()
@@ -47,27 +45,39 @@ namespace EmpireVOE
             linkedSetDirty = true;
         }
 
+        private static void EnsureLinkedSetFresh()
+        {
+            if (!linkedSetDirty) return;
+            RebuildLinkedSet();
+            linkedSetDirty = false;
+        }
+
         private static void RebuildLinkedSet()
         {
-            linkedOutposts.Clear();
+            globallyLinkedOutposts.Clear();
             FactionFC faction = FindFC.FactionComp;
             if (faction is null) return;
             foreach (WorldSettlementFC s in faction.settlements)
             {
                 WorldObjectComp_ScienceLink comp = s.GetComponent<WorldObjectComp_ScienceLink>();
-                if (comp?.linkedOutpost is object && !comp.linkedOutpost.Destroyed)
-                    linkedOutposts.Add(comp.linkedOutpost);
+                if (comp?.linkedOutposts is null) continue;
+                foreach (Outpost_Science outpost in comp.linkedOutposts)
+                {
+                    if (outpost is object && !outpost.Destroyed)
+                        globallyLinkedOutposts.Add(outpost);
+                }
             }
         }
 
         public override void PostExposeData()
         {
             base.PostExposeData();
-            Scribe_References.Look(ref linkedOutpost, "voeLinkedScienceOutpost");
+            Scribe_Collections.Look(ref linkedOutposts, "voeLinkedScienceOutposts", LookMode.Reference);
 
-            // Rebuild the static set after all comps have loaded
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
+                if (linkedOutposts is null) linkedOutposts = new List<Outpost_Science>();
+                // Rebuild the static set after all comps have loaded
                 MarkLinkedSetDirty();
             }
         }
@@ -114,51 +124,60 @@ namespace EmpireVOE
 
         private double CalculateBonus()
         {
-            if (linkedOutpost is null || linkedOutpost.Destroyed)
-                return 0;
-
             double bonus = 0;
-            foreach (Pawn pawn in linkedOutpost.CapablePawns)
+            foreach (Outpost_Science outpost in linkedOutposts)
             {
-                if (pawn.skills is null) continue;
-                SkillRecord skill = pawn.skills.GetSkill(SkillDefOf.Intellectual);
-                if (skill is null) continue;
-                int level = skill.Level;
-                if (level >= EmpireVOESettings.skillFloor)
-                    bonus += level * EmpireVOESettings.additivePerLevel;
+                if (outpost is null || outpost.Destroyed) continue;
+                foreach (Pawn pawn in outpost.CapablePawns)
+                {
+                    if (pawn.skills is null) continue;
+                    SkillRecord skill = pawn.skills.GetSkill(SkillDefOf.Intellectual);
+                    if (skill is null) continue;
+                    int level = skill.Level;
+                    if (level >= EmpireVOESettings.skillFloor)
+                        bonus += level * EmpireVOESettings.additivePerLevel;
+                }
             }
 
             return bonus;
         }
 
+        private void ToggleLink(Outpost_Science outpost)
+        {
+            WorldSettlementFC settlement = parent as WorldSettlementFC;
+            if (linkedOutposts.Contains(outpost))
+                linkedOutposts.Remove(outpost);
+            else
+                linkedOutposts.Add(outpost);
+            MarkLinkedSetDirty();
+            settlement?.InvalidateResourceCaches();
+        }
+
         private Command_Action CreateScienceLinkGizmo()
         {
-            string currentLabel = linkedOutpost is object && !linkedOutpost.Destroyed
-                ? linkedOutpost.Name ?? linkedOutpost.def.label
-                : "None".Translate().ToString();
-
             return new Command_Action
             {
                 defaultLabel = "VOE_ScienceLinkLabel".Translate(),
-                defaultDesc = "VOE_ScienceLinkDesc".Translate(currentLabel),
+                defaultDesc = "VOE_ScienceLinkDesc".Translate(linkedOutposts.Count),
                 icon = TexCommand.Install,
                 action = delegate
                 {
+                    EnsureLinkedSetFresh();
                     List<FloatMenuOption> options = new List<FloatMenuOption>();
 
-                    // Option: unlink
-                    options.Add(new FloatMenuOption(
-                        "None".Translate(),
-                        delegate
-                        {
-                            if (linkedOutpost is object)
+                    // Option: unlink all
+                    if (linkedOutposts.Count > 0)
+                    {
+                        options.Add(new FloatMenuOption(
+                            "VOE_UnlinkAll".Translate(),
+                            delegate
                             {
-                                linkedOutpost = null;
+                                if (linkedOutposts.Count == 0) return;
+                                linkedOutposts.Clear();
                                 MarkLinkedSetDirty();
-                                WorldSettlementFC settlement = parent as WorldSettlementFC;
-                                settlement?.InvalidateResourceCaches();
-                            }
-                        }));
+                                (parent as WorldSettlementFC)?.InvalidateResourceCaches();
+                            }));
+                    }
 
                     // List science outposts within range, sorted by distance
                     List<Outpost_Science> sorted = Find.WorldObjects.AllWorldObjects
@@ -172,22 +191,27 @@ namespace EmpireVOE
                     {
                         Outpost_Science op = outpost;
                         float distance = Find.WorldGrid.ApproxDistanceInTiles(op.Tile, parent.Tile);
-                        string label = (op.Name ?? op.def.label) + " (" + distance.ToString("F1") + " " + "VOE_Tiles".Translate() + ")";
+                        bool linkedHere = linkedOutposts.Contains(op);
+                        bool linkedElsewhere = !linkedHere && globallyLinkedOutposts.Contains(op);
+                        string baseLabel = (op.Name ?? op.def.label) + " (" + distance.ToString("F1") + " " + "VOE_Tiles".Translate() + ")";
 
-                        options.Add(new FloatMenuOption(
-                            label,
-                            delegate
+                        if (linkedElsewhere)
+                        {
+                            // Claimed by another settlement - show disabled.
+                            options.Add(new FloatMenuOption(
+                                baseLabel + " - " + "VOE_AlreadyLinked".Translate(), null)
                             {
-                                // Invalidate previous if changing
-                                WorldSettlementFC settlement = parent as WorldSettlementFC;
-                                if (linkedOutpost != op)
-                                {
-                                    linkedOutpost = op;
-                                    MarkLinkedSetDirty();
-                                    settlement?.InvalidateResourceCaches();
-                                }
-                            }));
+                                Disabled = true
+                            });
+                            continue;
+                        }
+
+                        string label = linkedHere ? baseLabel + " - " + (string)"VOE_Linked".Translate() : baseLabel;
+                        options.Add(new FloatMenuOption(label, delegate { ToggleLink(op); }));
                     }
+
+                    if (options.Count == 0)
+                        options.Add(new FloatMenuOption("VOE_NoOutpostsInRange".Translate(), null) { Disabled = true });
 
                     Find.WindowStack.Add(new FloatMenu(options));
                 }

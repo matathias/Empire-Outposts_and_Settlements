@@ -101,10 +101,15 @@
     <VOE_TownRequirements>Need at least {0} settlements or outposts within {1} tiles, of which at least {2} are settlements and {3} are outposts.</VOE_TownRequirements>
 
     <!-- Science Linking -->
-    <VOE_ScienceLinkLabel>Link to Settlement</VOE_ScienceLinkLabel>
-    <VOE_ScienceLinkDesc>Link this science outpost to an Empire settlement to provide a research production bonus. While linked, the outpost's own research contribution is redirected.\n\nCurrently linked to: {0}</VOE_ScienceLinkDesc>
+    <VOE_ScienceLinkLabel>Link science outposts</VOE_ScienceLinkLabel>
+    <VOE_ScienceLinkDesc>Link nearby science outposts to this settlement for a research production bonus. While linked, an outpost's own research contribution is redirected to the Empire.\n\nLinked outposts: {0}</VOE_ScienceLinkDesc>
     <VOE_ScienceLinkBonusDesc>Science outpost link</VOE_ScienceLinkBonusDesc>
+
+    <!-- Shared outpost-link gizmo strings -->
     <VOE_AlreadyLinked>already linked</VOE_AlreadyLinked>
+    <VOE_Linked>linked</VOE_Linked>
+    <VOE_UnlinkAll>Unlink all</VOE_UnlinkAll>
+    <VOE_NoOutpostsInRange>No outposts in range</VOE_NoOutpostsInRange>
     <VOE_Tiles>tiles</VOE_Tiles>
 
     <!-- Inspect String -->
