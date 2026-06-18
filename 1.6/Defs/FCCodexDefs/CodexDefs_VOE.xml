@@ -25,13 +25,13 @@
 
 Different outpost types take on different roles in the Empire:
 
-[b] - Defensive[/b] outposts can stand guard over nearby settlements.
+[b] - Defensive[/b] outposts can stand guard over nearby settlements, and passively stiffen their defense just by being close.
 [b] - Encampments[/b] speed up your mercenaries' healing after battle.
-[b] - Science[/b] outposts can pour their research into a settlement.
+[b] - Production[/b] outposts (mining, farming, hunting, logging, drilling, science) can be linked to feed a settlement's matching resource output instead of shipping items.
 [b] - Towns[/b] can be converted into any kind of settlement; other outposts can become their matching specialized settlement type.
-[b] - Production[/b] outposts (and any other type) can receive your tax shipments, bankroll a settlement's silver, and become raid targets in their own right.
+[b] - Any outpost[/b] can receive your tax shipments, bankroll a settlement's silver, and become a raid target in its own right.
 
-Every part of this integration is optional. A master switch turns the whole thing off, and each feature - military, tax delivery, financing, research linking, encampment recovery, outpost conversion, and roads - has its own toggle in the mod settings. The panel on the right shows which features are currently active and what outposts you have established.</description>
+Every part of this integration is optional. A master switch turns the whole thing off, and each feature - military, tax delivery, financing, resource linking, encampment recovery, outpost conversion, and roads - has its own toggle in the mod settings. The panel on the right shows which features are currently active and what outposts you have established.</description>
         <category>CodexCat_VOE_Operations</category>
         <displayOrder>0</displayOrder>
         <iconPath>UI/Banners/Banner-VOEIntegration</iconPath>
@@ -71,6 +71,8 @@ Its fighting strength is driven mainly by how many defenders it holds: a bigger 
 [b] - Military Efficiency[/b]: derived from the average of the outpost pawns' shooting and melee skills. Only the highest of each is considered for each pawn, so a high-skill sniper with poor melee will still bring up the average. Efficiency ranges from 0.5 at average 0 skill to 1.5 at average 20 skill.
 
 Defending is not free. After a battle, the garrison needs time to recover before it can deploy again, and while it is recovering it cannot be sent out as reinforcements. A defeat is costlier still: some defenders are wounded and the recovery period is extended. Further, a garrison must always leave one pawn behind at the outpost (a restriction from Vanilla Outposts Expanded - can't have empty outposts).
+
+Beyond actively deploying, a garrisoned defensive outpost also provides a [i]passive aura[/i]: settlements within range gain a fraction of the outpost's military level toward their own auto-resolved defense, stiffening them against raids even when the garrison never leaves home. Optionally, that shielding can also draw raids away from the settlement and toward the defensive outposts themselves.
 
 Defensive outposts also appear in your Empire's military tab alongside your squads, showing each one's status at a glance - ready, recovering, or currently defending. The panel on the right lists your defensive outposts with their live strength and status.</description>
         <category>CodexCat_VOE_Operations</category>
@@ -137,11 +139,29 @@ Pair this with tax delivery - route a productive settlement's goods into an outp
     </FactionColonies.CodexEntryDef>
 
     <FactionColonies.CodexEntryDef>
+        <defName>Codex_VOE_ResourceLink</defName>
+        <label>Resource Outpost Linking</label>
+        <description>Most production outposts - mining, farming, hunting, logging, drilling, and science - can be [i]linked[/i] to a nearby settlement instead of shipping goods back to a colony. A linked outpost stops making its physical delivery and instead feeds the settlement's matching resource output directly: a mining outpost adds to mining, a farm to food, a hunting camp to food and animals, and so on.
+
+The size of the contribution grows with the relevant skill of the outpost's workers, so a well-staffed outpost is worth more. Each settlement can draw on as many outposts as are in range, but any one outpost can only be linked to a single settlement at a time. You manage links from the [i]Outposts[/i] tab of the settlement window, and see every link across your faction in the [i]Outposts[/i] tab of the Empire+ window.
+
+The panel on the right shows your current resource links.</description>
+        <category>CodexCat_VOE_Economy</category>
+        <displayOrder>28</displayOrder>
+        <dynamicProvider>EmpireVOE.CodexProvider_VOEResourceLink</dynamicProvider>
+        <seeAlso>
+            <li>Codex_ResourceProduction</li>
+            <li>Codex_VOE_Science</li>
+            <li>Codex_VOE_Overview</li>
+        </seeAlso>
+    </FactionColonies.CodexEntryDef>
+
+    <FactionColonies.CodexEntryDef>
         <defName>Codex_VOE_Science</defName>
         <label>Science Outposts</label>
-        <description>A Science outpost can throw its research behind one of your settlements. Link it to a nearby settlement and it adds to that settlement's research output, with the size of the boost growing with the [i]Intellectual[/i] skill of the outpost's researchers.
+        <description>A Science outpost can throw its research behind one of your settlements - one flavour of the broader resource linking system (see the [i]Resource Outpost Linking[/i] entry). Link it to a nearby settlement and it adds to that settlement's research output, with the size of the boost growing with the [i]Intellectual[/i] skill of the outpost's researchers.
 
-While an outpost is linked, its own standalone research is folded into the settlement instead of being counted separately - so you channel its work rather than double-counting it. Each settlement can draw on one science outpost, and the outpost must be within range to be linked. You set the link from a gizmo on the settlement.
+While an outpost is linked, its own standalone research is folded into the settlement instead of being counted separately - so you channel its work rather than double-counting it. You manage links from the [i]Outposts[/i] tab of the settlement window.
 
 The panel on the right shows your current research links and how many researchers each linked outpost is contributing.</description>
         <category>CodexCat_VOE_Economy</category>

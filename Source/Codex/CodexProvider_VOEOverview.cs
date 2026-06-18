@@ -22,7 +22,7 @@ namespace EmpireVOE
             result += FeatureLine("VOE_EnableMilitary", EmpireVOESettings.MilitaryActive);
             result += FeatureLine("VOE_EnableDelivery", EmpireVOESettings.DeliveryActive);
             result += FeatureLine("VOE_EnableFinancing", EmpireVOESettings.FinancingActive);
-            result += FeatureLine("VOE_EnableScienceLink", EmpireVOESettings.ScienceLinkActive);
+            result += FeatureLine("VOE_EnableResourceLink", EmpireVOESettings.ResourceLinkActive);
             result += FeatureLine("VOE_EnableEncampment", EmpireVOESettings.EncampmentActive);
             result += FeatureLine("VOE_EnableOutpostConversion", EmpireVOESettings.OutpostConversionActive);
             result += FeatureLine("VOE_EnableRoads", EmpireVOESettings.RoadsActive);
