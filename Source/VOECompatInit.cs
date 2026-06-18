@@ -18,6 +18,9 @@ namespace EmpireVOE
             EmpireRegistry.Register(_foundingRestrictionValidator);
             EmpireRegistry.Register(OutpostDeliveryInterceptor.Instance);
             EmpireRegistry.Register(VOERoadNodeProvider.Instance);
+            EmpireRegistry.Register(DefensiveAuraRaidWeightProvider.Instance);
+            if (EmpireVOESettings.enableOutpostMainTab)
+                EmpireRegistry.Register(OutpostMainTab.Instance);
             EmpireCacheUtil.RegisterCacheInvalidator("EmpireVOE", () =>
             {
                 // Re-register after InvalidateAll clears all registries
@@ -25,6 +28,9 @@ namespace EmpireVOE
                 EmpireRegistry.Register(_foundingRestrictionValidator);
                 EmpireRegistry.Register(OutpostDeliveryInterceptor.Instance);
                 EmpireRegistry.Register(VOERoadNodeProvider.Instance);
+                EmpireRegistry.Register(DefensiveAuraRaidWeightProvider.Instance);
+                if (EmpireVOESettings.enableOutpostMainTab)
+                    EmpireRegistry.Register(OutpostMainTab.Instance);
             });
 
             // Found-screen integration: replace the Settle button with "Send a Caravan" and drive the

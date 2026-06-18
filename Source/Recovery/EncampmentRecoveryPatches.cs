@@ -5,9 +5,10 @@ using VOE;
 namespace EmpireVOE
 {
     /// <summary>
-    /// Invalidates the encampment cache when any encampment's pawn roster changes.
+    /// Invalidates the caches that depend on an outpost's pawn roster when it changes.
     /// RecachePawnTraits is called by AddPawn, RemovePawn, SpawnSetup, and ExposeData.
-    /// The cache backs the medicine-scaled merc heal-rate bonus (WorldObjectComp_EncampmentBonus).
+    /// Backs the medicine-scaled merc heal-rate bonus (encampments), the passive defensive aura
+    /// (defensive outposts), and skill-scaled resource production (linked production outposts).
     /// </summary>
     [HarmonyPatch(typeof(Outpost))]
     [HarmonyPatch("RecachePawnTraits")]
@@ -17,6 +18,10 @@ namespace EmpireVOE
         {
             if (__instance is Outpost_Encampment)
                 EncampmentCache.Invalidate();
+            if (__instance is Outpost_Defensive)
+                DefensiveAuraCache.Invalidate();
+            // A linked production outpost's skills feed its settlement's resource output; refresh it.
+            ResourceLinkUtil.NotifyOutpostRosterChanged(__instance);
         }
     }
 }

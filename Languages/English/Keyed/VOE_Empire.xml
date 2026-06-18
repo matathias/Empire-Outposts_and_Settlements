@@ -54,6 +54,8 @@
     <VOE_EnableOutpostConversionDesc>Outposts can be converted into Empire settlements via a gizmo. Towns can become any settlement type; production outposts can become their matching specialized type (e.g. a logging outpost becomes a lumber camp) when a submod that adds those types is installed.</VOE_EnableOutpostConversionDesc>
     <VOE_EnableRoads>Road Integration</VOE_EnableRoads>
     <VOE_EnableRoadsDesc>The Empire road builder includes your outposts in its network, building roads to and between them alongside settlements.</VOE_EnableRoadsDesc>
+    <VOE_EnableOutpostMainTab>Faction-wide Outposts tab</VOE_EnableOutpostMainTab>
+    <VOE_EnableOutpostMainTabDesc>Adds an Outposts tab to the Empire+ window, showing every outpost-settlement link by outpost and by settlement.</VOE_EnableOutpostMainTabDesc>
 
     <!-- Outpost -> Settlement Conversion Feature -->
     <VOE_ConvertOutpostPawns>Fold outpost pawns into settlement</VOE_ConvertOutpostPawns>

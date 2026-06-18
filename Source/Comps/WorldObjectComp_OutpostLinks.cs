@@ -104,32 +104,7 @@ namespace EmpireVOE
                 icon = current is object
                     ? current.ExpandingIcon
                     : TexCommand.Install,
-                action = delegate
-                {
-                    List<FloatMenuOption> options = new List<FloatMenuOption>();
-
-                    // Option: deliver to player tax map (default)
-                    options.Add(new FloatMenuOption(
-                        "VOE_PlayerTaxMap".Translate(),
-                        delegate { deliveryOutpost = null; }));
-
-                    // List all outposts ordered by distance
-                    IEnumerable<Outpost> outposts = Find.WorldObjects.AllWorldObjects
-                        .OfType<Outpost>()
-                        .OrderBy(o => Find.WorldGrid.ApproxDistanceInTiles(o.Tile, parent.Tile));
-
-                    foreach (Outpost outpost in outposts)
-                    {
-                        Outpost op = outpost;
-                        options.Add(new FloatMenuOption(
-                            op.LabelCap,
-                            delegate { deliveryOutpost = op; },
-                            op.ExpandingIcon,
-                            op.ExpandingIconColor));
-                    }
-
-                    Find.WindowStack.Add(new FloatMenu(options));
-                }
+                action = OpenDeliveryMenu
             };
         }
 
@@ -147,33 +122,62 @@ namespace EmpireVOE
                 icon = current is object
                     ? current.ExpandingIcon
                     : TexCommand.Install,
-                action = delegate
-                {
-                    List<FloatMenuOption> options = new List<FloatMenuOption>();
-
-                    // Option: no financing outpost
-                    options.Add(new FloatMenuOption(
-                        "None".Translate(),
-                        delegate { financingOutpost = null; }));
-
-                    // List all outposts ordered by distance
-                    IEnumerable<Outpost> outposts = Find.WorldObjects.AllWorldObjects
-                        .OfType<Outpost>()
-                        .OrderBy(o => Find.WorldGrid.ApproxDistanceInTiles(o.Tile, parent.Tile));
-
-                    foreach (Outpost outpost in outposts)
-                    {
-                        Outpost op = outpost;
-                        options.Add(new FloatMenuOption(
-                            op.LabelCap,
-                            delegate { financingOutpost = op; },
-                            op.ExpandingIcon,
-                            op.ExpandingIconColor));
-                    }
-
-                    Find.WindowStack.Add(new FloatMenu(options));
-                }
+                action = OpenFinancingMenu
             };
+        }
+
+        // --- Shared menu builders (reused by both the world-map gizmos and the Outposts tab) ---
+
+        /// <summary>Opens the float menu for choosing this settlement's tax-delivery destination.</summary>
+        internal void OpenDeliveryMenu()
+        {
+            List<FloatMenuOption> options = new List<FloatMenuOption>();
+            options.Add(new FloatMenuOption(
+                "VOE_PlayerTaxMap".Translate(),
+                delegate { deliveryOutpost = null; }));
+
+            foreach (Outpost outpost in OutpostsByDistance())
+            {
+                Outpost op = outpost;
+                options.Add(new FloatMenuOption(
+                    op.LabelCap,
+                    delegate { deliveryOutpost = op; },
+                    op.ExpandingIcon,
+                    op.ExpandingIconColor));
+            }
+
+            Find.WindowStack.Add(new FloatMenu(options));
+        }
+
+        /// <summary>Opens the float menu for choosing this settlement's financing outpost.</summary>
+        internal void OpenFinancingMenu()
+        {
+            List<FloatMenuOption> options = new List<FloatMenuOption>();
+            options.Add(new FloatMenuOption(
+                "None".Translate(),
+                delegate { financingOutpost = null; }));
+
+            foreach (Outpost outpost in OutpostsByDistance())
+            {
+                Outpost op = outpost;
+                options.Add(new FloatMenuOption(
+                    op.LabelCap,
+                    delegate { financingOutpost = op; },
+                    op.ExpandingIcon,
+                    op.ExpandingIconColor));
+            }
+
+            Find.WindowStack.Add(new FloatMenu(options));
+        }
+
+        internal void ClearDelivery() => deliveryOutpost = null;
+        internal void ClearFinancing() => financingOutpost = null;
+
+        private IEnumerable<Outpost> OutpostsByDistance()
+        {
+            return Find.WorldObjects.AllWorldObjects
+                .OfType<Outpost>()
+                .OrderBy(o => Find.WorldGrid.ApproxDistanceInTiles(o.Tile, parent.Tile));
         }
     }
 }

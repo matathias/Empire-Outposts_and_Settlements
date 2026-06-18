@@ -19,6 +19,7 @@ namespace EmpireVOE
         public static bool enableEncampment = true;
         public static bool enableOutpostConversion = true;
         public static bool enableRoads = true;
+        public static bool enableOutpostMainTab = true;
 
         // Skill-based bonuses (used by resource linking and outpost conversion)
         public static float additivePerLevel = 0.025f;
@@ -81,6 +82,7 @@ namespace EmpireVOE
             Scribe_Values.Look(ref enableResourceLink, "enableResourceLink", true);
             Scribe_Values.Look(ref enableEncampment, "enableEncampment", true);
             Scribe_Values.Look(ref enableOutpostConversion, "enableOutpostConversion", true);
+            Scribe_Values.Look(ref enableOutpostMainTab, "enableOutpostMainTab", true);
 
             // Skill-based bonuses
             Scribe_Values.Look(ref additivePerLevel, "additivePerLevel", 0.025f);
@@ -349,6 +351,17 @@ namespace EmpireVOE
                 // Force the road network to recompute so outpost nodes are added/removed.
                 FindFC.RoadBuilder?.FlagUpdateRoadQueues();
             }
+
+            ls.GapLine();
+
+            // --- Faction-wide Outposts main tab (Empire+ window) ---
+            bool prevMainTab = EmpireVOESettings.enableOutpostMainTab;
+            ls.CheckboxLabeled(
+                "VOE_EnableOutpostMainTab".Translate(),
+                ref EmpireVOESettings.enableOutpostMainTab,
+                "VOE_EnableOutpostMainTabDesc".Translate());
+            if (prevMainTab != EmpireVOESettings.enableOutpostMainTab)
+                OutpostMainTab.SetRegistered(EmpireVOESettings.enableOutpostMainTab);
 
             ls.Gap(12f);
             if (ls.ButtonText("VOE_OpenPatchNotes".Translate()))
