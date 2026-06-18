@@ -156,4 +156,21 @@
 		<li>Matathias</li>
 		</authors>
 	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
+		<defName>VOE_0_3_11</defName>
+		<label>Fixes &amp; Updates</label>
+		<description>Handful of bugfixes and balance tweaks.</description>
+		<releaseDate>2026-06-17</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Officially rename the mod to &quot;Empire Refactored: Outposts &amp; Settlements&quot;</li>
+		<li>Town outposts can be set to only recruit pawns that match the xenotype or race of the current inhabitants, at a reduced chance of recruitment. Not really an Empire feature, but if we&apos;re already touching VOE, then why not?</li>
+		<li>Change how military level is calculated: it is now based on similar logic as squads in the base mod, that being level is derived from the cost of all the pawns in the outpost</li>
+		<li>Defensive Outpost military efficiency calculations were simplified (it&apos;s linear now) with a higher floor and slightly lower ceiling</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
 </Defs>
