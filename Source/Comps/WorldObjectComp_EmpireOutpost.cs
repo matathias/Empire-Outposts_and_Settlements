@@ -115,10 +115,10 @@ namespace EmpireVOE
                     lines.Add(defComp.GetStatusInspectString(raidTarget.IsUnderAttack));
             }
 
-            // Science link status
-            if (EmpireVOESettings.enableScienceLink && parent is Outpost_Science science)
+            // Resource link status (any production outpost that can feed a settlement's resource output)
+            if (EmpireVOESettings.enableResourceLink && ResourceLinkUtil.IsLinkable(Outpost))
             {
-                List<string> linkedNames = GetLinkedSettlementNames(science);
+                List<string> linkedNames = GetLinkedSettlementNames(Outpost);
                 if (linkedNames.Count > 0)
                     lines.Add("VOE_LinkedTo".Translate(string.Join(", ", linkedNames)));
                 else
@@ -218,15 +218,15 @@ namespace EmpireVOE
             return null;
         }
 
-        private List<string> GetLinkedSettlementNames(Outpost_Science science)
+        private List<string> GetLinkedSettlementNames(Outpost outpost)
         {
             List<string> names = new List<string>();
             FactionFC faction = FindFC.FactionComp;
             if (faction is null) return names;
             foreach (WorldSettlementFC s in faction.settlements)
             {
-                WorldObjectComp_ScienceLink link = s.GetComponent<WorldObjectComp_ScienceLink>();
-                if (link?.linkedOutposts is object && link.linkedOutposts.Contains(science))
+                WorldObjectComp_ResourceLink link = s.GetComponent<WorldObjectComp_ResourceLink>();
+                if (link?.linkedOutposts is object && link.linkedOutposts.Contains(outpost))
                     names.Add(s.Name);
             }
             return names;

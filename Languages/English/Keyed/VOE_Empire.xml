@@ -42,8 +42,8 @@
     <VOE_EnableDeliveryDesc>Route settlement tax deliveries to outposts instead of the player's tax map.</VOE_EnableDeliveryDesc>
     <VOE_EnableFinancing>Outpost Financing</VOE_EnableFinancing>
     <VOE_EnableFinancingDesc>Outposts can fund settlement payments from their stored silver.</VOE_EnableFinancingDesc>
-    <VOE_EnableScienceLink>Science Linking</VOE_EnableScienceLink>
-    <VOE_EnableScienceLinkDesc>Science outposts can be linked to settlements to boost research production.</VOE_EnableScienceLinkDesc>
+    <VOE_EnableResourceLink>Resource Linking</VOE_EnableResourceLink>
+    <VOE_EnableResourceLinkDesc>Production outposts (mining, farming, hunting, logging, drilling, science) can be linked to a nearby settlement to feed its matching resource output instead of shipping physical items.</VOE_EnableResourceLinkDesc>
     <VOE_EnableEncampment>Encampment Recovery</VOE_EnableEncampment>
     <VOE_EnableEncampmentDesc>Nearby encampments boost the heal rate of mercenaries at your settlements.</VOE_EnableEncampmentDesc>
     <VOE_EnableOutpostConversion>Outpost Conversion</VOE_EnableOutpostConversion>
@@ -109,10 +109,8 @@
     <VOE_TownXenoPureChanceDesc>Per-town toggle (gizmo on the town's world map). While a town has same-xenotype recruiting on, its recruit chance is scaled by this multiplier.</VOE_TownXenoPureChanceDesc>
     <VOE_TownXenoPureChance>Recruit chance multiplier</VOE_TownXenoPureChance>
 
-    <!-- Science Linking -->
-    <VOE_ScienceLinkLabel>Link science outposts</VOE_ScienceLinkLabel>
-    <VOE_ScienceLinkDesc>Link nearby science outposts to this settlement for a research production bonus. While linked, an outpost's own research contribution is redirected to the Empire.\n\nLinked outposts: {0}</VOE_ScienceLinkDesc>
-    <VOE_ScienceLinkBonusDesc>Science outpost link</VOE_ScienceLinkBonusDesc>
+    <!-- Resource Linking -->
+    <VOE_ResourceLinkBonusDesc>{0} outpost link</VOE_ResourceLinkBonusDesc>
 
     <!-- Shared outpost-link gizmo strings -->
     <VOE_AlreadyLinked>already linked</VOE_AlreadyLinked>
@@ -133,7 +131,35 @@
     <!-- Skill-Based Bonuses Settings -->
     <VOE_AdditivePerLevel>Additive bonus per skill level</VOE_AdditivePerLevel>
     <VOE_SkillFloor>Skill floor</VOE_SkillFloor>
-    <VOE_ScienceLinkRange>Science link max range (tiles)</VOE_ScienceLinkRange>
+    <VOE_ResourceLinkRange>Resource link max range (tiles)</VOE_ResourceLinkRange>
+
+    <!-- Passive Defensive Aura Settings -->
+    <VOE_DefensiveAuraRange>Defensive aura range (tiles)</VOE_DefensiveAuraRange>
+    <VOE_DefensiveAuraLevelFactor>Passive defense (fraction of garrison level)</VOE_DefensiveAuraLevelFactor>
+    <VOE_DefensiveAuraSource>{0} nearby defensive outpost(s)</VOE_DefensiveAuraSource>
+
+    <!-- Outposts settlement subtab + faction-wide main tab -->
+    <VOE_OutpostsTab>Outposts</VOE_OutpostsTab>
+    <VOE_OutpostsMainTab>Outposts</VOE_OutpostsMainTab>
+    <VOE_MainTabByOutpost>By outpost</VOE_MainTabByOutpost>
+    <VOE_MainTabBySettlement>By settlement</VOE_MainTabBySettlement>
+    <VOE_TabSectionResourceLinks>Resource links</VOE_TabSectionResourceLinks>
+    <VOE_TabSectionTaxDelivery>Tax delivery</VOE_TabSectionTaxDelivery>
+    <VOE_TabSectionFinancing>Financing</VOE_TabSectionFinancing>
+    <VOE_TabSectionEncampment>Encampment recovery</VOE_TabSectionEncampment>
+    <VOE_TabSectionDefensive>Defensive aura</VOE_TabSectionDefensive>
+    <VOE_TabLink>Link</VOE_TabLink>
+    <VOE_TabUnlink>Unlink</VOE_TabUnlink>
+    <VOE_TabChange>Change</VOE_TabChange>
+    <VOE_TabSet>Set</VOE_TabSet>
+    <VOE_TabClear>Clear</VOE_TabClear>
+    <VOE_TabNoLinks>None</VOE_TabNoLinks>
+    <VOE_TabFeeds>feeds {0}</VOE_TabFeeds>
+    <VOE_TabContribution>+{0}</VOE_TabContribution>
+    <VOE_TabLinkedElsewhere>linked elsewhere</VOE_TabLinkedElsewhere>
+    <VOE_MainTabOutpostUnlinked>not linked</VOE_MainTabOutpostUnlinked>
+    <VOE_MainTabNoOutposts>No outposts have been established.</VOE_MainTabNoOutposts>
+    <VOE_MainTabNoSettlements>You have not founded any settlements.</VOE_MainTabNoSettlements>
 
     <!-- Encampment Recovery Settings -->
     <VOE_EncampmentRange>Encampment range (tiles)</VOE_EncampmentRange>
@@ -171,6 +197,10 @@
     <VOE_CodexScienceHeader>Current research links:</VOE_CodexScienceHeader>
     <VOE_CodexScienceNone>No science outpost is linked to a settlement.</VOE_CodexScienceNone>
     <VOE_CodexScienceLine>{0}: linked to {1} ({2} researcher(s))</VOE_CodexScienceLine>
+
+    <VOE_CodexResourceLinkHeader>Current resource links:</VOE_CodexResourceLinkHeader>
+    <VOE_CodexResourceLinkNone>No production outpost is linked to a settlement.</VOE_CodexResourceLinkNone>
+    <VOE_CodexResourceLinkLine>{0} &lt;- {1} ({2}: +{3})</VOE_CodexResourceLinkLine>
 
     <VOE_CodexConversionHeader>Outposts that can become settlements:</VOE_CodexConversionHeader>
     <VOE_CodexConversionNone>You have no outposts that can be converted into a settlement.</VOE_CodexConversionNone>

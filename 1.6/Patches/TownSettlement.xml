@@ -13,11 +13,11 @@
 		</value>
 	</Operation>
 
-	<!-- Add WorldObjectComp_ScienceLink to all Empire settlement defs that have a comps list -->
+	<!-- Add WorldObjectComp_ResourceLink to all Empire settlement defs that have a comps list -->
 	<Operation Class="PatchOperationAdd">
 		<xpath>Defs/FactionColonies.WorldSettlementDef[comps]/comps</xpath>
 		<value>
-			<li Class="EmpireVOE.WorldObjectCompProperties_ScienceLink" />
+			<li Class="EmpireVOE.WorldObjectCompProperties_ResourceLink" />
 		</value>
 	</Operation>
 

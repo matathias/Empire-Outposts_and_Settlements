@@ -15,15 +15,15 @@ namespace EmpireVOE
         public static bool enableMilitary = true;
         public static bool enableDelivery = true;
         public static bool enableFinancing = true;
-        public static bool enableScienceLink = true;
+        public static bool enableResourceLink = true;
         public static bool enableEncampment = true;
         public static bool enableOutpostConversion = true;
         public static bool enableRoads = true;
 
-        // Skill-based bonuses (used by science link and outpost conversion)
+        // Skill-based bonuses (used by resource linking and outpost conversion)
         public static float additivePerLevel = 0.025f;
         public static int skillFloor = 0;
-        public static int scienceLinkRange = 10;
+        public static int resourceLinkRange = 10;
 
         // Encampment Recovery
         public static int encampmentRange = 10;
@@ -52,7 +52,7 @@ namespace EmpireVOE
         public static bool MilitaryActive => !disableIntegration && enableMilitary;
         public static bool DeliveryActive => !disableIntegration && enableDelivery;
         public static bool FinancingActive => !disableIntegration && enableFinancing;
-        public static bool ScienceLinkActive => !disableIntegration && enableScienceLink;
+        public static bool ResourceLinkActive => !disableIntegration && enableResourceLink;
         public static bool EncampmentActive => !disableIntegration && enableEncampment;
         public static bool OutpostConversionActive => !disableIntegration && enableOutpostConversion;
         public static bool RoadsActive => !disableIntegration && enableRoads;
@@ -67,14 +67,14 @@ namespace EmpireVOE
             Scribe_Values.Look(ref enableMilitary, "enableMilitary", true);
             Scribe_Values.Look(ref enableDelivery, "enableDelivery", true);
             Scribe_Values.Look(ref enableFinancing, "enableFinancing", true);
-            Scribe_Values.Look(ref enableScienceLink, "enableScienceLink", true);
+            Scribe_Values.Look(ref enableResourceLink, "enableResourceLink", true);
             Scribe_Values.Look(ref enableEncampment, "enableEncampment", true);
             Scribe_Values.Look(ref enableOutpostConversion, "enableOutpostConversion", true);
 
             // Skill-based bonuses
             Scribe_Values.Look(ref additivePerLevel, "additivePerLevel", 0.025f);
             Scribe_Values.Look(ref skillFloor, "skillFloor", 0);
-            Scribe_Values.Look(ref scienceLinkRange, "scienceLinkRange", 10);
+            Scribe_Values.Look(ref resourceLinkRange, "resourceLinkRange", 10);
 
             // Encampment Recovery
             Scribe_Values.Look(ref encampmentRange, "encampmentRange", 10);
@@ -213,16 +213,16 @@ namespace EmpireVOE
 
             ls.GapLine();
 
-            // --- Science Linking ---
+            // --- Resource Linking ---
             ls.CheckboxLabeled(
-                "VOE_EnableScienceLink".Translate(),
-                ref EmpireVOESettings.enableScienceLink,
-                "VOE_EnableScienceLinkDesc".Translate());
+                "VOE_EnableResourceLink".Translate(),
+                ref EmpireVOESettings.enableResourceLink,
+                "VOE_EnableResourceLinkDesc".Translate());
 
-            if (EmpireVOESettings.enableScienceLink)
+            if (EmpireVOESettings.enableResourceLink)
             {
-                ls.Label("  " + "VOE_ScienceLinkRange".Translate() + ": " + EmpireVOESettings.scienceLinkRange);
-                EmpireVOESettings.scienceLinkRange = (int)ls.Slider(EmpireVOESettings.scienceLinkRange, 5, 50);
+                ls.Label("  " + "VOE_ResourceLinkRange".Translate() + ": " + EmpireVOESettings.resourceLinkRange);
+                EmpireVOESettings.resourceLinkRange = (int)ls.Slider(EmpireVOESettings.resourceLinkRange, 5, 50);
 
                 ls.Label("  " + "VOE_AdditivePerLevel".Translate() + ": " + EmpireVOESettings.additivePerLevel.ToString("F3"));
                 EmpireVOESettings.additivePerLevel = (float)System.Math.Round(ls.Slider(EmpireVOESettings.additivePerLevel, 0.005f, 0.1f), 3);
