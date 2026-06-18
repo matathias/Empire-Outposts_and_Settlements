@@ -108,6 +108,9 @@ namespace EmpireVOE
                 lines.Add("VOE_MilitaryLevel".Translate(milLevel, defPower));
 
                 WorldObjectComp_EmpireDefensive defComp = parent.GetComponent<WorldObjectComp_EmpireDefensive>();
+                // Combat efficiency is defensive-outpost-only (non-defensive outposts have no defender).
+                if (defComp?.defender is object)
+                    lines.Add("VOE_CombatEfficiency".Translate(defComp.defender.Efficiency.ToString("0.0#")));
                 if (defComp is object)
                     lines.Add(defComp.GetStatusInspectString(raidTarget.IsUnderAttack));
             }

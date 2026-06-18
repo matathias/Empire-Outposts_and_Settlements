@@ -33,6 +33,10 @@ namespace EmpireVOE
 
         public int MilitaryLevel => CalculateMilitaryLevel();
 
+        /// <summary>Skill-based combat efficiency multiplier ("how well they fight"), distinct from
+        /// MilitaryLevel ("how much force"). Same value fed into CreateDefendingForce.</summary>
+        public double Efficiency => CalculateEfficiency();
+
         public int Range => outpost.Range;
 
         public bool CanAutoDefend => comp.autoDefend
