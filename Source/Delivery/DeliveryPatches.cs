@@ -77,13 +77,19 @@ namespace EmpireVOE
                         destination.AddItem(t);
                 }
 
+                // Notify via the base mod's delivery notification utility so the
+                // outpost delivery honors the player's FCSettings.taxNotificationMode
+                // (letter / message / both / none). Goods are already deposited above,
+                // so we want only the notification step -- not DeliverThings/DeliveryEvent,
+                // which would also try to physically transport goods to the outpost tile.
                 string sourceName = source is object ? source.Name : "Unknown";
-                Find.LetterStack.ReceiveLetter(
-                    "VOE_TaxDeliveredToOutpost".Translate(sourceName, destination.LabelCap),
-                    "VOE_TaxDeliveredToOutpostDesc".Translate(
-                        sourceName, destination.LabelCap,
-                        DeliveryUtil.GoodsToString(evt.goods)),
-                    LetterDefOf.PositiveEvent);
+                string label = "VOE_TaxDeliveredToOutpost".Translate(sourceName, destination.LabelCap);
+                string text = "VOE_TaxDeliveredToOutpostDesc".Translate(
+                    sourceName, destination.LabelCap, DeliveryUtil.GoodsToString(evt.goods));
+
+                evt.let = LetterMaker.MakeLetter(label, text, LetterDefOf.PositiveEvent);
+                evt.msg = new Message(label, MessageTypeDefOf.PositiveEvent);
+                DeliveryNotification.MakeDeliveryLetterAndMessage(evt);
 
                 DeliveryUtil.DebugLog("Delivered taxes from " + sourceName + " to outpost " + destination.LabelCap);
                 return true;
