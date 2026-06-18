@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using FactionColonies;
 using Outposts;
@@ -12,7 +11,7 @@ namespace EmpireVOE
     public static class VOERaidDestructiveTests
     {
         [EmpireDestructiveTest("VOE.Destructive.Military")]
-        public static void OutpostRaidTarget_MilitaryLevel_FromPawnCount()
+        public static void OutpostRaidTarget_MilitaryLevel_MatchesCostCurve()
         {
             FactionFC f = DestructiveTestUtil.RequireFaction();
 
@@ -21,8 +20,17 @@ namespace EmpireVOE
             if (outpost is null) TestAssert.Skip("No player outpost available");
 
             var target = new OutpostRaidTarget(outpost);
-            TestAssert.AreEqual(Math.Max(0, outpost.PawnCount / 3), target.MilitaryLevel,
-                "MilitaryLevel should be PawnCount / 3 (integer division)");
+
+            // The raid target must read off the shared cost-curve helper (the single source of truth
+            // shared with DefensiveAutoDefender) so the infobox and the military tab agree.
+            TestAssert.AreEqual(OutpostMilitaryUtil.MilitaryLevel(outpost), target.MilitaryLevel,
+                "MilitaryLevel should come from OutpostMilitaryUtil (the shared cost-curve helper)");
+
+            // Contract: empty outpost reads 0; any non-empty garrison floors at 1.
+            if (outpost.PawnCount == 0)
+                TestAssert.AreEqual(0, target.MilitaryLevel, "Empty outpost should read level 0");
+            else
+                TestAssert.GreaterThan(target.MilitaryLevel, 0, "A manned outpost should have a positive military level");
 
             DestructiveTestUtil.AssertEmpireInvariants(f, "OutpostRaidTarget_MilitaryLevel");
         }

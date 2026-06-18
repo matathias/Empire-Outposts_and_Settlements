@@ -11,7 +11,9 @@ namespace EmpireVOE
     /// <summary>
     /// IRaidTarget wrapper for any VOE outpost. Makes the outpost eligible for
     /// Empire's raid targeting system with the same 24-hour warning as settlements.
-    /// MilitaryLevel = PawnCount / 3 (integer division).
+    /// MilitaryLevel is priced off the live garrison via <see cref="OutpostMilitaryUtil"/>
+    /// (the base mod's cost->level curve), so it stays in lockstep with the value shown in the
+    /// military tab (DefensiveAutoDefender) and the world-map infobox.
     /// </summary>
     public class OutpostRaidTarget : IRaidTarget
     {
@@ -28,7 +30,7 @@ namespace EmpireVOE
 
         public PlanetTile Tile => outpost.Tile;
 
-        public int MilitaryLevel => Math.Max(0, outpost.PawnCount / 3);
+        public int MilitaryLevel => OutpostMilitaryUtil.MilitaryLevel(outpost);
 
         public bool IsUnderAttack { get; set; }
 

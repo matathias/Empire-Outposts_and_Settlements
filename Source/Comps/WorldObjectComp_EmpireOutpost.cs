@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FactionColonies;
@@ -100,7 +101,11 @@ namespace EmpireVOE
             // Military level + defensive status
             if (EmpireVOESettings.enableMilitary && raidTarget is object)
             {
-                lines.Add("VOE_MilitaryLevel".Translate(raidTarget.MilitaryLevel * FCSettings.defenderAdvantage));
+                // Mirror the military tab's "Mil N • Def M" exactly (see MainTabWindow_Colony): raw
+                // cost-curve level, plus the defender-advantage-adjusted defense power.
+                int milLevel = raidTarget.MilitaryLevel;
+                double defPower = Math.Round(milLevel * FCSettings.defenderAdvantage);
+                lines.Add("VOE_MilitaryLevel".Translate(milLevel, defPower));
 
                 WorldObjectComp_EmpireDefensive defComp = parent.GetComponent<WorldObjectComp_EmpireDefensive>();
                 if (defComp is object)

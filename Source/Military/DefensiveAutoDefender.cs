@@ -92,17 +92,14 @@ namespace EmpireVOE
         }
 
         /// <summary>
-        /// Military Level = priced off the live garrison via the base mod's cost->level curve, so an
-        /// outpost's level is comparable to settlement squads (and ranks fairly in auto-defender
-        /// selection). SquadPowerRegistry.LevelFromPawns sums each capable pawn's MarketValue (body +
-        /// gear + implants), effectiveness-weighted, then inverts CalculateSquadBudget. Empty outpost
-        /// reads 0; any non-empty garrison floors at 1. Combat *efficiency* stays skill-based
-        /// (CalculateEfficiency) — level is "how much force", efficiency is "how well they fight".
+        /// Military Level is priced off the live garrison via <see cref="OutpostMilitaryUtil"/> (the base
+        /// mod's cost->level curve), the single source of truth shared with OutpostRaidTarget so the tab,
+        /// world-map infobox, and raid resolution all agree. Combat *efficiency* stays skill-based
+        /// (<see cref="CalculateEfficiency"/>) — level is "how much force", efficiency is "how well they fight".
         /// </summary>
         private int CalculateMilitaryLevel()
         {
-            if (outpost.PawnCount == 0) return 0;
-            return Math.Max(1, (int)Math.Round(SquadPowerRegistry.LevelFromPawns(outpost.CapablePawns)));
+            return OutpostMilitaryUtil.MilitaryLevel(outpost);
         }
 
         /// <summary>
