@@ -139,6 +139,7 @@
     <VOE_EncampmentRange>Encampment range (tiles)</VOE_EncampmentRange>
     <VOE_EncampmentHealRatePerLevel>Heal rate bonus per Medicine level</VOE_EncampmentHealRatePerLevel>
     <VOE_EncampmentHealRateDesc>{0} nearby encampment(s): +{1}% merc heal rate</VOE_EncampmentHealRateDesc>
+    <VOE_EncampmentHealRateSource>{0} nearby encampment(s)</VOE_EncampmentHealRateSource>
 
     <!-- Codex Live Data (dynamic providers) -->
     <VOE_CodexFeatureDisabled>This feature is turned off in the mod settings.</VOE_CodexFeatureDisabled>

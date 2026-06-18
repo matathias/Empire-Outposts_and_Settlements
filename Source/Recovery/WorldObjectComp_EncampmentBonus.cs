@@ -45,9 +45,9 @@ namespace EmpireVOE
             EncampmentCacheEntry entry = EncampmentCache.GetOrBuild(settlement);
             if (entry is null || entry.encampments.Count == 0) return null;
 
-            return "VOE_EncampmentHealRateDesc".Translate(
-                entry.encampments.Count,
-                (entry.totalHealRateBonus * 100).ToString("F0"));
+            return TextUtil.MultiplierBonusLine(
+                stat.IdentityValue + entry.totalHealRateBonus,
+                "VOE_EncampmentHealRateSource".Translate(entry.encampments.Count)) + "\n";
         }
     }
 }

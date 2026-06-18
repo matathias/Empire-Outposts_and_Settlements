@@ -111,7 +111,7 @@ namespace EmpireVOE
         {
             double bonus = GetResourceAdditiveModifier(resource);
             if (bonus > 0)
-                return "VOE_ScienceLinkBonusDesc".Translate() + ": +" + bonus.ToString("F2");
+                return TextUtil.AdditiveBonusLine(bonus, "VOE_ScienceLinkBonusDesc".Translate());
             return null;
         }
 
