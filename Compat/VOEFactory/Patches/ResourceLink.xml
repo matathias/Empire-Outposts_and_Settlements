@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+	<!-- ============================================================ -->
+	<!-- VOE: Factory Add-On (Scorpio.VOEFactory)                       -->
+	<!-- Resource-link mappings                                         -->
+	<!--                                                               -->
+	<!-- This folder only loads when that mod is active. The factory    -->
+	<!-- outposts below extend Outpost_ChooseResult and deliver through -->
+	<!-- the base Outpost.Produce(), so the resource-link delivery      -->
+	<!-- suppression applies cleanly.                                   -->
+	<!--                                                               -->
+	<!-- Excluded: Recycling (overrides Produce() without calling base, -->
+	<!-- so delivery can't be suppressed), Chem Lab (produces drugs -    -->
+	<!-- no clean Empire resource), Vault (storage only).               -->
+	<!-- ============================================================ -->
+
+	<!-- Scorpio_Outpost_Ironworks -> Weapons (Crafting) -->
+	<Operation Class="PatchOperationConditional">
+		<xpath>Defs/WorldObjectDef[defName="Scorpio_Outpost_Ironworks"]/modExtensions</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>Defs/WorldObjectDef[defName="Scorpio_Outpost_Ironworks"]</xpath>
+			<value><modExtensions /></value>
+		</nomatch>
+	</Operation>
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/WorldObjectDef[defName="Scorpio_Outpost_Ironworks"]/modExtensions</xpath>
+		<value>
+			<li Class="EmpireVOE.OutpostResourceLinkExtension">
+				<resources>
+					<li>RTD_Weapons</li>
+				</resources>
+				<skill>Crafting</skill>
+			</li>
+		</value>
+	</Operation>
+
+	<!-- Scorpio_Outpost_MilitaryComplex -> Weapons (Crafting) -->
+	<Operation Class="PatchOperationConditional">
+		<xpath>Defs/WorldObjectDef[defName="Scorpio_Outpost_MilitaryComplex"]/modExtensions</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>Defs/WorldObjectDef[defName="Scorpio_Outpost_MilitaryComplex"]</xpath>
+			<value><modExtensions /></value>
+		</nomatch>
+	</Operation>
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/WorldObjectDef[defName="Scorpio_Outpost_MilitaryComplex"]/modExtensions</xpath>
+		<value>
+			<li Class="EmpireVOE.OutpostResourceLinkExtension">
+				<resources>
+					<li>RTD_Weapons</li>
+				</resources>
+				<skill>Crafting</skill>
+			</li>
+		</value>
+	</Operation>
+
+	<!-- Scorpio_Outpost_TextileMill -> Apparel (Crafting) -->
+	<Operation Class="PatchOperationConditional">
+		<xpath>Defs/WorldObjectDef[defName="Scorpio_Outpost_TextileMill"]/modExtensions</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>Defs/WorldObjectDef[defName="Scorpio_Outpost_TextileMill"]</xpath>
+			<value><modExtensions /></value>
+		</nomatch>
+	</Operation>
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/WorldObjectDef[defName="Scorpio_Outpost_TextileMill"]/modExtensions</xpath>
+		<value>
+			<li Class="EmpireVOE.OutpostResourceLinkExtension">
+				<resources>
+					<li>RTD_Apparel</li>
+				</resources>
+				<skill>Crafting</skill>
+			</li>
+		</value>
+	</Operation>
+
+	<!-- Scorpio_Outpost_ProstheticLab -> Medicine (Medicine) -->
+	<Operation Class="PatchOperationConditional">
+		<xpath>Defs/WorldObjectDef[defName="Scorpio_Outpost_ProstheticLab"]/modExtensions</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>Defs/WorldObjectDef[defName="Scorpio_Outpost_ProstheticLab"]</xpath>
+			<value><modExtensions /></value>
+		</nomatch>
+	</Operation>
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/WorldObjectDef[defName="Scorpio_Outpost_ProstheticLab"]/modExtensions</xpath>
+		<value>
+			<li Class="EmpireVOE.OutpostResourceLinkExtension">
+				<resources>
+					<li>RTD_Medicine</li>
+				</resources>
+				<skill>Medicine</skill>
+			</li>
+		</value>
+	</Operation>
+
+</Patch>
