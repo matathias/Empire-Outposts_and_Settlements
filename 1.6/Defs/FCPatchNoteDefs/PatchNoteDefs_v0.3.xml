@@ -173,4 +173,20 @@
 		<li>Matathias</li>
 		</authors>
 	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
+		<defName>VOE_0_3_12</defName>
+		<label>Minor Fixes</label>
+		<description>A handful of minor fixes.</description>
+		<releaseDate>2026-06-17</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Defensive Outposts now show their combat efficiency in their world map infobox</li>
+		<li>Fix an issue where some modifier tooltips weren&apos;t colorized correctly</li>
+		<li>Tax notifications now respect the base mod&apos;s tax notification setting (letter vs message)</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
 </Defs>
