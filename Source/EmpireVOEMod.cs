@@ -29,6 +29,14 @@ namespace EmpireVOE
         public static int encampmentRange = 10;
         public static float encampmentHealRatePerLevel = 0.02f;
 
+        // Passive defensive aura (nearby defensive outposts stiffen a settlement's defense)
+        public static bool enableDefensiveAura = true;
+        public static bool enableDefensiveAuraDivert = false;
+        public static int defensiveAuraRange = 10;
+        public static float defensiveAuraLevelFactor = 0.25f;
+        public static float defensiveAuraDivertScale = 0.1f;
+        public static float defensiveAuraWeightFloor = 0.25f;
+
         // Outpost -> Settlement conversion feature
         public static bool requireOutpostForSettlement = false;
         public static bool convertOutpostPawns = true;
@@ -56,6 +64,9 @@ namespace EmpireVOE
         public static bool EncampmentActive => !disableIntegration && enableEncampment;
         public static bool OutpostConversionActive => !disableIntegration && enableOutpostConversion;
         public static bool RoadsActive => !disableIntegration && enableRoads;
+        // Shield half on by default; raid-diversion half is opt-in. Both gated on the Military toggle.
+        public static bool DefensiveAuraActive => !disableIntegration && enableMilitary && enableDefensiveAura;
+        public static bool DefensiveAuraDivertActive => !disableIntegration && enableMilitary && enableDefensiveAuraDivert;
 
         public override void ExposeData()
         {
@@ -79,6 +90,14 @@ namespace EmpireVOE
             // Encampment Recovery
             Scribe_Values.Look(ref encampmentRange, "encampmentRange", 10);
             Scribe_Values.Look(ref encampmentHealRatePerLevel, "encampmentHealRatePerLevel", 0.02f);
+
+            // Passive defensive aura
+            Scribe_Values.Look(ref enableDefensiveAura, "enableDefensiveAura", true);
+            Scribe_Values.Look(ref enableDefensiveAuraDivert, "enableDefensiveAuraDivert", false);
+            Scribe_Values.Look(ref defensiveAuraRange, "defensiveAuraRange", 10);
+            Scribe_Values.Look(ref defensiveAuraLevelFactor, "defensiveAuraLevelFactor", 0.25f);
+            Scribe_Values.Look(ref defensiveAuraDivertScale, "defensiveAuraDivertScale", 0.1f);
+            Scribe_Values.Look(ref defensiveAuraWeightFloor, "defensiveAuraWeightFloor", 0.25f);
 
             // Road Integration
             Scribe_Values.Look(ref enableRoads, "enableRoads", true);
@@ -193,6 +212,37 @@ namespace EmpireVOE
             if (prevMil != EmpireVOESettings.enableMilitary && !EmpireVOESettings.disableIntegration)
             {
                 WorldObjectComp_EmpireOutpost.ToggleMilitary(EmpireVOESettings.enableMilitary);
+            }
+
+            if (EmpireVOESettings.enableMilitary)
+            {
+                ls.CheckboxLabeled(
+                    "  " + "VOE_EnableDefensiveAura".Translate(),
+                    ref EmpireVOESettings.enableDefensiveAura,
+                    "VOE_EnableDefensiveAuraDesc".Translate());
+
+                if (EmpireVOESettings.enableDefensiveAura)
+                {
+                    int prevRange = EmpireVOESettings.defensiveAuraRange;
+                    float prevFactor = EmpireVOESettings.defensiveAuraLevelFactor;
+
+                    ls.Label("    " + "VOE_DefensiveAuraRange".Translate() + ": " + EmpireVOESettings.defensiveAuraRange);
+                    EmpireVOESettings.defensiveAuraRange = (int)ls.Slider(EmpireVOESettings.defensiveAuraRange, 5, 50);
+
+                    ls.Label("    " + "VOE_DefensiveAuraLevelFactor".Translate() + ": " + EmpireVOESettings.defensiveAuraLevelFactor.ToString("P0"));
+                    EmpireVOESettings.defensiveAuraLevelFactor = (float)System.Math.Round(ls.Slider(EmpireVOESettings.defensiveAuraLevelFactor, 0.05f, 1f), 2);
+
+                    ls.CheckboxLabeled(
+                        "    " + "VOE_EnableDefensiveAuraDivert".Translate(),
+                        ref EmpireVOESettings.enableDefensiveAuraDivert,
+                        "VOE_EnableDefensiveAuraDivertDesc".Translate());
+
+                    if (prevRange != EmpireVOESettings.defensiveAuraRange ||
+                        System.Math.Abs(prevFactor - EmpireVOESettings.defensiveAuraLevelFactor) > 0.0001f)
+                    {
+                        DefensiveAuraCache.Invalidate();
+                    }
+                }
             }
 
             ls.GapLine();

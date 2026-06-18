@@ -46,6 +46,8 @@ namespace EmpireVOE
             if (EmpireVOESettings.RoadsActive) FindFC.RoadBuilder?.FlagUpdateRoadQueues();
             if (parent is Outpost_Encampment)
                 EncampmentCache.Invalidate();
+            if (parent is Outpost_Defensive)
+                DefensiveAuraCache.Invalidate();
         }
 
         public override IEnumerable<Gizmo> GetGizmos()
@@ -164,6 +166,8 @@ namespace EmpireVOE
             EmpireRegistry.Register(raidTarget);
             if (parent is Outpost_Encampment)
                 EncampmentCache.Invalidate();
+            if (parent is Outpost_Defensive)
+                DefensiveAuraCache.Invalidate();
         }
 
         internal void Unregister()

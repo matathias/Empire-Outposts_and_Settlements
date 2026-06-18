@@ -38,6 +38,10 @@
     <!-- Per-Feature Toggles -->
     <VOE_EnableMilitary>Military Integration</VOE_EnableMilitary>
     <VOE_EnableMilitaryDesc>Outposts can be raided, defensive outposts auto-defend nearby settlements, and outposts appear in the military tab.</VOE_EnableMilitaryDesc>
+    <VOE_EnableDefensiveAura>Passive defensive aura</VOE_EnableDefensiveAura>
+    <VOE_EnableDefensiveAuraDesc>Garrisoned defensive outposts passively stiffen the defense of nearby settlements when raided, even without deploying their forces.</VOE_EnableDefensiveAuraDesc>
+    <VOE_EnableDefensiveAuraDivert>Draw raids toward defensive outposts</VOE_EnableDefensiveAuraDivert>
+    <VOE_EnableDefensiveAuraDivertDesc>Settlements shielded by a nearby defensive outpost become less likely raid targets, shifting enemy attention toward the outposts themselves.</VOE_EnableDefensiveAuraDivertDesc>
     <VOE_EnableDelivery>Tax Delivery Routing</VOE_EnableDelivery>
     <VOE_EnableDeliveryDesc>Route settlement tax deliveries to outposts instead of the player's tax map.</VOE_EnableDeliveryDesc>
     <VOE_EnableFinancing>Outpost Financing</VOE_EnableFinancing>

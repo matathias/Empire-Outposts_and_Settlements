@@ -37,6 +37,22 @@
 		</value>
 	</Operation>
 
+	<!-- Add WorldObjectComp_DefensiveAura (passive defense from nearby defensive outposts) -->
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/FactionColonies.WorldSettlementDef[comps]/comps</xpath>
+		<value>
+			<li Class="EmpireVOE.WorldObjectCompProperties_DefensiveAura" />
+		</value>
+	</Operation>
+
+	<!-- Add WorldObjectComp_OutpostOverview (settlement-window "Outposts" management subtab) -->
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/FactionColonies.WorldSettlementDef[comps]/comps</xpath>
+		<value>
+			<li Class="EmpireVOE.WorldObjectCompProperties_OutpostOverview" />
+		</value>
+	</Operation>
+
 	<!-- ============================================================ -->
 	<!-- Outpost comps                                                 -->
 	<!-- ============================================================ -->
