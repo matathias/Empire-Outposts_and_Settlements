@@ -9,14 +9,15 @@ namespace EmpireVOE
     /// </summary>
     public static class VOEFormulas
     {
-        /* Efficiency: skill-dominant, pawn count irrelevant. Piecewise quadratic up to skill 20, then a
-           sqrt tail for diminishing returns. Anchored at skill 0 -> 0.3, 10 -> 1.0, 20 -> 1.6 (both
-           branches meet at 1.6 when skill == 20). */
+        /* Efficiency: skill-dominant, pawn count irrelevant. Linear in skill. Slope 0.05 up to skill 20
+           (anchored at 0 -> 0.5, 10 -> 1.0, 20 -> 1.5), then continues above 20 at half the rate
+           (slope 0.025) for modded skills past the vanilla cap. Both branches meet at 1.5 when
+           skill == 20. */
         public static double Efficiency(double avgSkill)
         {
             if (avgSkill <= 20.0)
-                return 0.3 + 0.075 * avgSkill - 0.0005 * avgSkill * avgSkill;
-            return 1.6 + 0.05 * Math.Sqrt(avgSkill - 20.0);
+                return 0.5 + 0.05 * avgSkill;
+            return 1.5 + 0.025 * (avgSkill - 20.0);
         }
 
         /* Days remaining before an outpost may be converted. 0 when the delay is disabled or elapsed. */

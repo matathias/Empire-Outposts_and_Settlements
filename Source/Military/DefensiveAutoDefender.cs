@@ -108,9 +108,9 @@ namespace EmpireVOE
         /// <summary>
         /// Efficiency = skill-dominant (better fighters hit harder per round).
         /// Pawn count has no effect - purely about quality.
-        /// Piecewise: quadratic 0-20, sqrt tail above 20 for diminishing returns.
-        /// Anchored at: skill 0 -> 0.3, skill 10 -> 1.0, skill 20 -> 1.6.
-        /// Above 20: continues scaling but tapers strongly (for mods with skills beyond 20).
+        /// Linear in skill: slope 0.05 from skill 0 to 20, then half that (slope 0.025) above 20.
+        /// Anchored at: skill 0 -> 0.5, skill 10 -> 1.0, skill 20 -> 1.5.
+        /// Above 20: keeps rising at half the rate (for mods with skills beyond the vanilla cap).
         /// </summary>
         private double CalculateEfficiency()
         {

@@ -65,7 +65,10 @@ This is why outpost placement matters. A lone, lightly-staffed outpost on a host
         <label>Defensive Outposts</label>
         <description>A Defensive outpost is a garrison, able to auto-defend outposts and settlements just like a squad can.
 
-Its fighting strength is driven mainly by how many defenders it holds: a bigger garrison fields a bigger force. The combat skill of those defenders is a secondary factor - it sharpens how hard the force hits rather than how large it is. A crowd of average fighters still outweighs a handful of veterans, but when power levels are equal, the skilled fighters will come out ahead.
+Its fighting strength is driven mainly by how many defenders it holds: a bigger garrison fields a bigger force. An outpost's stats are derived as follows:
+
+[b] - Military Level[/b]: derived from the total market value of the outpost's pawns. More pawns with better gear means a higher military level.
+[b] - Military Efficiency[/b]: derived from the average of the outpost pawns' shooting and melee skills. Only the highest of each is considered for each pawn, so a high-skill sniper with poor melee will still bring up the average. Efficiency ranges from 0.5 at average 0 skill to 1.5 at average 20 skill.
 
 Defending is not free. After a battle, the garrison needs time to recover before it can deploy again, and while it is recovering it cannot be sent out as reinforcements. A defeat is costlier still: some defenders are wounded and the recovery period is extended. Further, a garrison must always leave one pawn behind at the outpost (a restriction from Vanilla Outposts Expanded - can't have empty outposts).
 

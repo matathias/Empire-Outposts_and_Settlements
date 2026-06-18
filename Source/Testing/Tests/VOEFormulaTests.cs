@@ -9,21 +9,21 @@ namespace EmpireVOE
     /// </summary>
     public static class VOEFormulaTests
     {
-        /*-*-*- Efficiency: <=20 quadratic, >20 sqrt tail. Anchors: 0->0.3, 10->1.0, 20->1.6 -*-*-*/
+        /*-*-*- Efficiency: linear, slope 0.05 to skill 20 then half-rate above. Anchors: 0->0.5, 10->1.0, 20->1.5 -*-*-*/
 
         [EmpireTest("VOE.Formula")]
         public static void Efficiency_Anchors()
         {
-            TestAssert.AreEqual(0.3, VOEFormulas.Efficiency(0.0));
+            TestAssert.AreEqual(0.5, VOEFormulas.Efficiency(0.0));
             TestAssert.AreEqual(1.0, VOEFormulas.Efficiency(10.0));
-            TestAssert.AreEqual(1.6, VOEFormulas.Efficiency(20.0));
+            TestAssert.AreEqual(1.5, VOEFormulas.Efficiency(20.0));
         }
 
         [EmpireTest("VOE.Formula")]
-        public static void Efficiency_SqrtTailAboveTwenty()
+        public static void Efficiency_HalfRateAboveTwenty()
         {
-            TestAssert.AreEqual(1.65, VOEFormulas.Efficiency(21.0)); // 1.6 + 0.05*sqrt(1)
-            TestAssert.AreEqual(1.70, VOEFormulas.Efficiency(24.0)); // 1.6 + 0.05*sqrt(4)
+            TestAssert.AreEqual(1.525, VOEFormulas.Efficiency(21.0)); // 1.5 + 0.025*(21-20)
+            TestAssert.AreEqual(1.60, VOEFormulas.Efficiency(24.0));  // 1.5 + 0.025*(24-20)
         }
 
         /*-*-*- DelayDaysRemaining: disabled -> 0, else max(0, delay - daysSince) -*-*-*/
