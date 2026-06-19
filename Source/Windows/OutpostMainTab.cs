@@ -53,18 +53,18 @@ namespace EmpireVOE
             subTab = UIUtil.DrawTabRowButtonFlat(boundingBox, subTabs, subTab, out Rect contentRect);
             Rect inner = contentRect.ContractedBy(8f);
 
-            Rect viewRect = new Rect(0f, 0f, inner.width - 16f, contentHeight);
-            Widgets.BeginScrollView(inner, ref scroll, viewRect);
+            Rect viewRect = ScrollUtil.BeginScrollView(inner, ref scroll, contentHeight);
 
             Listing_Standard ls = new Listing_Standard();
             ls.Begin(viewRect);
+            ls.maxOneColumn = true;
 
             if (subTab == 0) DrawByOutpost(ls);
             else DrawBySettlement(ls);
 
             contentHeight = ls.CurHeight;
             ls.End();
-            Widgets.EndScrollView();
+            ScrollUtil.EndScrollView();
         }
 
         // --- By outpost ---
@@ -123,11 +123,7 @@ namespace EmpireVOE
 
             foreach (WorldSettlementFC s in uiFaction.settlements)
             {
-                ls.GapLine(6f);
-                Text.Font = GameFont.Small;
-                GUI.color = new Color(0.85f, 0.85f, 0.7f);
-                ls.Label(s.Name);
-                GUI.color = Color.white;
+                OutpostLinkView.DrawSectionHeader(ls, s.Name);
 
                 bool any = false;
 

@@ -56,11 +56,11 @@ namespace EmpireVOE
         {
             if (uiSettlement is null) return;
 
-            Rect viewRect = new Rect(0f, 0f, boundingBox.width - 16f, contentHeight);
-            Widgets.BeginScrollView(boundingBox, ref scroll, viewRect);
+            Rect viewRect = ScrollUtil.BeginScrollView(boundingBox, ref scroll, contentHeight);
 
             Listing_Standard ls = new Listing_Standard();
             ls.Begin(viewRect);
+            ls.maxOneColumn = true;
 
             if (EmpireVOESettings.ResourceLinkActive) DrawResourceLinks(ls);
             if (EmpireVOESettings.DeliveryActive) DrawDelivery(ls);
@@ -70,7 +70,7 @@ namespace EmpireVOE
 
             contentHeight = ls.CurHeight;
             ls.End();
-            Widgets.EndScrollView();
+            ScrollUtil.EndScrollView();
         }
 
         // --- Sections ---
@@ -118,7 +118,7 @@ namespace EmpireVOE
                     Widgets.Label(buttonRect, "");
                     continue;
                 }
-                if (Widgets.ButtonText(buttonRect, linkedHere ? "VOE_TabUnlink".Translate() : "VOE_TabLink".Translate()))
+                if (UIUtil.ButtonFlat(buttonRect, linkedHere ? "VOE_TabUnlink".Translate() : "VOE_TabLink".Translate()))
                     comp.ToggleLink(outpost);
             }
         }
@@ -196,11 +196,7 @@ namespace EmpireVOE
 
         private static void Header(Listing_Standard ls, string title)
         {
-            ls.GapLine(6f);
-            Text.Font = GameFont.Small;
-            GUI.color = new Color(0.85f, 0.85f, 0.7f);
-            ls.Label(title);
-            GUI.color = Color.white;
+            OutpostLinkView.DrawSectionHeader(ls, title);
         }
 
         private void DrawTargetRow(Rect row, Outpost current, string noneLabel,
@@ -223,9 +219,9 @@ namespace EmpireVOE
                 Text.Anchor = prev;
             }
 
-            if (hasTarget && Widgets.ButtonText(clearRect, "VOE_TabClear".Translate()))
+            if (hasTarget && UIUtil.ButtonFlat(clearRect, "VOE_TabClear".Translate()))
                 clear();
-            if (Widgets.ButtonText(changeRect, "VOE_TabChange".Translate()))
+            if (UIUtil.ButtonFlat(changeRect, "VOE_TabChange".Translate()))
                 openMenu();
         }
 

@@ -180,11 +180,11 @@ namespace EmpireVOE
 
         private void DoIntegrationTab(Rect rect)
         {
-            Rect viewRect = new Rect(0f, 0f, rect.width - 16f, integrationContentHeight);
-            Widgets.BeginScrollView(rect, ref integrationScroll, viewRect);
+            Rect viewRect = ScrollUtil.BeginScrollView(rect, ref integrationScroll, integrationContentHeight);
 
             Listing_Standard ls = new Listing_Standard();
             ls.Begin(viewRect);
+            ls.maxOneColumn = true;
 
             // Master toggle
             bool prev = EmpireVOESettings.disableIntegration;
@@ -379,16 +379,16 @@ namespace EmpireVOE
 
             integrationContentHeight = ls.CurHeight;
             ls.End();
-            Widgets.EndScrollView();
+            ScrollUtil.EndScrollView();
         }
 
         private void DoTownsTab(Rect rect)
         {
-            Rect viewRect = new Rect(0f, 0f, rect.width - 16f, townsContentHeight);
-            Widgets.BeginScrollView(rect, ref townsScroll, viewRect);
+            Rect viewRect = ScrollUtil.BeginScrollView(rect, ref townsScroll, townsContentHeight);
 
             Listing_Standard ls = new Listing_Standard();
             ls.Begin(viewRect);
+            ls.maxOneColumn = true;
 
             ls.Label("VOE_TownRequirementsHeader".Translate());
             ls.GapLine();
@@ -421,7 +421,7 @@ namespace EmpireVOE
 
             townsContentHeight = ls.CurHeight;
             ls.End();
-            Widgets.EndScrollView();
+            ScrollUtil.EndScrollView();
         }
     }
 }
