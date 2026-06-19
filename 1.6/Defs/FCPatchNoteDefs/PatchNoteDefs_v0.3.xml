@@ -189,4 +189,21 @@
 		<li>Matathias</li>
 		</authors>
 	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
+		<defName>VOE_0_3_13</defName>
+		<label>New Features, UI, and Fixes</label>
+		<description>Adds a few new features, and new UI to more easil engage with the mod.</description>
+		<releaseDate>2026-06-19</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Expand the &quot;Science outpost link&quot; functionality to be a general resource-linking system, where certain outposts can link to a settlement and forego their item production to instead provide Empire resource production to the settlement</li>
+		<li>Add a &quot;Defensive Aura&quot; to Defensive Outposts, only active when they aren&apos;t audo-defending or otherwise busy. The aura applies a small military level bonus to all Empire settlements within range</li>
+		<li>Add settlement window- and main tab- UI for settlement-outpost linking</li>
+		<li>Update some Codex entries</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
 </Defs>
