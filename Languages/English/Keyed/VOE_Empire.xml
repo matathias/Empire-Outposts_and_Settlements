@@ -165,7 +165,7 @@
     <VOE_TabSet>Set</VOE_TabSet>
     <VOE_TabClear>Clear</VOE_TabClear>
     <VOE_TabNoLinks>None</VOE_TabNoLinks>
-    <VOE_TabFeeds>feeds {0}</VOE_TabFeeds>
+    <VOE_TabFeeds>boosts {0}</VOE_TabFeeds>
     <VOE_TabContribution>+{0}</VOE_TabContribution>
     <VOE_TabLinkedElsewhere>linked elsewhere</VOE_TabLinkedElsewhere>
     <VOE_MainTabOutpostUnlinked>not linked</VOE_MainTabOutpostUnlinked>

@@ -20,7 +20,7 @@ namespace EmpireVOE
 
         private const float HeaderHeight = 35f;
         private const float Margin = 5f;
-        private const float CellHeight = 48f;
+        private const float CellHeight = 56f;
         private const float CellGutter = 12f;
 
         private FactionFC uiFaction;
@@ -117,8 +117,7 @@ namespace EmpireVOE
 
             foreach (var group in outposts.GroupBy(o => o.def))
             {
-                Outpost rep = group.First();
-                OutpostLinkView.DrawSectionHeader(ls, group.Key.LabelCap, rep.ExpandingIcon, rep.ExpandingIconColor);
+                OutpostLinkView.DrawSectionHeader(ls, group.Key.LabelCap);
 
                 List<Outpost> items = group.ToList();
                 for (int i = 0; i < items.Count; i += 2)
@@ -132,31 +131,77 @@ namespace EmpireVOE
             }
         }
 
-        /// <summary>Two-line cell: icon+name (jump to map) and link/unlink on top, relationships below.</summary>
+        /// <summary>
+        /// Dark card with a full-height type icon on the left (jump to map). Right of the icon: outpost name +
+        /// link/unlink on line 1; role text (left) and the linked settlement(s) under the button on line 2.
+        /// </summary>
         private void DrawOutpostCell(Rect cell, Outpost outpost)
         {
-            float lineH = cell.height / 2f;
-            Rect line1 = new Rect(cell.x, cell.y, cell.width, lineH);
+            const float pad = 4f;
+            const float btnW = 62f;
+
+            Rect card = cell.ContractedBy(2f);
+            Widgets.DrawBoxSolid(card, ColorUtil.Gray1);
+
+            // Full-height type icon (the two-row grouping cue).
+            float iconSz = card.height - pad * 2f;
+            OutpostLinkView.DrawOutpostIcon(new Rect(card.x + pad, card.y + pad, iconSz, iconSz), outpost, jumpOnClick: true);
+
+            float contentX = card.x + pad + iconSz + 6f;
+            float contentW = card.xMax - pad - contentX;
+            float lineH = (card.height - pad * 2f) / 2f;
+            float line1Y = card.y + pad;
+            float line2Y = line1Y + lineH;
 
             bool linkable = ResourceLinkUtil.IsLinkable(outpost);
-            Rect labelRect = new Rect(line1.x, line1.y, linkable ? line1.width - 66f : line1.width, line1.height);
-            OutpostLinkView.DrawOutpostLabel(labelRect, outpost, jumpOnClick: true);
 
+            // Line 1: name (left) + Link/Unlink (right).
+            float nameW = linkable ? contentW - btnW - 6f : contentW;
+            OutpostLinkView.DrawOutpostName(new Rect(contentX, line1Y, nameW, lineH), outpost, jumpOnClick: true);
             if (linkable)
             {
-                Rect btnRect = new Rect(line1.xMax - 64f, line1.y + 1f, 62f, line1.height - 2f);
+                Rect btnRect = new Rect(card.xMax - pad - btnW, line1Y + 1f, btnW, lineH - 2f);
                 bool linked = LinkedSettlement(outpost) is object;
                 if (UIUtil.ButtonFlat(btnRect, linked ? "VOE_TabUnlink".Translate() : "VOE_TabLink".Translate()))
                     ToggleOutpostLink(outpost);
             }
 
-            Rect line2 = new Rect(cell.x + 16f, cell.y + lineH, cell.width - 16f, lineH);
-            OutpostLinkView.DrawOutpostRelations(line2, OutpostRelations(outpost));
+            // Line 2: role text (left) + settlement(s) under the button (right).
+            List<OutpostRelation> relations = OutpostRelations(outpost);
+            float settleW = Mathf.Max(btnW, contentW * 0.42f);
+            Rect roleRect = new Rect(contentX, line2Y, contentW - settleW - 6f, lineH);
+            Rect settleRect = new Rect(card.xMax - pad - settleW, line2Y, settleW, lineH);
+
+            string roleText = relations.Count > 0
+                ? string.Join("  -  ", relations.Select(r => r.role).ToArray())
+                : (string)"VOE_MainTabOutpostUnlinked".Translate();
+            TextAnchor prevAnchor = Text.Anchor;
+            Color prevColor = GUI.color;
+            Text.Anchor = TextAnchor.MiddleLeft;
+            GUI.color = new Color(0.7f, 0.7f, 0.7f);
+            Widgets.Label(roleRect, Text.ClampTextWithEllipsis(roleRect, roleText));
+            GUI.color = prevColor;
+            Text.Anchor = prevAnchor;
+
+            // Distinct related settlements, laid out right-to-left so the nearest sits under the button.
+            List<WorldSettlementFC> settlements = new List<WorldSettlementFC>();
+            foreach (OutpostRelation r in relations)
+                if (!settlements.Contains(r.settlement)) settlements.Add(r.settlement);
+            float rx = settleRect.xMax;
+            foreach (WorldSettlementFC st in settlements)
+            {
+                if (rx <= settleRect.x) break;
+                float w = Mathf.Min(Text.CalcSize(st.Name).x + 4f, rx - settleRect.x);
+                OutpostLinkView.DrawClickableSettlementName(new Rect(rx - w, settleRect.y, w, settleRect.height),
+                    st, AccentUtil.GetSettlementAccent(st), TextAnchor.MiddleRight);
+                rx -= w + 6f;
+            }
         }
 
         /// <summary>The settlement an outpost is currently resource-linked to, or null.</summary>
         private WorldSettlementFC LinkedSettlement(Outpost outpost)
         {
+            if (uiFaction is null) return null;
             foreach (WorldSettlementFC s in uiFaction.settlements)
             {
                 WorldObjectComp_ResourceLink rl = s.GetComponent<WorldObjectComp_ResourceLink>();

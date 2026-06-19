@@ -70,6 +70,69 @@ namespace EmpireVOE
             }
         }
 
+        /// <summary>
+        /// Draws just the outpost's type icon (tinted), scaled to a centered square that fills the rect — used
+        /// by the by-outpost card where the icon spans both text rows. Clicking jumps the world camera to it.
+        /// </summary>
+        public static void DrawOutpostIcon(Rect rect, Outpost outpost, bool jumpOnClick = false)
+        {
+            if (outpost is null) return;
+
+            Texture2D icon = outpost.ExpandingIcon;
+            if (icon != null)
+            {
+                float size = Mathf.Min(rect.width, rect.height);
+                Rect iconRect = new Rect(rect.x + (rect.width - size) / 2f, rect.y + (rect.height - size) / 2f, size, size);
+                Color prev = GUI.color;
+                GUI.color = outpost.ExpandingIconColor;
+                GUI.DrawTexture(iconRect, icon);
+                GUI.color = prev;
+            }
+
+            if (jumpOnClick)
+            {
+                if (Mouse.IsOver(rect)) Widgets.DrawHighlight(rect);
+                if (Widgets.ButtonInvisible(rect))
+                    CameraJumper.TryJumpAndSelect(new GlobalTargetInfo(outpost));
+            }
+        }
+
+        /// <summary>Draws just the outpost's name (no icon), clamped, left-aligned; clicking jumps to it.</summary>
+        public static void DrawOutpostName(Rect rect, Outpost outpost, bool jumpOnClick = false)
+        {
+            if (outpost is null) return;
+
+            TextAnchor prevAnchor = Text.Anchor;
+            Text.Anchor = TextAnchor.MiddleLeft;
+            Widgets.Label(rect, Text.ClampTextWithEllipsis(rect, outpost.RenamableLabel));
+            Text.Anchor = prevAnchor;
+
+            if (jumpOnClick)
+            {
+                if (Mouse.IsOver(rect)) Widgets.DrawHighlight(rect);
+                if (Widgets.ButtonInvisible(rect))
+                    CameraJumper.TryJumpAndSelect(new GlobalTargetInfo(outpost));
+            }
+        }
+
+        /// <summary>Draws a clickable settlement name (opens that settlement's window) in the given color.</summary>
+        public static void DrawClickableSettlementName(Rect rect, WorldSettlementFC settlement, Color color,
+            TextAnchor anchor = TextAnchor.MiddleLeft)
+        {
+            if (settlement is null) return;
+            TextAnchor prevAnchor = Text.Anchor;
+            Color prevColor = GUI.color;
+            Text.Anchor = anchor;
+            GUI.color = color;
+            Widgets.Label(rect, Text.ClampTextWithEllipsis(rect, settlement.Name));
+            GUI.color = prevColor;
+            Text.Anchor = prevAnchor;
+
+            if (Mouse.IsOver(rect)) Widgets.DrawHighlight(rect);
+            if (Widgets.ButtonInvisible(rect))
+                Find.WindowStack.Add(new SettlementWindowFc(settlement));
+        }
+
         /// <summary>Right-aligned grey detail text (distance, contribution, status) within the rect.</summary>
         public static void DrawDetail(Rect rect, string text)
         {
@@ -88,22 +151,11 @@ namespace EmpireVOE
         /// outpost-link surfaces so sections read as clearly separated. Matches the base mod's
         /// <c>UIUtil.HighlightedLabel</c> idiom.
         /// </summary>
-        public static void DrawSectionHeader(Listing_Standard ls, string title, Texture2D icon = null, Color? iconColor = null)
+        public static void DrawSectionHeader(Listing_Standard ls, string title)
         {
             ls.Gap(4f);
             Rect rect = ls.GetRect(HeaderHeight);
             Widgets.DrawHighlight(rect);
-
-            float textX = rect.x + 6f;
-            if (icon != null)
-            {
-                Rect iconRect = new Rect(rect.x + 4f, rect.y + (rect.height - IconSize) / 2f, IconSize, IconSize);
-                Color prevIcon = GUI.color;
-                GUI.color = iconColor ?? Color.white;
-                GUI.DrawTexture(iconRect, icon);
-                GUI.color = prevIcon;
-                textX = iconRect.xMax + 6f;
-            }
 
             TextAnchor prevAnchor = Text.Anchor;
             Color prevColor = GUI.color;
@@ -111,7 +163,7 @@ namespace EmpireVOE
             Text.Font = GameFont.Small;
             Text.Anchor = TextAnchor.MiddleLeft;
             GUI.color = new Color(0.85f, 0.85f, 0.7f);
-            Widgets.Label(new Rect(textX, rect.y, rect.xMax - textX - 6f, rect.height), title);
+            Widgets.Label(new Rect(rect.x + 6f, rect.y, rect.width - 12f, rect.height), title);
             GUI.color = prevColor;
             Text.Anchor = prevAnchor;
             Text.Font = prevFont;
@@ -156,58 +208,6 @@ namespace EmpireVOE
                 Find.WindowStack.Add(new SettlementWindowFc(settlement));
 
             ls.Gap(2f);
-        }
-
-        /// <summary>
-        /// Draws an outpost's relationships on one line as `[clickable settlement] [role]` segments, left to
-        /// right. Each settlement name opens its window on click. Empty list renders "not linked".
-        /// </summary>
-        public static void DrawOutpostRelations(Rect rect, List<OutpostRelation> relations)
-        {
-            TextAnchor prevAnchor = Text.Anchor;
-            Color prevColor = GUI.color;
-            GameFont prevFont = Text.Font;
-            Text.Font = GameFont.Small;
-            Text.Anchor = TextAnchor.MiddleLeft;
-
-            if (relations is null || relations.Count == 0)
-            {
-                GUI.color = new Color(0.7f, 0.7f, 0.7f);
-                Widgets.Label(rect, "VOE_MainTabOutpostUnlinked".Translate());
-                GUI.color = prevColor;
-                Text.Anchor = prevAnchor;
-                Text.Font = prevFont;
-                return;
-            }
-
-            float x = rect.x;
-            for (int i = 0; i < relations.Count && x < rect.xMax; i++)
-            {
-                OutpostRelation rel = relations[i];
-
-                string sName = rel.settlement.Name;
-                float nameW = Mathf.Min(Text.CalcSize(sName).x, rect.xMax - x);
-                Rect nameRect = new Rect(x, rect.y, nameW, rect.height);
-                GUI.color = AccentUtil.GetSettlementAccent(rel.settlement);
-                Widgets.Label(nameRect, sName);
-                GUI.color = prevColor;
-                if (Mouse.IsOver(nameRect)) Widgets.DrawHighlight(nameRect);
-                if (Widgets.ButtonInvisible(nameRect))
-                    Find.WindowStack.Add(new SettlementWindowFc(rel.settlement));
-                x = nameRect.xMax + 4f;
-
-                if (!rel.role.NullOrEmpty() && x < rect.xMax)
-                {
-                    float roleW = Mathf.Min(Text.CalcSize(rel.role).x, rect.xMax - x);
-                    GUI.color = new Color(0.7f, 0.7f, 0.7f);
-                    Widgets.Label(new Rect(x, rect.y, roleW, rect.height), rel.role);
-                    GUI.color = prevColor;
-                    x += roleW + 8f;
-                }
-            }
-
-            Text.Anchor = prevAnchor;
-            Text.Font = prevFont;
         }
 
         /// <summary>Distance from a settlement to an outpost, formatted as "{n} tiles".</summary>
