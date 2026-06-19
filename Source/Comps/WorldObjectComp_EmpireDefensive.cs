@@ -65,6 +65,16 @@ namespace EmpireVOE
         /// </summary>
         public bool ProvidesAura => !autoDefend && !defending && !IsOnCooldown;
 
+        /// <summary>
+        /// True when this outpost is actually projecting its aura right now: the feature is on, the garrison is
+        /// standing a passive watch, and there are pawns to stand it. (Outpost-side readiness — does not check
+        /// whether a settlement is actually in range.)
+        /// </summary>
+        public bool IsProjectingAura => EmpireVOESettings.DefensiveAuraActive && ProvidesAura && Outpost.PawnCount > 0;
+
+        /// <summary>The militaryBaseLevel bonus this outpost contributes to each nearby settlement.</summary>
+        public double AuraMilitaryBonus => DefensiveAuraEntry.OutpostBonus(Outpost);
+
         // Aura eligibility (ProvidesAura) is dynamic: autoDefend toggles, defenses begin/end, and cooldowns
         // elapse — the last with no event of its own. Poll for a flip and dirty the aura cache so the passive
         // militaryBaseLevel bonus tracks garrison availability. Invalidate clears the settlement stat cache too.

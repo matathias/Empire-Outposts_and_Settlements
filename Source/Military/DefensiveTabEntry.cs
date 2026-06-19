@@ -59,6 +59,7 @@ namespace EmpireVOE
                     return "FCMilStatusBusy".Translate();
                 }
                 if (AutoDefend) return "FCMilStatusReady".Translate();
+                if (comp.IsProjectingAura) return "VOE_StatusDefensiveAura".Translate();
                 return "VOE_DefenseIdle".Translate();
             }
         }
@@ -70,6 +71,7 @@ namespace EmpireVOE
                 if (IsUnderAttack) return AccentUtil.MilUnderAttack;
                 if (IsBusy) return AccentUtil.MilActiveMission;
                 if (AutoDefend) return AccentUtil.MilReady;
+                if (comp.IsProjectingAura) return AccentUtil.MilDefensive;
                 return AccentUtil.MilInactive;
             }
         }

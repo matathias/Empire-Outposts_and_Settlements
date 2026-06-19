@@ -6,6 +6,7 @@ using RimWorld;
 using RimWorld.Planet;
 using UnityEngine;
 using Verse;
+using VOE;
 
 namespace EmpireVOE
 {
@@ -168,21 +169,26 @@ namespace EmpireVOE
 
         private void DrawDefensiveAura(Listing_Standard ls)
         {
-            Header(ls, "VOE_TabSectionDefensive".Translate());
             DefensiveAuraEntry entry = DefensiveAuraCache.GetOrBuild(uiSettlement);
+            string header = "VOE_TabSectionDefensive".Translate();
+            if (entry is object && entry.outposts.Count > 0)
+                header += "  (" + "VOE_AuraLevelValue".Translate(entry.militaryLevelBonus.ToString("0.#")) + ")";
+            Header(ls, header);
             if (entry is null || entry.outposts.Count == 0)
             {
                 ls.Label("  " + "VOE_TabNoLinks".Translate());
                 return;
             }
 
-            foreach (Outpost defensive in entry.outposts)
+            foreach (Outpost_Defensive defensive in entry.outposts)
             {
                 Rect row = ls.GetRect(OutpostLinkView.RowHeight);
                 Rect labelRect = new Rect(row.x, row.y, row.width * 0.5f, row.height);
                 Rect detailRect = new Rect(labelRect.xMax + 4f, row.y, row.width - labelRect.width - 4f, row.height);
                 OutpostLinkView.DrawOutpostLabel(labelRect, defensive);
-                OutpostLinkView.DrawDetail(detailRect, OutpostLinkView.DistanceLabel(uiSettlement, defensive));
+                string detail = "VOE_AuraLevelValue".Translate(DefensiveAuraEntry.OutpostBonus(defensive).ToString("0.#"))
+                    + "  •  " + OutpostLinkView.DistanceLabel(uiSettlement, defensive);
+                OutpostLinkView.DrawDetail(detailRect, detail);
             }
         }
 

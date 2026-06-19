@@ -31,9 +31,17 @@ namespace EmpireVOE
                 if (distance > EmpireVOESettings.defensiveAuraRange) continue;
 
                 outposts.Add(defensive);
-                militaryLevelBonus += OutpostMilitaryUtil.MilitaryLevel(defensive) * EmpireVOESettings.defensiveAuraLevelFactor;
+                militaryLevelBonus += OutpostBonus(defensive);
             }
         }
+
+        /// <summary>
+        /// The militaryBaseLevel bonus a single outpost contributes to each nearby settlement: a fraction
+        /// (<c>defensiveAuraLevelFactor</c>) of its active military level. Single source of truth, shared by the
+        /// aura sum here, the outpost infobox, and the settlement overview subtab.
+        /// </summary>
+        public static double OutpostBonus(Outpost_Defensive outpost)
+            => OutpostMilitaryUtil.MilitaryLevel(outpost) * EmpireVOESettings.defensiveAuraLevelFactor;
     }
 
     /// <summary>

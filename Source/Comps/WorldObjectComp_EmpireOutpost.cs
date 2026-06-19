@@ -110,6 +110,9 @@ namespace EmpireVOE
                 lines.Add("VOE_MilitaryLevel".Translate(milLevel, defPower));
 
                 WorldObjectComp_EmpireDefensive defComp = parent.GetComponent<WorldObjectComp_EmpireDefensive>();
+                // Passive defensive aura (sits directly under the military level it stiffens for neighbors).
+                if (defComp is object && defComp.IsProjectingAura)
+                    lines.Add("VOE_InspectAuraActive".Translate(defComp.AuraMilitaryBonus.ToString("0.#")));
                 // Combat efficiency is defensive-outpost-only (non-defensive outposts have no defender).
                 if (defComp?.defender is object)
                     lines.Add("VOE_CombatEfficiency".Translate(defComp.defender.Efficiency.ToString("0.0#")));

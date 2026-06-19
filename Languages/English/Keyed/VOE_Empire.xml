@@ -12,8 +12,11 @@
 	<VOE_DefenseIdle>Idle</VOE_DefenseIdle>
     <VOE_StatusDefending>Defending {0}</VOE_StatusDefending>
     <VOE_StatusRegrouping>Regrouping ({0})</VOE_StatusRegrouping>
+    <VOE_StatusDefensiveAura>Defensive Aura</VOE_StatusDefensiveAura>
     <VOE_MilitaryLevel>Military Level: {0} (Defense: {1})</VOE_MilitaryLevel>
     <VOE_CombatEfficiency>Combat Efficiency: {0}x</VOE_CombatEfficiency>
+    <VOE_InspectAuraActive>Defensive aura: +{0} to nearby settlements</VOE_InspectAuraActive>
+    <VOE_AuraLevelValue>+{0} level</VOE_AuraLevelValue>
     <VOE_ReinforcementsCooldown>Deployment cooldown: {0} remaining</VOE_ReinforcementsCooldown>
 
     <!-- Delivery Integration -->
