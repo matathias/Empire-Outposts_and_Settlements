@@ -13,6 +13,7 @@ namespace EmpireVOE
 
         static VOECompatInit()
         {
+            EmpireVOECompat.CheckForMods();
             new Harmony("com.Matathias.EmpireVOE").PatchAll(Assembly.GetExecutingAssembly());
             EmpireRegistry.Register(OutpostFinancer.Instance);
             EmpireRegistry.Register(_foundingRestrictionValidator);

@@ -103,7 +103,7 @@ namespace EmpireVOE
                 string detail = OutpostLinkView.DistanceLabel(uiSettlement, outpost) + "  -  " + feeds;
                 if (linkedHere)
                 {
-                    double contribution = ResourceLinkUtil.ContributionOf(outpost);
+                    double contribution = ResourceLinkUtil.ContributionOf(outpost, uiSettlement);
                     detail += "  (" + "VOE_TabContribution".Translate(contribution.ToString("0.##")) + ")";
                 }
                 else if (linkedElsewhere)

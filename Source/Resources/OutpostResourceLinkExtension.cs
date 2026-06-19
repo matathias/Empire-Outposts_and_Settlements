@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using FactionColonies;
+using Outposts;
 using RimWorld;
 using Verse;
 
@@ -22,5 +24,16 @@ namespace EmpireVOE
 
         /// <summary>Optional secondary skill; per pawn the higher of the two levels is used (e.g. Hunting = Shooting/Animals).</summary>
         public SkillDef secondarySkill;
+
+        /// <summary>
+        /// The outpost's per-worker additive contribution to a linked settlement's resource production.
+        /// Default is the skill-sum over the outpost's pawns; subclasses (e.g. the power compat) override
+        /// with their own formula. Must be a worker-count-independent per-worker value — never scale by the
+        /// settlement's assigned-worker count.
+        /// </summary>
+        public virtual double Contribution(Outpost outpost, WorldSettlementFC settlement)
+        {
+            return ResourceLinkUtil.SkillSum(outpost, this);
+        }
     }
 }

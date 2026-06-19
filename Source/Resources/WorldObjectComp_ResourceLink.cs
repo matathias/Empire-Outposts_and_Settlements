@@ -55,7 +55,7 @@ namespace EmpireVOE
                 if (outpost is null || outpost.Destroyed) continue;
                 OutpostResourceLinkExtension ext = outpost.def.GetModExtension<OutpostResourceLinkExtension>();
                 if (ext?.resources is null || !ext.resources.Contains(resource.def)) continue;
-                bonus += ResourceLinkUtil.SkillSum(outpost, ext);
+                bonus += ext.Contribution(outpost, parent as WorldSettlementFC);
             }
             return bonus;
         }
@@ -101,14 +101,18 @@ namespace EmpireVOE
                 linkedOutposts.Add(outpost);
             ResourceLinkUtil.MarkDirty();
             (parent as WorldSettlementFC)?.InvalidateResourceCaches();
+            ResourceLinkUtil.NotifyLinkChanged(outpost);
         }
 
         internal void UnlinkAll()
         {
             if (linkedOutposts.Count == 0) return;
+            List<Outpost> cleared = new List<Outpost>(linkedOutposts);
             linkedOutposts.Clear();
             ResourceLinkUtil.MarkDirty();
             (parent as WorldSettlementFC)?.InvalidateResourceCaches();
+            foreach (Outpost outpost in cleared)
+                ResourceLinkUtil.NotifyLinkChanged(outpost);
         }
     }
 }

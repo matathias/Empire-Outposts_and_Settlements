@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using FactionColonies;
 using Outposts;
@@ -37,12 +38,23 @@ namespace EmpireVOE
             return sum;
         }
 
-        /// <summary>Convenience: the contribution an outpost would make, resolving its extension.</summary>
-        public static double ContributionOf(Outpost outpost)
+        /// <summary>
+        /// The contribution an outpost makes to the given settlement, resolving its extension. Settlement-aware
+        /// because some links (e.g. power) scale their contribution by distance to the settlement.
+        /// </summary>
+        public static double ContributionOf(Outpost outpost, WorldSettlementFC settlement)
         {
             OutpostResourceLinkExtension ext = outpost?.def.GetModExtension<OutpostResourceLinkExtension>();
-            return ext is null ? 0 : SkillSum(outpost, ext);
+            return ext is null ? 0 : ext.Contribution(outpost, settlement);
         }
+
+        /// <summary>
+        /// Fired when an outpost's link state changes (linked or unlinked). Compat layers subscribe to react
+        /// immediately — e.g. the VOEPowerGrid compat refreshes a connected outlet's suppressed output.
+        /// </summary>
+        public static event Action<Outpost> LinkChanged;
+
+        internal static void NotifyLinkChanged(Outpost outpost) => LinkChanged?.Invoke(outpost);
 
         /*-*-*- Cross-settlement claimed-outpost registry (one outpost -> one settlement) -*-*-*/
 

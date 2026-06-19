@@ -25,6 +25,8 @@ namespace EmpireVOE
         public static float additivePerLevel = 0.025f;
         public static int skillFloor = 0;
         public static int resourceLinkRange = 10;
+        // Power-outpost resource linking (VOEPowerGrid compat): scales watts->RTD_Power conversion
+        public static float powerConversionMultiplier = 1f;
 
         // Encampment Recovery
         public static int encampmentRange = 10;
@@ -88,6 +90,7 @@ namespace EmpireVOE
             Scribe_Values.Look(ref additivePerLevel, "additivePerLevel", 0.025f);
             Scribe_Values.Look(ref skillFloor, "skillFloor", 0);
             Scribe_Values.Look(ref resourceLinkRange, "resourceLinkRange", 10);
+            Scribe_Values.Look(ref powerConversionMultiplier, "powerConversionMultiplier", 1f);
 
             // Encampment Recovery
             Scribe_Values.Look(ref encampmentRange, "encampmentRange", 10);
@@ -281,6 +284,13 @@ namespace EmpireVOE
 
                 ls.Label("  " + "VOE_SkillFloor".Translate() + ": " + EmpireVOESettings.skillFloor);
                 EmpireVOESettings.skillFloor = (int)ls.Slider(EmpireVOESettings.skillFloor, 0, 10);
+
+                // Power-outpost conversion (only shown when VOE Power Outposts is installed)
+                if (EmpireVOECompat.PowerOutpostsActive)
+                {
+                    ls.Label("  " + "VOE_PowerConversionMultiplier".Translate() + ": " + EmpireVOESettings.powerConversionMultiplier.ToString("F2"));
+                    EmpireVOESettings.powerConversionMultiplier = (float)System.Math.Round(ls.Slider(EmpireVOESettings.powerConversionMultiplier, 0.1f, 5f), 2);
+                }
             }
 
             ls.GapLine();

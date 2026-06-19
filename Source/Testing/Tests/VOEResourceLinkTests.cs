@@ -28,7 +28,7 @@ namespace EmpireVOE
         [EmpireTest("VOE.ResourceLink")]
         public static void ContributionOf_Null_Zero()
         {
-            TestAssert.AreEqual(0.0, ResourceLinkUtil.ContributionOf(null));
+            TestAssert.AreEqual(0.0, ResourceLinkUtil.ContributionOf(null, null));
         }
 
         [EmpireTest("VOE.ResourceLink")]

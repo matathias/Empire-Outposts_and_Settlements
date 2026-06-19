@@ -138,6 +138,7 @@
     <VOE_AdditivePerLevel>Additive bonus per skill level</VOE_AdditivePerLevel>
     <VOE_SkillFloor>Skill floor</VOE_SkillFloor>
     <VOE_ResourceLinkRange>Resource link max range (tiles)</VOE_ResourceLinkRange>
+    <VOE_PowerConversionMultiplier>Power outpost conversion multiplier</VOE_PowerConversionMultiplier>
 
     <!-- Passive Defensive Aura Settings -->
     <VOE_DefensiveAuraRange>Defensive aura range (tiles)</VOE_DefensiveAuraRange>

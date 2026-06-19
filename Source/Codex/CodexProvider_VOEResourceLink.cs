@@ -32,7 +32,7 @@ namespace EmpireVOE
                     if (ext?.resources is null) continue;
                     any = true;
                     string resources = string.Join(", ", ext.resources.Select(r => r.LabelCap.ToString()).ToArray());
-                    double contribution = ResourceLinkUtil.ContributionOf(outpost);
+                    double contribution = ResourceLinkUtil.ContributionOf(outpost, s);
                     result += "  " + "VOE_CodexResourceLinkLine".Translate(
                         s.Name, outpost.Name ?? outpost.def.label, resources, contribution.ToString("0.##")) + "\n";
                 }
