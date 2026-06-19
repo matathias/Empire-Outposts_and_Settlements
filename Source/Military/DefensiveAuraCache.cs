@@ -10,6 +10,9 @@ namespace EmpireVOE
     /// Per-settlement cache entry holding nearby garrisoned defensive outposts and the passive military-level
     /// bonus they contribute. Each outpost contributes a fraction (<c>defensiveAuraLevelFactor</c>) of its
     /// active military level, so the passive shield is always weaker than actually deploying the garrison.
+    /// Only outposts standing a passive watch count (<see cref="WorldObjectComp_EmpireDefensive.ProvidesAura"/>):
+    /// one set to auto-defend, deployed on a defense, or regrouping on cooldown has its garrison committed
+    /// elsewhere and projects no aura.
     /// </summary>
     public class DefensiveAuraEntry
     {
@@ -22,6 +25,8 @@ namespace EmpireVOE
             {
                 if (!(wo is Outpost_Defensive defensive)) continue;
                 if (defensive.PawnCount == 0) continue;
+                WorldObjectComp_EmpireDefensive defComp = defensive.GetComponent<WorldObjectComp_EmpireDefensive>();
+                if (defComp is object && !defComp.ProvidesAura) continue;   // committed garrisons project no aura
                 float distance = Find.WorldGrid.ApproxDistanceInTiles(defensive.Tile, settlement.Tile);
                 if (distance > EmpireVOESettings.defensiveAuraRange) continue;
 
@@ -33,7 +38,9 @@ namespace EmpireVOE
 
     /// <summary>
     /// Static lazy cache mapping settlement tiles to their nearby defensive-outpost aura data. Invalidated on
-    /// defensive-outpost roster changes, outpost creation/destruction, and aura settings changes.
+    /// defensive-outpost roster changes, outpost creation/destruction, aura settings changes, and aura-eligibility
+    /// flips (auto-defend toggled, defense begun/ended, cooldown set/expired — see
+    /// <see cref="WorldObjectComp_EmpireDefensive.CompTick"/>).
     /// </summary>
     public static class DefensiveAuraCache
     {

@@ -59,6 +59,17 @@ namespace EmpireVOE
             }
         }
 
+        /// <summary>
+        /// True when the garrison is standing a passive watch and may project the defensive aura: not set
+        /// to auto-defend, not currently deployed on a defense, and not regrouping on cooldown.
+        /// </summary>
+        public bool ProvidesAura => !autoDefend && !defending && !IsOnCooldown;
+
+        // Aura eligibility (ProvidesAura) is dynamic: autoDefend toggles, defenses begin/end, and cooldowns
+        // elapse — the last with no event of its own. Poll for a flip and dirty the aura cache so the passive
+        // militaryBaseLevel bonus tracks garrison availability. Invalidate clears the settlement stat cache too.
+        [Unsaved] private bool lastAuraEligible;
+
         public void SetCooldown(int durationTicks)
         {
             cooldownEndTick = Find.TickManager.TicksGame + durationTicks;
@@ -74,6 +85,17 @@ namespace EmpireVOE
             base.Initialize(props);
             if (!EmpireVOESettings.MilitaryActive) return;
             Register();
+        }
+
+        public override void CompTick()
+        {
+            base.CompTick();
+            if (!EmpireVOESettings.DefensiveAuraActive) return;
+            if (!parent.IsHashIntervalTick(250)) return;   // ~4s; hashed per outpost so checks spread across ticks
+            bool eligible = ProvidesAura;
+            if (eligible == lastAuraEligible) return;
+            lastAuraEligible = eligible;
+            DefensiveAuraCache.Invalidate();
         }
 
         public override void PostExposeData()
