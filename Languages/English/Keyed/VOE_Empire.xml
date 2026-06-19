@@ -160,6 +160,7 @@
     <VOE_TabSectionDefensive>Defensive aura</VOE_TabSectionDefensive>
     <VOE_TabLink>Link</VOE_TabLink>
     <VOE_TabUnlink>Unlink</VOE_TabUnlink>
+    <VOE_NoSettlementsInRange>No settlements in range</VOE_NoSettlementsInRange>
     <VOE_TabChange>Change</VOE_TabChange>
     <VOE_TabSet>Set</VOE_TabSet>
     <VOE_TabClear>Clear</VOE_TabClear>

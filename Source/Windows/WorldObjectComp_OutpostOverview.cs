@@ -93,12 +93,16 @@ namespace EmpireVOE
                 Rect row = ls.GetRect(OutpostLinkView.RowHeight);
                 Rect labelRect = new Rect(row.x, row.y, row.width * 0.42f, row.height);
                 Rect buttonRect = new Rect(row.xMax - 70f, row.y + 2f, 68f, row.height - 4f);
-                Rect detailRect = new Rect(labelRect.xMax + 4f, row.y, buttonRect.x - labelRect.xMax - 8f, row.height);
 
                 OutpostLinkView.DrawOutpostLabel(labelRect, outpost);
 
                 bool linkedHere = comp.IsLinkedHere(outpost);
                 bool linkedElsewhere = ResourceLinkUtil.IsLinkedToOther(outpost, comp);
+
+                // When linked elsewhere the Link/Unlink button is hidden, so let the detail fill that space
+                // instead of clamping early and leaving a blank gap.
+                float detailRight = linkedElsewhere ? row.xMax - 4f : buttonRect.x - 8f;
+                Rect detailRect = new Rect(labelRect.xMax + 4f, row.y, detailRight - (labelRect.xMax + 4f), row.height);
 
                 string feeds = "VOE_TabFeeds".Translate(ResourcesFed(outpost));
                 string detail = OutpostLinkView.DistanceLabel(uiSettlement, outpost) + "  -  " + feeds;
@@ -114,10 +118,7 @@ namespace EmpireVOE
                 OutpostLinkView.DrawDetail(detailRect, detail);
 
                 if (linkedElsewhere)
-                {
-                    Widgets.Label(buttonRect, "");
                     continue;
-                }
                 if (UIUtil.ButtonFlat(buttonRect, linkedHere ? "VOE_TabUnlink".Translate() : "VOE_TabLink".Translate()))
                     comp.ToggleLink(outpost);
             }
