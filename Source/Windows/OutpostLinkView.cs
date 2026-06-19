@@ -73,60 +73,27 @@ namespace EmpireVOE
         }
 
         /// <summary>
-        /// Draws just the outpost's type icon (tinted), scaled to a centered square that fills the rect — used
-        /// by the by-outpost card where the icon spans both text rows. Clicking jumps the world camera to it.
+        /// Draws a clickable settlement name (opens that settlement's window) in the given color, optionally
+        /// with a leading icon. The whole rect (icon + name) is the click target.
         /// </summary>
-        public static void DrawOutpostIcon(Rect rect, Outpost outpost, bool jumpOnClick = false)
-        {
-            if (outpost is null) return;
-
-            Texture2D icon = outpost.ExpandingIcon;
-            if (icon != null)
-            {
-                float size = Mathf.Min(rect.width, rect.height);
-                Rect iconRect = new Rect(rect.x + (rect.width - size) / 2f, rect.y + (rect.height - size) / 2f, size, size);
-                Color prev = GUI.color;
-                GUI.color = outpost.ExpandingIconColor;
-                GUI.DrawTexture(iconRect, icon);
-                GUI.color = prev;
-            }
-
-            if (jumpOnClick)
-            {
-                if (Mouse.IsOver(rect)) Widgets.DrawHighlight(rect);
-                if (Widgets.ButtonInvisible(rect))
-                    CameraJumper.TryJumpAndSelect(new GlobalTargetInfo(outpost));
-            }
-        }
-
-        /// <summary>Draws just the outpost's name (no icon), clamped, left-aligned; clicking jumps to it.</summary>
-        public static void DrawOutpostName(Rect rect, Outpost outpost, bool jumpOnClick = false)
-        {
-            if (outpost is null) return;
-
-            TextAnchor prevAnchor = Text.Anchor;
-            Text.Anchor = TextAnchor.MiddleLeft;
-            Widgets.Label(rect, Text.ClampTextWithEllipsis(rect, outpost.RenamableLabel));
-            Text.Anchor = prevAnchor;
-
-            if (jumpOnClick)
-            {
-                if (Mouse.IsOver(rect)) Widgets.DrawHighlight(rect);
-                if (Widgets.ButtonInvisible(rect))
-                    CameraJumper.TryJumpAndSelect(new GlobalTargetInfo(outpost));
-            }
-        }
-
-        /// <summary>Draws a clickable settlement name (opens that settlement's window) in the given color.</summary>
         public static void DrawClickableSettlementName(Rect rect, WorldSettlementFC settlement, Color color,
-            TextAnchor anchor = TextAnchor.MiddleLeft)
+            TextAnchor anchor = TextAnchor.MiddleLeft, Texture2D icon = null)
         {
             if (settlement is null) return;
+
+            Rect labelRect = rect;
+            if (icon != null)
+            {
+                Rect iconRect = new Rect(rect.x, rect.y + (rect.height - IconSize) / 2f, IconSize, IconSize);
+                GUI.DrawTexture(iconRect, icon);
+                labelRect = new Rect(iconRect.xMax + 6f, rect.y, rect.xMax - iconRect.xMax - 6f, rect.height);
+            }
+
             TextAnchor prevAnchor = Text.Anchor;
             Color prevColor = GUI.color;
             Text.Anchor = anchor;
             GUI.color = color;
-            Widgets.Label(rect, Text.ClampTextWithEllipsis(rect, settlement.Name));
+            Widgets.Label(labelRect, Text.ClampTextWithEllipsis(labelRect, settlement.Name));
             GUI.color = prevColor;
             Text.Anchor = prevAnchor;
 
@@ -157,7 +124,7 @@ namespace EmpireVOE
         {
             ls.Gap(4f);
             Rect rect = ls.GetRect(HeaderHeight);
-            Widgets.DrawHighlight(rect);
+            Widgets.DrawBoxSolid(rect, ColorUtil.Gray3);
 
             TextAnchor prevAnchor = Text.Anchor;
             Color prevColor = GUI.color;
@@ -182,7 +149,7 @@ namespace EmpireVOE
         {
             ls.Gap(4f);
             Rect rect = ls.GetRect(HeaderHeight);
-            Widgets.DrawHighlight(rect);
+            Widgets.DrawBoxSolid(rect, ColorUtil.Gray3);
 
             float textX = rect.x + 6f;
             Texture2D icon = FindFC.FactionComp?.factionIcon;
@@ -212,20 +179,51 @@ namespace EmpireVOE
             ls.Gap(2f);
         }
 
+        /// <summary>
+        /// Section header for an outpost (by-outpost subtab): lighter bar with the outpost's type icon + name
+        /// (clicking jumps to it on the map). Reserves <paramref name="reserveRight"/> px on the right so the
+        /// caller can place a Link/Unlink button; returns the header rect.
+        /// </summary>
+        public static Rect DrawOutpostHeader(Listing_Standard ls, Outpost outpost, float reserveRight)
+        {
+            ls.Gap(4f);
+            Rect rect = ls.GetRect(HeaderHeight);
+            Widgets.DrawBoxSolid(rect, ColorUtil.Gray3);
+
+            Rect labelArea = new Rect(rect.x + 2f, rect.y, rect.width - 4f - reserveRight, rect.height);
+            DrawOutpostLabel(labelArea, outpost, jumpOnClick: true);
+
+            ls.Gap(2f);
+            return rect;
+        }
+
+        /// <summary>Zebra-stripes a row: shades odd-indexed rows for readability.</summary>
+        public static void DrawRowAlt(Rect row, int index)
+        {
+            if ((index & 1) == 1) Widgets.DrawAltRect(row);
+        }
+
         // --- Role badges ---
 
         private const float BadgeIconSize = 16f;
         private const float BadgePad = 6f;
         private const float BadgeGap = 4f;
 
-        /// <summary>One badge per resource the outpost boosts (icon + name in the resource's color).</summary>
-        public static List<LinkBadge> ResourceBadges(Outpost outpost)
+        /// <summary>
+        /// One badge per resource the outpost boosts (icon + name in the resource's color), with the per-worker
+        /// production bonus for <paramref name="settlement"/> baked into the label as "(+x.x)".
+        /// </summary>
+        public static List<LinkBadge> ResourceBadges(Outpost outpost, WorldSettlementFC settlement)
         {
             List<LinkBadge> badges = new List<LinkBadge>();
             OutpostResourceLinkExtension ext = outpost?.def.GetModExtension<OutpostResourceLinkExtension>();
             if (ext?.resources is object)
+            {
+                double contrib = ResourceLinkUtil.ContributionOf(outpost, settlement);
+                string bonus = " (+" + contrib.ToString("0.##") + ")";
                 foreach (ResourceTypeDef r in ext.resources)
-                    badges.Add(new LinkBadge(r.LabelCap, r.Icon, r.color));
+                    badges.Add(new LinkBadge(r.LabelCap.ToString() + bonus, r.Icon, r.color));
+            }
             return badges;
         }
 

@@ -151,8 +151,8 @@
     <!-- Outposts settlement subtab + faction-wide main tab -->
     <VOE_OutpostsTab>Outposts</VOE_OutpostsTab>
     <VOE_OutpostsMainTab>Outposts</VOE_OutpostsMainTab>
-    <VOE_MainTabByOutpost>By outpost</VOE_MainTabByOutpost>
-    <VOE_MainTabBySettlement>By settlement</VOE_MainTabBySettlement>
+    <VOE_MainTabByOutpost>By Outpost</VOE_MainTabByOutpost>
+    <VOE_MainTabBySettlement>By Settlement</VOE_MainTabBySettlement>
     <VOE_TabSectionResourceLinks>Resource links</VOE_TabSectionResourceLinks>
     <VOE_TabSectionTaxDelivery>Tax delivery</VOE_TabSectionTaxDelivery>
     <VOE_TabSectionFinancing>Financing</VOE_TabSectionFinancing>

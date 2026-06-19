@@ -20,8 +20,6 @@ namespace EmpireVOE
 
         private const float HeaderHeight = 35f;
         private const float Margin = 5f;
-        private const float CellHeight = 56f;
-        private const float CellGutter = 12f;
 
         private FactionFC uiFaction;
         private int subTab;
@@ -64,7 +62,7 @@ namespace EmpireVOE
             Rect subtabBox = new Rect(boundingBox.x + Margin, bodyY, boundingBox.width - Margin * 2f, boundingBox.yMax - bodyY - Margin);
             if (subtabBox.height <= 0f) return;
 
-            subTab = UIUtil.DrawTabRowButtonFlat(subtabBox, subTabs, subTab, out Rect contentRect);
+            subTab = UIUtil.DrawTabRowButtonFlat(subtabBox, subTabs, subTab, out Rect contentRect, tabHeight: 26f);
             Rect inner = contentRect.ContractedBy(2f);
 
             Rect viewRect = ScrollUtil.BeginScrollView(inner, ref scroll, contentHeight);
@@ -104,100 +102,89 @@ namespace EmpireVOE
             Text.Anchor = prevAnchor;
         }
 
-        // --- By outpost (grouped by type, 2-column grid) ---
+        // --- By outpost (each outpost a header, its settlements as rows; mirrors By settlement) ---
 
         private void DrawByOutpost(Listing_Standard ls)
         {
-            List<Outpost> outposts = Find.WorldObjects.AllWorldObjects.OfType<Outpost>().ToList();
+            List<Outpost> outposts = Find.WorldObjects.AllWorldObjects.OfType<Outpost>()
+                .OrderBy(o => o.def.label).ThenBy(o => o.RenamableLabel).ToList();
             if (outposts.Count == 0)
             {
                 ls.Label("  " + "VOE_MainTabNoOutposts".Translate());
                 return;
             }
 
-            foreach (var group in outposts.GroupBy(o => o.def))
+            foreach (Outpost outpost in outposts)
             {
-                OutpostLinkView.DrawSectionHeader(ls, group.Key.LabelCap);
-
-                List<Outpost> items = group.ToList();
-                for (int i = 0; i < items.Count; i += 2)
+                bool linkable = ResourceLinkUtil.IsLinkable(outpost);
+                Rect hdr = OutpostLinkView.DrawOutpostHeader(ls, outpost, linkable ? 70f : 0f);
+                if (linkable)
                 {
-                    Rect row = ls.GetRect(CellHeight);
-                    float half = (row.width - CellGutter) / 2f;
-                    DrawOutpostCell(new Rect(row.x, row.y, half, row.height), items[i]);
-                    if (i + 1 < items.Count)
-                        DrawOutpostCell(new Rect(row.x + half + CellGutter, row.y, half, row.height), items[i + 1]);
+                    Rect btnRect = new Rect(hdr.xMax - 66f, hdr.y + 1f, 64f, hdr.height - 2f);
+                    bool linked = LinkedSettlement(outpost) is object;
+                    if (UIUtil.ButtonFlat(btnRect, linked ? "VOE_TabUnlink".Translate() : "VOE_TabLink".Translate()))
+                        ToggleOutpostLink(outpost);
                 }
+
+                // Group this outpost's relationships by settlement (one row per settlement it serves).
+                List<WorldSettlementFC> order = new List<WorldSettlementFC>();
+                Dictionary<WorldSettlementFC, List<LinkBadge>> badges = new Dictionary<WorldSettlementFC, List<LinkBadge>>();
+                List<LinkBadge> Bucket(WorldSettlementFC s)
+                {
+                    if (s is null) return null;
+                    if (!badges.TryGetValue(s, out List<LinkBadge> list)) { list = new List<LinkBadge>(); badges[s] = list; order.Add(s); }
+                    return list;
+                }
+
+                foreach (WorldSettlementFC s in uiFaction.settlements)
+                {
+                    WorldObjectComp_ResourceLink rl = s.GetComponent<WorldObjectComp_ResourceLink>();
+                    if (rl is object && rl.IsLinkedHere(outpost))
+                        Bucket(s).AddRange(OutpostLinkView.ResourceBadges(outpost, s));
+
+                    WorldObjectComp_OutpostLinks links = s.GetComponent<WorldObjectComp_OutpostLinks>();
+                    if (links is object)
+                    {
+                        if (links.GetDeliveryOutpost() == outpost) Bucket(s).Add(OutpostLinkView.TaxDeliveryBadge());
+                        if (links.GetFinancingOutpost() == outpost) Bucket(s).Add(OutpostLinkView.FinancingBadge());
+                    }
+                }
+
+                if (order.Count == 0)
+                {
+                    Rect row = ls.GetRect(OutpostLinkView.RowHeight);
+                    DrawNotLinkedRow(row);
+                    continue;
+                }
+
+                int idx = 0;
+                foreach (WorldSettlementFC s in order)
+                    DrawOutpostSettlementRow(ls, s, badges[s], idx++);
             }
         }
 
-        /// <summary>
-        /// Dark card with a full-height type icon on the left (jump to map). Right of the icon: outpost name +
-        /// link/unlink on line 1; role text (left) and the linked settlement(s) under the button on line 2.
-        /// </summary>
-        private void DrawOutpostCell(Rect cell, Outpost outpost)
+        /// <summary>A settlement row under an outpost header: clickable settlement name + its role badges.</summary>
+        private void DrawOutpostSettlementRow(Listing_Standard ls, WorldSettlementFC settlement, List<LinkBadge> badges, int index)
         {
-            const float pad = 4f;
-            const float btnW = 62f;
+            Rect row = ls.GetRect(OutpostLinkView.RowHeight);
+            OutpostLinkView.DrawRowAlt(row, index);
 
-            Rect card = cell.ContractedBy(2f);
-            Widgets.DrawBoxSolid(card, ColorUtil.Gray1);
+            Rect nameRect = new Rect(row.x + 8f, row.y, (row.width - 8f) * 0.4f, row.height);
+            Rect badgeRect = new Rect(nameRect.xMax + 4f, row.y, row.xMax - nameRect.xMax - 8f, row.height);
+            OutpostLinkView.DrawClickableSettlementName(nameRect, settlement, AccentUtil.GetSettlementAccent(settlement),
+                icon: FindFC.FactionComp?.factionIcon);
+            OutpostLinkView.DrawBadgeRow(badgeRect, badges);
+        }
 
-            // Full-height type icon (the two-row grouping cue).
-            float iconSz = card.height - pad * 2f;
-            OutpostLinkView.DrawOutpostIcon(new Rect(card.x + pad, card.y + pad, iconSz, iconSz), outpost, jumpOnClick: true);
-
-            float contentX = card.x + pad + iconSz + 6f;
-            float contentW = card.xMax - pad - contentX;
-            float lineH = (card.height - pad * 2f) / 2f;
-            float line1Y = card.y + pad;
-            float line2Y = line1Y + lineH;
-
-            bool linkable = ResourceLinkUtil.IsLinkable(outpost);
-
-            // Line 1: name (left) + Link/Unlink (right).
-            float nameW = linkable ? contentW - btnW - 6f : contentW;
-            OutpostLinkView.DrawOutpostName(new Rect(contentX, line1Y, nameW, lineH), outpost, jumpOnClick: true);
-            if (linkable)
-            {
-                Rect btnRect = new Rect(card.xMax - pad - btnW, line1Y + 1f, btnW, lineH - 2f);
-                bool linked = LinkedSettlement(outpost) is object;
-                if (UIUtil.ButtonFlat(btnRect, linked ? "VOE_TabUnlink".Translate() : "VOE_TabLink".Translate()))
-                    ToggleOutpostLink(outpost);
-            }
-
-            // Line 2: role badges (left) + settlement(s) under the button (right, given generous width).
-            List<WorldSettlementFC> settlements = new List<WorldSettlementFC>();
-            List<LinkBadge> badges = OutpostBadges(outpost, settlements);
-            float settleW = Mathf.Max(120f, contentW * 0.5f);
-            Rect roleRect = new Rect(contentX, line2Y, contentW - settleW - 6f, lineH);
-            Rect settleRect = new Rect(card.xMax - pad - settleW, line2Y, settleW, lineH);
-
-            if (badges.Count > 0)
-            {
-                OutpostLinkView.DrawBadgeRow(roleRect, badges);
-            }
-            else
-            {
-                TextAnchor prevAnchor = Text.Anchor;
-                Color prevColor = GUI.color;
-                Text.Anchor = TextAnchor.MiddleLeft;
-                GUI.color = new Color(0.7f, 0.7f, 0.7f);
-                Widgets.Label(roleRect, "VOE_MainTabOutpostUnlinked".Translate());
-                GUI.color = prevColor;
-                Text.Anchor = prevAnchor;
-            }
-
-            // Distinct related settlements, laid out right-to-left so the nearest sits under the button.
-            float rx = settleRect.xMax;
-            foreach (WorldSettlementFC st in settlements)
-            {
-                if (rx <= settleRect.x) break;
-                float w = Mathf.Min(Text.CalcSize(st.Name).x + 4f, rx - settleRect.x);
-                OutpostLinkView.DrawClickableSettlementName(new Rect(rx - w, settleRect.y, w, settleRect.height),
-                    st, AccentUtil.GetSettlementAccent(st), TextAnchor.MiddleRight);
-                rx -= w + 6f;
-            }
+        private static void DrawNotLinkedRow(Rect row)
+        {
+            TextAnchor prevAnchor = Text.Anchor;
+            Color prevColor = GUI.color;
+            Text.Anchor = TextAnchor.MiddleLeft;
+            GUI.color = new Color(0.7f, 0.7f, 0.7f);
+            Widgets.Label(new Rect(row.x + 8f, row.y, row.width - 8f, row.height), "VOE_MainTabOutpostUnlinked".Translate());
+            GUI.color = prevColor;
+            Text.Anchor = prevAnchor;
         }
 
         /// <summary>The settlement an outpost is currently resource-linked to, or null.</summary>
@@ -236,37 +223,6 @@ namespace EmpireVOE
             Find.WindowStack.Add(new FloatMenu(options));
         }
 
-        /// <summary>
-        /// Role badges for an outpost across all settlements, also collecting (into <paramref name="settlements"/>)
-        /// the distinct settlements it relates to.
-        /// </summary>
-        private List<LinkBadge> OutpostBadges(Outpost outpost, List<WorldSettlementFC> settlements)
-        {
-            List<LinkBadge> badges = new List<LinkBadge>();
-            bool addedResource = false;
-            foreach (WorldSettlementFC s in uiFaction.settlements)
-            {
-                bool related = false;
-
-                WorldObjectComp_ResourceLink rl = s.GetComponent<WorldObjectComp_ResourceLink>();
-                if (rl is object && rl.IsLinkedHere(outpost))
-                {
-                    if (!addedResource) { badges.AddRange(OutpostLinkView.ResourceBadges(outpost)); addedResource = true; }
-                    related = true;
-                }
-
-                WorldObjectComp_OutpostLinks links = s.GetComponent<WorldObjectComp_OutpostLinks>();
-                if (links is object)
-                {
-                    if (links.GetDeliveryOutpost() == outpost) { badges.Add(OutpostLinkView.TaxDeliveryBadge()); related = true; }
-                    if (links.GetFinancingOutpost() == outpost) { badges.Add(OutpostLinkView.FinancingBadge()); related = true; }
-                }
-
-                if (related && settlements is object && !settlements.Contains(s)) settlements.Add(s);
-            }
-            return badges;
-        }
-
         // --- By settlement (one consolidated row per outpost) ---
 
         private void DrawBySettlement(Listing_Standard ls)
@@ -294,7 +250,7 @@ namespace EmpireVOE
                 WorldObjectComp_ResourceLink rl = s.GetComponent<WorldObjectComp_ResourceLink>();
                 if (rl?.linkedOutposts is object)
                     foreach (Outpost o in rl.linkedOutposts)
-                        Bucket(o)?.AddRange(OutpostLinkView.ResourceBadges(o));
+                        Bucket(o)?.AddRange(OutpostLinkView.ResourceBadges(o, s));
 
                 WorldObjectComp_OutpostLinks links = s.GetComponent<WorldObjectComp_OutpostLinks>();
                 Bucket(links?.GetDeliveryOutpost())?.Add(OutpostLinkView.TaxDeliveryBadge());
@@ -306,15 +262,17 @@ namespace EmpireVOE
                     continue;
                 }
 
+                int idx = 0;
                 foreach (Outpost o in order)
-                    DrawSettlementOutpostRow(ls, o, badges[o], rl);
+                    DrawSettlementOutpostRow(ls, o, badges[o], rl, idx++);
             }
         }
 
         private void DrawSettlementOutpostRow(Listing_Standard ls, Outpost outpost,
-            List<LinkBadge> badges, WorldObjectComp_ResourceLink rl)
+            List<LinkBadge> badges, WorldObjectComp_ResourceLink rl, int index)
         {
             Rect row = ls.GetRect(OutpostLinkView.RowHeight);
+            OutpostLinkView.DrawRowAlt(row, index);
             bool canUnlink = rl is object && rl.IsLinkedHere(outpost);
             float rightEdge = canUnlink ? row.xMax - 70f : row.xMax;
 

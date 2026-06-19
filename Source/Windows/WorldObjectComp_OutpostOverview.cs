@@ -88,9 +88,11 @@ namespace EmpireVOE
                 return;
             }
 
+            int index = 0;
             foreach (Outpost outpost in candidates)
             {
                 Rect row = ls.GetRect(OutpostLinkView.RowHeight);
+                OutpostLinkView.DrawRowAlt(row, index++);
                 Rect labelRect = new Rect(row.x, row.y, row.width * 0.42f, row.height);
                 Rect buttonRect = new Rect(row.xMax - 70f, row.y + 2f, 68f, row.height - 4f);
 
@@ -103,16 +105,12 @@ namespace EmpireVOE
                 float detailRight = linkedElsewhere ? row.xMax - 4f : buttonRect.x - 8f;
                 float detailX = labelRect.xMax + 4f;
 
-                // Status text (contribution while linked here, else "linked elsewhere"), right-aligned.
-                string status = null;
-                if (linkedHere)
-                    status = "VOE_TabContribution".Translate(ResourceLinkUtil.ContributionOf(outpost, uiSettlement).ToString("0.##"));
-                else if (linkedElsewhere)
-                    status = "VOE_TabLinkedElsewhere".Translate();
-
-                float statusW = status.NullOrEmpty() ? 0f : Mathf.Min(Text.CalcSize(status).x + 8f, (detailRight - detailX) * 0.5f);
+                // The production bonus now lives inside the resource badge; the only status text is
+                // "linked elsewhere" — give it generous width so it never clips.
+                string status = linkedElsewhere ? (string)"VOE_TabLinkedElsewhere".Translate() : null;
+                float statusW = status.NullOrEmpty() ? 0f : Mathf.Min(Text.CalcSize(status).x + 22f, (detailRight - detailX) * 0.6f);
                 OutpostLinkView.DrawBadgeRow(new Rect(detailX, row.y, detailRight - detailX - statusW, row.height),
-                    OutpostLinkView.ResourceBadges(outpost));
+                    OutpostLinkView.ResourceBadges(outpost, uiSettlement));
                 if (!status.NullOrEmpty())
                     OutpostLinkView.DrawDetail(new Rect(detailRight - statusW, row.y, statusW, row.height), status);
 
@@ -157,9 +155,11 @@ namespace EmpireVOE
                 return;
             }
 
+            int index = 0;
             foreach (EncampmentData data in entry.encampments)
             {
                 Rect row = ls.GetRect(OutpostLinkView.RowHeight);
+                OutpostLinkView.DrawRowAlt(row, index++);
                 OutpostLinkView.DrawOutpostLabel(row, data.encampment);
             }
         }
@@ -177,9 +177,11 @@ namespace EmpireVOE
                 return;
             }
 
+            int index = 0;
             foreach (Outpost_Defensive defensive in entry.outposts)
             {
                 Rect row = ls.GetRect(OutpostLinkView.RowHeight);
+                OutpostLinkView.DrawRowAlt(row, index++);
                 Rect labelRect = new Rect(row.x, row.y, row.width * 0.5f, row.height);
                 Rect detailRect = new Rect(labelRect.xMax + 4f, row.y, row.width - labelRect.width - 4f, row.height);
                 OutpostLinkView.DrawOutpostLabel(labelRect, defensive);
