@@ -130,10 +130,10 @@ namespace EmpireVOE
         public string GetStatusInspectString(bool isUnderAttack)
         {
             if (isUnderAttack)
-                return "VOE_DefenseStatusAttacked".Translate();
+                return "FCVOE_DefenseStatusAttacked".Translate();
             if (IsOnCooldown)
-                return "VOE_DefenseStatusCooldown".Translate(CooldownTicksLeft.ToTimeString());
-            return "VOE_DefenseStatusReady".Translate();
+                return "FCVOE_DefenseStatusCooldown".Translate(CooldownTicksLeft.ToTimeString());
+            return "FCVOE_DefenseStatusReady".Translate();
         }
 
         // --- Registration ---

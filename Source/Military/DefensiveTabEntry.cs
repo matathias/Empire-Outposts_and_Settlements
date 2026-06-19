@@ -49,18 +49,18 @@ namespace EmpireVOE
                 {
                     // Outpost pawns are returned instantly, so the squad "Returning Home" text is wrong
                     // here — use a dedicated external-defender cooldown string.
-                    return "VOE_StatusRegrouping".Translate(comp.CooldownTicksLeft.ToTimeString());
+                    return "FCVOE_StatusRegrouping".Translate(comp.CooldownTicksLeft.ToTimeString());
                 }
                 if (defender.Busy)
                 {
                     string target = defender.DefendingTargetName;
                     if (target?.Length > 0)
-                        return "VOE_StatusDefending".Translate(target);
+                        return "FCVOE_StatusDefending".Translate(target);
                     return "FCMilStatusBusy".Translate();
                 }
                 if (AutoDefend) return "FCMilStatusReady".Translate();
-                if (comp.IsProjectingAura) return "VOE_StatusDefensiveAura".Translate();
-                return "VOE_DefenseIdle".Translate();
+                if (comp.IsProjectingAura) return "FCVOE_StatusDefensiveAura".Translate();
+                return "FCVOE_DefenseIdle".Translate();
             }
         }
 

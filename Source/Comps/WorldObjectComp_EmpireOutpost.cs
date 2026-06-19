@@ -60,8 +60,8 @@ namespace EmpireVOE
                 {
                     yield return new Command_Action
                     {
-                        defaultLabel = "VOE_ChangeDefender".Translate(),
-                        defaultDesc = "VOE_ChangeDefenderDesc".Translate(),
+                        defaultLabel = "FCVOE_ChangeDefender".Translate(),
+                        defaultDesc = "FCVOE_ChangeDefenderDesc".Translate(),
                         icon = TexLoad.iconMilitary,
                         action = () => Find.WindowStack.Add(new Dialog_DefendSettlement(evt))
                     };
@@ -76,13 +76,13 @@ namespace EmpireVOE
                 {
                     Command_Action convert = new Command_Action
                     {
-                        defaultLabel = "VOE_ConvertToSettlement".Translate(),
-                        defaultDesc = "VOE_ConvertToSettlementDesc".Translate(),
+                        defaultLabel = "FCVOE_ConvertToSettlement".Translate(),
+                        defaultDesc = "FCVOE_ConvertToSettlementDesc".Translate(),
                         icon = TexCommand.Install,
                         action = () => Find.WindowStack.Add(new FCWindow_SettlementTypePicker(
                             types,
                             selected => OutpostConversionUtil.ConvertOutpost(Outpost, selected),
-                            "VOE_ConvertPickType"))
+                            "FCVOE_ConvertPickType"))
                     };
                     if (!OutpostConversionUtil.CanConvertNow(Outpost, out string convertReason))
                     {
@@ -107,15 +107,15 @@ namespace EmpireVOE
                 // cost-curve level, plus the defender-advantage-adjusted defense power.
                 int milLevel = raidTarget.MilitaryLevel;
                 double defPower = Math.Round(milLevel * FCSettings.defenderAdvantage);
-                lines.Add("VOE_MilitaryLevel".Translate(milLevel, defPower));
+                lines.Add("FCVOE_MilitaryLevel".Translate(milLevel, defPower));
 
                 WorldObjectComp_EmpireDefensive defComp = parent.GetComponent<WorldObjectComp_EmpireDefensive>();
                 // Passive defensive aura (sits directly under the military level it stiffens for neighbors).
                 if (defComp is object && defComp.IsProjectingAura)
-                    lines.Add("VOE_InspectAuraActive".Translate(defComp.AuraMilitaryBonus.ToString("0.#")));
+                    lines.Add("FCVOE_InspectAuraActive".Translate(defComp.AuraMilitaryBonus.ToString("0.#")));
                 // Combat efficiency is defensive-outpost-only (non-defensive outposts have no defender).
                 if (defComp?.defender is object)
-                    lines.Add("VOE_CombatEfficiency".Translate(defComp.defender.Efficiency.ToString("0.0#")));
+                    lines.Add("FCVOE_CombatEfficiency".Translate(defComp.defender.Efficiency.ToString("0.0#")));
                 if (defComp is object)
                     lines.Add(defComp.GetStatusInspectString(raidTarget.IsUnderAttack));
             }
@@ -125,9 +125,9 @@ namespace EmpireVOE
             {
                 List<string> linkedNames = GetLinkedSettlementNames(Outpost);
                 if (linkedNames.Count > 0)
-                    lines.Add("VOE_LinkedTo".Translate(string.Join(", ", linkedNames)));
+                    lines.Add("FCVOE_LinkedTo".Translate(string.Join(", ", linkedNames)));
                 else
-                    lines.Add("VOE_NotLinked".Translate());
+                    lines.Add("FCVOE_NotLinked".Translate());
             }
 
             // Financing info (reverse lookup)
@@ -135,7 +135,7 @@ namespace EmpireVOE
             {
                 List<string> financedNames = GetFinancedSettlementNames();
                 if (financedNames.Count > 0)
-                    lines.Add("VOE_FinancingFor".Translate(string.Join(", ", financedNames)));
+                    lines.Add("FCVOE_FinancingFor".Translate(string.Join(", ", financedNames)));
             }
 
             // Delivery source info (reverse lookup)
@@ -143,7 +143,7 @@ namespace EmpireVOE
             {
                 List<string> deliveryNames = GetDeliverySourceNames();
                 if (deliveryNames.Count > 0)
-                    lines.Add("VOE_ReceivingTaxes".Translate(string.Join(", ", deliveryNames)));
+                    lines.Add("FCVOE_ReceivingTaxes".Translate(string.Join(", ", deliveryNames)));
             }
 
             // Outpost -> Settlement conversion availability
@@ -151,9 +151,9 @@ namespace EmpireVOE
             {
                 int remaining = OutpostConversionUtil.DelayDaysRemaining(Outpost);
                 if (remaining > 0)
-                    lines.Add("VOE_ConvertAvailableInDays".Translate(remaining.ToString()));
+                    lines.Add("FCVOE_ConvertAvailableInDays".Translate(remaining.ToString()));
                 else
-                    lines.Add("VOE_ConvertReady".Translate());
+                    lines.Add("FCVOE_ConvertReady".Translate());
             }
 
             if (lines.Count == 0) return null;

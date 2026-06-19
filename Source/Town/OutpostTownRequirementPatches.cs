@@ -30,11 +30,11 @@ namespace EmpireVOE
             int outposts = OutpostTownRequirements.NearbyOutposts(tile);
 
             if (settlements < EmpireVOESettings.townMinSettlements)
-                __result = "VOE_TownNearbySettlements".Translate(EmpireVOESettings.townMinSettlements, EmpireVOESettings.townRange);
+                __result = "FCVOE_TownNearbySettlements".Translate(EmpireVOESettings.townMinSettlements, EmpireVOESettings.townRange);
             else if (outposts < EmpireVOESettings.townMinOutposts)
-                __result = "VOE_TownNearbyOutposts".Translate(EmpireVOESettings.townMinOutposts, EmpireVOESettings.townRange);
+                __result = "FCVOE_TownNearbyOutposts".Translate(EmpireVOESettings.townMinOutposts, EmpireVOESettings.townRange);
             else if (settlements + outposts < EmpireVOESettings.townMinTotal)
-                __result = "VOE_TownNearbyTotal".Translate(EmpireVOESettings.townMinTotal, EmpireVOESettings.townRange);
+                __result = "FCVOE_TownNearbyTotal".Translate(EmpireVOESettings.townMinTotal, EmpireVOESettings.townRange);
             else
                 __result = null;
 
@@ -53,7 +53,7 @@ namespace EmpireVOE
                        && outposts >= EmpireVOESettings.townMinOutposts
                        && settlements + outposts >= EmpireVOESettings.townMinTotal;
 
-            __result = "VOE_TownRequirements".Translate(
+            __result = "FCVOE_TownRequirements".Translate(
                 EmpireVOESettings.townMinTotal, EmpireVOESettings.townRange,
                 EmpireVOESettings.townMinSettlements, EmpireVOESettings.townMinOutposts).Requirement(passed);
 

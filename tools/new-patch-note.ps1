@@ -34,7 +34,7 @@ $versionParts = $version -split '\.'
 $major = [int]$versionParts[0]
 $minor = [int]$versionParts[1]
 $patch = [int]$versionParts[2]
-$defName = "VOE_${major}_${minor}_${patch}"
+$defName = "FCVOE_${major}_${minor}_${patch}"
 
 # Label
 do {
@@ -92,7 +92,7 @@ $authorsXml = ($authors | ForEach-Object { "${indent}${indent}<li>$([System.Secu
 
 $xmlBlock = @"
 
-${indent}<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
+${indent}<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
 ${indent}${indent}<defName>$defName</defName>
 ${indent}${indent}<label>$([System.Security.SecurityElement]::Escape($label))</label>
 ${indent}${indent}<description>$([System.Security.SecurityElement]::Escape($description))</description>

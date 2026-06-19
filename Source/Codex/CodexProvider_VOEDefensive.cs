@@ -19,14 +19,14 @@ namespace EmpireVOE
         public string GetDynamicContent(FactionFC faction)
         {
             if (!EmpireVOESettings.MilitaryActive)
-                return "VOE_CodexFeatureDisabled".Translate();
+                return "FCVOE_CodexFeatureDisabled".Translate();
 
             List<Outpost_Defensive> outposts = Find.WorldObjects?.AllWorldObjects?
                 .OfType<Outpost_Defensive>().ToList() ?? new List<Outpost_Defensive>();
             if (outposts.Count == 0)
-                return "VOE_CodexDefensiveNone".Translate();
+                return "FCVOE_CodexDefensiveNone".Translate();
 
-            string result = "VOE_CodexDefensiveHeader".Translate() + "\n\n";
+            string result = "FCVOE_CodexDefensiveHeader".Translate() + "\n\n";
             foreach (Outpost_Defensive outpost in outposts)
             {
                 WorldObjectComp_EmpireDefensive comp = outpost.GetComponent<WorldObjectComp_EmpireDefensive>();
@@ -36,11 +36,11 @@ namespace EmpireVOE
                 int level = comp.defender?.MilitaryLevel ?? 0;
                 int range = comp.defender?.Range ?? outpost.Range;
 
-                result += "VOE_CodexDefensiveLine".Translate(outpost.Name ?? outpost.def.label, level, range) + "\n";
+                result += "FCVOE_CodexDefensiveLine".Translate(outpost.Name ?? outpost.def.label, level, range) + "\n";
                 result += "    " + StatusLine(comp, outpostComp) + "\n";
                 result += "    " + (comp.autoDefend
-                    ? "VOE_CodexDefensiveAutoOn".Translate()
-                    : "VOE_CodexDefensiveAutoOff".Translate()) + "\n\n";
+                    ? "FCVOE_CodexDefensiveAutoOn".Translate()
+                    : "FCVOE_CodexDefensiveAutoOff".Translate()) + "\n\n";
             }
 
             return result.TrimEnd();
@@ -50,12 +50,12 @@ namespace EmpireVOE
         {
             bool underAttack = outpostComp?.raidTarget?.IsUnderAttack ?? false;
             if (underAttack)
-                return "VOE_DefenseStatusAttacked".Translate();
+                return "FCVOE_DefenseStatusAttacked".Translate();
             if (comp.defender is object && comp.defender.Busy)
-                return "VOE_StatusDefending".Translate(comp.defender.DefendingTargetName);
+                return "FCVOE_StatusDefending".Translate(comp.defender.DefendingTargetName);
             if (comp.IsOnCooldown)
-                return "VOE_DefenseStatusCooldown".Translate(comp.CooldownTicksLeft.ToTimeString());
-            return "VOE_DefenseStatusReady".Translate();
+                return "FCVOE_DefenseStatusCooldown".Translate(comp.CooldownTicksLeft.ToTimeString());
+            return "FCVOE_DefenseStatusReady".Translate();
         }
     }
 }

@@ -17,11 +17,11 @@ namespace EmpireVOE
         {
             if (faction is null) return null;
             if (!EmpireVOESettings.ResourceLinkActive)
-                return "VOE_CodexFeatureDisabled".Translate();
+                return "FCVOE_CodexFeatureDisabled".Translate();
             if (!faction.settlements.Any())
-                return "VOE_CodexNoSettlements".Translate();
+                return "FCVOE_CodexNoSettlements".Translate();
 
-            string result = "VOE_CodexScienceHeader".Translate() + "\n\n";
+            string result = "FCVOE_CodexScienceHeader".Translate() + "\n\n";
             bool any = false;
             foreach (WorldSettlementFC s in faction.settlements)
             {
@@ -31,12 +31,12 @@ namespace EmpireVOE
                 {
                     if (outpost is null || outpost.Destroyed) continue;
                     any = true;
-                    result += "  " + "VOE_CodexScienceLine".Translate(
+                    result += "  " + "FCVOE_CodexScienceLine".Translate(
                         s.Name, outpost.Name ?? outpost.def.label, CountResearchers(outpost)) + "\n";
                 }
             }
 
-            return any ? result.TrimEnd() : "VOE_CodexScienceNone".Translate().ToString();
+            return any ? result.TrimEnd() : "FCVOE_CodexScienceNone".Translate().ToString();
         }
 
         private static int CountResearchers(Outpost_Science outpost)

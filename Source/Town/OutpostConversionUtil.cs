@@ -106,31 +106,31 @@ namespace EmpireVOE
 
             if (EmpireVOESettings.enableConversionDelay && DelayDaysRemaining(outpost) > 0)
             {
-                reason = "VOE_ConvertAvailableInDays".Translate(DelayDaysRemaining(outpost).ToString());
+                reason = "FCVOE_ConvertAvailableInDays".Translate(DelayDaysRemaining(outpost).ToString());
                 return false;
             }
             if (outpost.PawnCount == 0)
             {
-                reason = "VOE_ConvertNoPawns".Translate();
+                reason = "FCVOE_ConvertNoPawns".Translate();
                 return false;
             }
             if (outpost.Packing)
             {
-                reason = "VOE_ConvertBusyPacking".Translate();
+                reason = "FCVOE_ConvertBusyPacking".Translate();
                 return false;
             }
 
             WorldObjectComp_EmpireOutpost eo = outpost.GetComponent<WorldObjectComp_EmpireOutpost>();
             if (eo?.raidTarget is object && eo.raidTarget.IsUnderAttack)
             {
-                reason = "VOE_ConvertBusyAttacked".Translate();
+                reason = "FCVOE_ConvertBusyAttacked".Translate();
                 return false;
             }
 
             WorldObjectComp_EmpireDefensive def = outpost.GetComponent<WorldObjectComp_EmpireDefensive>();
             if (def?.defender is object && def.defender.Busy)
             {
-                reason = "VOE_ConvertBusyDefending".Translate(def.defender.DefendingTargetName);
+                reason = "FCVOE_ConvertBusyDefending".Translate(def.defender.DefendingTargetName);
                 return false;
             }
 
@@ -155,7 +155,7 @@ namespace EmpireVOE
             }
             if (!GetConvertibleTypes(outpost).Contains(type))
             {
-                Messages.Message("VOE_ConvertInvalidType".Translate(), MessageTypeDefOf.RejectInput);
+                Messages.Message("FCVOE_ConvertInvalidType".Translate(), MessageTypeDefOf.RejectInput);
                 return false;
             }
 
@@ -217,8 +217,8 @@ namespace EmpireVOE
             outpost.Destroy();
 
             Find.LetterStack.ReceiveLetter(
-                "VOE_OutpostIncorporated".Translate(outpostName),
-                "VOE_OutpostIncorporatedDesc".Translate(outpostName, settlement.Name, pawnCount),
+                "FCVOE_OutpostIncorporated".Translate(outpostName),
+                "FCVOE_OutpostIncorporatedDesc".Translate(outpostName, settlement.Name, pawnCount),
                 LetterDefOf.PositiveEvent,
                 new LookTargets(settlement));
             return true;

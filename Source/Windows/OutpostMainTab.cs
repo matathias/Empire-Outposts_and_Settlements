@@ -35,7 +35,7 @@ namespace EmpireVOE
             else EmpireRegistry.Unregister(Instance);
         }
 
-        public string TabName() => "VOE_OutpostsMainTab".Translate();
+        public string TabName() => "FCVOE_OutpostsMainTab".Translate();
 
         public void PreOpenWindow(FactionFC faction)
         {
@@ -55,8 +55,8 @@ namespace EmpireVOE
             DrawHeader(headerRect);
 
             subTabs.Clear();
-            subTabs.Add("VOE_MainTabByOutpost".Translate());
-            subTabs.Add("VOE_MainTabBySettlement".Translate());
+            subTabs.Add("FCVOE_MainTabByOutpost".Translate());
+            subTabs.Add("FCVOE_MainTabBySettlement".Translate());
 
             float bodyY = headerRect.yMax + Margin;
             Rect subtabBox = new Rect(boundingBox.x + Margin, bodyY, boundingBox.width - Margin * 2f, boundingBox.yMax - bodyY - Margin);
@@ -110,7 +110,7 @@ namespace EmpireVOE
                 .OrderBy(o => o.def.label).ThenBy(o => o.RenamableLabel).ToList();
             if (outposts.Count == 0)
             {
-                ls.Label("  " + "VOE_MainTabNoOutposts".Translate());
+                ls.Label("  " + "FCVOE_MainTabNoOutposts".Translate());
                 return;
             }
 
@@ -122,7 +122,7 @@ namespace EmpireVOE
                 {
                     Rect btnRect = new Rect(hdr.xMax - 66f, hdr.y + 1f, 64f, hdr.height - 2f);
                     bool linked = LinkedSettlement(outpost) is object;
-                    if (UIUtil.ButtonFlat(btnRect, linked ? "VOE_TabUnlink".Translate() : "VOE_TabLink".Translate()))
+                    if (UIUtil.ButtonFlat(btnRect, linked ? "FCVOE_TabUnlink".Translate() : "FCVOE_TabLink".Translate()))
                         ToggleOutpostLink(outpost);
                 }
 
@@ -182,7 +182,7 @@ namespace EmpireVOE
             Color prevColor = GUI.color;
             Text.Anchor = TextAnchor.MiddleLeft;
             GUI.color = new Color(0.7f, 0.7f, 0.7f);
-            Widgets.Label(new Rect(row.x + 8f, row.y, row.width - 8f, row.height), "VOE_MainTabOutpostUnlinked".Translate());
+            Widgets.Label(new Rect(row.x + 8f, row.y, row.width - 8f, row.height), "FCVOE_MainTabOutpostUnlinked".Translate());
             GUI.color = prevColor;
             Text.Anchor = prevAnchor;
         }
@@ -219,7 +219,7 @@ namespace EmpireVOE
                     delegate { captured.GetComponent<WorldObjectComp_ResourceLink>().ToggleLink(outpost); }));
             }
             if (options.Count == 0)
-                options.Add(new FloatMenuOption("VOE_NoSettlementsInRange".Translate(), null));
+                options.Add(new FloatMenuOption("FCVOE_NoSettlementsInRange".Translate(), null));
             Find.WindowStack.Add(new FloatMenu(options));
         }
 
@@ -229,7 +229,7 @@ namespace EmpireVOE
         {
             if (!uiFaction.settlements.Any())
             {
-                ls.Label("  " + "VOE_MainTabNoSettlements".Translate());
+                ls.Label("  " + "FCVOE_MainTabNoSettlements".Translate());
                 return;
             }
 
@@ -258,7 +258,7 @@ namespace EmpireVOE
 
                 if (order.Count == 0)
                 {
-                    ls.Label("  " + "VOE_TabNoLinks".Translate());
+                    ls.Label("  " + "FCVOE_TabNoLinks".Translate());
                     continue;
                 }
 
@@ -285,7 +285,7 @@ namespace EmpireVOE
             if (canUnlink)
             {
                 Rect btnRect = new Rect(row.xMax - 66f, row.y + 2f, 64f, row.height - 4f);
-                if (UIUtil.ButtonFlat(btnRect, "VOE_TabUnlink".Translate()))
+                if (UIUtil.ButtonFlat(btnRect, "FCVOE_TabUnlink".Translate()))
                     rl.ToggleLink(outpost);
             }
         }

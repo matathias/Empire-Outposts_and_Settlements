@@ -49,7 +49,7 @@ namespace EmpireVOE
 
             return TextUtil.AdditiveBonusLine(
                 entry.militaryLevelBonus,
-                "VOE_DefensiveAuraSource".Translate(entry.outposts.Count)) + "\n";
+                "FCVOE_DefensiveAuraSource".Translate(entry.outposts.Count)) + "\n";
         }
     }
 }

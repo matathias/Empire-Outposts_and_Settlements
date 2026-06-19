@@ -41,7 +41,7 @@ namespace EmpireVOE
 
         public void OnTabSwitch() { }
         public void PostCloseWindow() { uiSettlement = null; }
-        public string OverviewTabName() => "VOE_OutpostsTab".Translate();
+        public string OverviewTabName() => "FCVOE_OutpostsTab".Translate();
 
         public bool ShouldShowOverviewTab(WorldSettlementFC settlement)
         {
@@ -78,13 +78,13 @@ namespace EmpireVOE
         private void DrawResourceLinks(Listing_Standard ls)
         {
             WorldObjectComp_ResourceLink comp = ResourceLink;
-            Header(ls, "VOE_TabSectionResourceLinks".Translate());
+            Header(ls, "FCVOE_TabSectionResourceLinks".Translate());
             if (comp is null) return;
 
             List<Outpost> candidates = comp.GetLinkableOutpostsInRange();
             if (candidates.Count == 0)
             {
-                ls.Label("  " + "VOE_TabNoLinks".Translate());
+                ls.Label("  " + "FCVOE_TabNoLinks".Translate());
                 return;
             }
 
@@ -107,7 +107,7 @@ namespace EmpireVOE
 
                 // The production bonus now lives inside the resource badge; the only status text is
                 // "linked elsewhere" — give it generous width so it never clips.
-                string status = linkedElsewhere ? (string)"VOE_TabLinkedElsewhere".Translate() : null;
+                string status = linkedElsewhere ? (string)"FCVOE_TabLinkedElsewhere".Translate() : null;
                 float statusW = status.NullOrEmpty() ? 0f : Mathf.Min(Text.CalcSize(status).x + 22f, (detailRight - detailX) * 0.6f);
                 OutpostLinkView.DrawBadgeRow(new Rect(detailX, row.y, detailRight - detailX - statusW, row.height),
                     OutpostLinkView.ResourceBadges(outpost, uiSettlement));
@@ -116,7 +116,7 @@ namespace EmpireVOE
 
                 if (linkedElsewhere)
                     continue;
-                if (UIUtil.ButtonFlat(buttonRect, linkedHere ? "VOE_TabUnlink".Translate() : "VOE_TabLink".Translate()))
+                if (UIUtil.ButtonFlat(buttonRect, linkedHere ? "FCVOE_TabUnlink".Translate() : "FCVOE_TabLink".Translate()))
                     comp.ToggleLink(outpost);
             }
         }
@@ -124,34 +124,34 @@ namespace EmpireVOE
         private void DrawDelivery(Listing_Standard ls)
         {
             WorldObjectComp_OutpostLinks comp = Links;
-            Header(ls, "VOE_TabSectionTaxDelivery".Translate());
+            Header(ls, "FCVOE_TabSectionTaxDelivery".Translate());
             if (comp is null) return;
 
             Outpost current = comp.GetDeliveryOutpost();
             Rect row = ls.GetRect(OutpostLinkView.RowHeight);
-            DrawTargetRow(row, current, "VOE_PlayerTaxMap".Translate(),
+            DrawTargetRow(row, current, "FCVOE_PlayerTaxMap".Translate(),
                 comp.OpenDeliveryMenu, comp.ClearDelivery, current is object);
         }
 
         private void DrawFinancing(Listing_Standard ls)
         {
             WorldObjectComp_OutpostLinks comp = Links;
-            Header(ls, "VOE_TabSectionFinancing".Translate());
+            Header(ls, "FCVOE_TabSectionFinancing".Translate());
             if (comp is null) return;
 
             Outpost current = comp.GetFinancingOutpost();
             Rect row = ls.GetRect(OutpostLinkView.RowHeight);
-            DrawTargetRow(row, current, "VOE_TabNoLinks".Translate(),
+            DrawTargetRow(row, current, "FCVOE_TabNoLinks".Translate(),
                 comp.OpenFinancingMenu, comp.ClearFinancing, current is object);
         }
 
         private void DrawEncampment(Listing_Standard ls)
         {
-            Header(ls, "VOE_TabSectionEncampment".Translate());
+            Header(ls, "FCVOE_TabSectionEncampment".Translate());
             EncampmentCacheEntry entry = EncampmentCache.GetOrBuild(uiSettlement);
             if (entry is null || entry.encampments.Count == 0)
             {
-                ls.Label("  " + "VOE_TabNoLinks".Translate());
+                ls.Label("  " + "FCVOE_TabNoLinks".Translate());
                 return;
             }
 
@@ -167,13 +167,13 @@ namespace EmpireVOE
         private void DrawDefensiveAura(Listing_Standard ls)
         {
             DefensiveAuraEntry entry = DefensiveAuraCache.GetOrBuild(uiSettlement);
-            string header = "VOE_TabSectionDefensive".Translate();
+            string header = "FCVOE_TabSectionDefensive".Translate();
             if (entry is object && entry.outposts.Count > 0)
-                header += "  (" + "VOE_AuraLevelValue".Translate(entry.militaryLevelBonus.ToString("0.#")) + ")";
+                header += "  (" + "FCVOE_AuraLevelValue".Translate(entry.militaryLevelBonus.ToString("0.#")) + ")";
             Header(ls, header);
             if (entry is null || entry.outposts.Count == 0)
             {
-                ls.Label("  " + "VOE_TabNoLinks".Translate());
+                ls.Label("  " + "FCVOE_TabNoLinks".Translate());
                 return;
             }
 
@@ -186,7 +186,7 @@ namespace EmpireVOE
                 Rect detailRect = new Rect(labelRect.xMax + 4f, row.y, row.width - labelRect.width - 4f, row.height);
                 OutpostLinkView.DrawOutpostLabel(labelRect, defensive);
                 OutpostLinkView.DrawDetail(detailRect,
-                    "VOE_AuraLevelValue".Translate(DefensiveAuraEntry.OutpostBonus(defensive).ToString("0.#")));
+                    "FCVOE_AuraLevelValue".Translate(DefensiveAuraEntry.OutpostBonus(defensive).ToString("0.#")));
             }
         }
 
@@ -217,9 +217,9 @@ namespace EmpireVOE
                 Text.Anchor = prev;
             }
 
-            if (hasTarget && UIUtil.ButtonFlat(clearRect, "VOE_TabClear".Translate()))
+            if (hasTarget && UIUtil.ButtonFlat(clearRect, "FCVOE_TabClear".Translate()))
                 clear();
-            if (UIUtil.ButtonFlat(changeRect, "VOE_TabChange".Translate()))
+            if (UIUtil.ButtonFlat(changeRect, "FCVOE_TabChange".Translate()))
                 openMenu();
         }
     }

@@ -60,7 +60,7 @@ namespace EmpireVOE
             if (deducted && remaining > 0)
             {
                 DeliveryUtil.DebugLog("Financing outpost " + outpost.LabelCap + " partially depleted. Remaining: " + remaining);
-                Messages.Message("VOE_FinancingPartiallyDepleted".Translate(outpost.LabelCap, remaining), MessageTypeDefOf.NeutralEvent);
+                Messages.Message("FCVOE_FinancingPartiallyDepleted".Translate(outpost.LabelCap, remaining), MessageTypeDefOf.NeutralEvent);
             }
 
             context.Amount = remaining;

@@ -3,7 +3,7 @@
     <name>Empire Refactored: Outposts &amp; Settlements</name>
     <author>Matathias</author>
     <packageId>Matathias.EmpireRefVOE</packageId>
-    <modVersion>0.3.13</modVersion>
+    <modVersion>0.3.14</modVersion>
     <supportedVersions><li>1.6</li></supportedVersions>
     <description>Empire and Vanilla Outposts Expanded - two of the oldest and, at least at one point in time, most popular mods to enable a semblence of 4X gameplay in Rimworld. Yet, they operate entirely independently of each other, with no integration whatsoever.
 

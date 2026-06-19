@@ -15,11 +15,11 @@ namespace EmpireVOE
         {
             if (faction is null) return null;
             if (!EmpireVOESettings.ResourceLinkActive)
-                return "VOE_CodexFeatureDisabled".Translate();
+                return "FCVOE_CodexFeatureDisabled".Translate();
             if (!faction.settlements.Any())
-                return "VOE_CodexNoSettlements".Translate();
+                return "FCVOE_CodexNoSettlements".Translate();
 
-            string result = "VOE_CodexResourceLinkHeader".Translate() + "\n\n";
+            string result = "FCVOE_CodexResourceLinkHeader".Translate() + "\n\n";
             bool any = false;
             foreach (WorldSettlementFC s in faction.settlements)
             {
@@ -33,12 +33,12 @@ namespace EmpireVOE
                     any = true;
                     string resources = string.Join(", ", ext.resources.Select(r => r.LabelCap.ToString()).ToArray());
                     double contribution = ResourceLinkUtil.ContributionOf(outpost, s);
-                    result += "  " + "VOE_CodexResourceLinkLine".Translate(
+                    result += "  " + "FCVOE_CodexResourceLinkLine".Translate(
                         s.Name, outpost.Name ?? outpost.def.label, resources, contribution.ToString("0.##")) + "\n";
                 }
             }
 
-            return any ? result.TrimEnd() : "VOE_CodexResourceLinkNone".Translate().ToString();
+            return any ? result.TrimEnd() : "FCVOE_CodexResourceLinkNone".Translate().ToString();
         }
     }
 }

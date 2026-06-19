@@ -1,223 +1,223 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
-    <VOE_DisableIntegration>Disable all integration</VOE_DisableIntegration>
-    <VOE_DisableIntegrationDesc>Master switch. Turns off ALL integration between Empire Refactored and Vanilla Outposts Expanded.</VOE_DisableIntegrationDesc>
-    <VOE_OutpostDefended>{0} defended</VOE_OutpostDefended>
-    <VOE_OutpostDefendedDesc>Your outpost {0} successfully repelled an enemy raid.</VOE_OutpostDefendedDesc>
-    <VOE_OutpostRaided>{0} raided</VOE_OutpostRaided>
-    <VOE_OutpostRaidedDesc>Your outpost {0} was raided! {1} colonists were injured and some supplies were lost.</VOE_OutpostRaidedDesc>
-    <VOE_ChangeDefender>Change Defender</VOE_ChangeDefender>
-    <VOE_ChangeDefenderDesc>Select an Empire settlement to defend this outpost.</VOE_ChangeDefenderDesc>
-    <VOE_DefenderChanged>{0} is now defending {1}.</VOE_DefenderChanged>
-	<VOE_DefenseIdle>Idle</VOE_DefenseIdle>
-    <VOE_StatusDefending>Defending {0}</VOE_StatusDefending>
-    <VOE_StatusRegrouping>Regrouping ({0})</VOE_StatusRegrouping>
-    <VOE_StatusDefensiveAura>Defensive Aura</VOE_StatusDefensiveAura>
-    <VOE_MilitaryLevel>Military Level: {0} (Defense: {1})</VOE_MilitaryLevel>
-    <VOE_CombatEfficiency>Combat Efficiency: {0}x</VOE_CombatEfficiency>
-    <VOE_InspectAuraActive>Defensive aura: +{0} to nearby settlements</VOE_InspectAuraActive>
-    <VOE_AuraLevelValue>+{0} level</VOE_AuraLevelValue>
-    <VOE_ReinforcementsCooldown>Deployment cooldown: {0} remaining</VOE_ReinforcementsCooldown>
+    <FCVOE_DisableIntegration>Disable all integration</FCVOE_DisableIntegration>
+    <FCVOE_DisableIntegrationDesc>Master switch. Turns off ALL integration between Empire Refactored and Vanilla Outposts Expanded.</FCVOE_DisableIntegrationDesc>
+    <FCVOE_OutpostDefended>{0} defended</FCVOE_OutpostDefended>
+    <FCVOE_OutpostDefendedDesc>Your outpost {0} successfully repelled an enemy raid.</FCVOE_OutpostDefendedDesc>
+    <FCVOE_OutpostRaided>{0} raided</FCVOE_OutpostRaided>
+    <FCVOE_OutpostRaidedDesc>Your outpost {0} was raided! {1} colonists were injured and some supplies were lost.</FCVOE_OutpostRaidedDesc>
+    <FCVOE_ChangeDefender>Change Defender</FCVOE_ChangeDefender>
+    <FCVOE_ChangeDefenderDesc>Select an Empire settlement to defend this outpost.</FCVOE_ChangeDefenderDesc>
+    <FCVOE_DefenderChanged>{0} is now defending {1}.</FCVOE_DefenderChanged>
+	<FCVOE_DefenseIdle>Idle</FCVOE_DefenseIdle>
+    <FCVOE_StatusDefending>Defending {0}</FCVOE_StatusDefending>
+    <FCVOE_StatusRegrouping>Regrouping ({0})</FCVOE_StatusRegrouping>
+    <FCVOE_StatusDefensiveAura>Defensive Aura</FCVOE_StatusDefensiveAura>
+    <FCVOE_MilitaryLevel>Military Level: {0} (Defense: {1})</FCVOE_MilitaryLevel>
+    <FCVOE_CombatEfficiency>Combat Efficiency: {0}x</FCVOE_CombatEfficiency>
+    <FCVOE_InspectAuraActive>Defensive aura: +{0} to nearby settlements</FCVOE_InspectAuraActive>
+    <FCVOE_AuraLevelValue>+{0} level</FCVOE_AuraLevelValue>
+    <FCVOE_ReinforcementsCooldown>Deployment cooldown: {0} remaining</FCVOE_ReinforcementsCooldown>
 
     <!-- Delivery Integration -->
-    <VOE_DeliveryOutpostLabel>Tax Delivery Location</VOE_DeliveryOutpostLabel>
-    <VOE_DeliveryOutpostDesc>Choose where taxes from this settlement are delivered. Currently: {0}</VOE_DeliveryOutpostDesc>
-    <VOE_FinancingOutpostLabel>Financing Location</VOE_FinancingOutpostLabel>
-    <VOE_FinancingOutpostDesc>Choose an outpost to fund this settlement's payments. Currently: {0}</VOE_FinancingOutpostDesc>
-    <VOE_TaxDeliveredToOutpost>Taxes from {0} have arrived at {1}.</VOE_TaxDeliveredToOutpost>
-    <VOE_TaxDeliveredToOutpostDesc>Tax shipment from {0} has been delivered to outpost {1}.\n\nGoods:\n{2}</VOE_TaxDeliveredToOutpostDesc>
-    <VOE_TaxRedirected>Tax delivery redirected</VOE_TaxRedirected>
-    <VOE_TaxRedirectedDesc>The outpost designated to receive taxes from {0} no longer exists. Shipment redirected to {1}.</VOE_TaxRedirectedDesc>
-    <VOE_InvalidDeliveryOutpost>{0} tried to deliver taxes to an invalid outpost. Delivery destination has been reset.</VOE_InvalidDeliveryOutpost>
-    <VOE_FinancingPartiallyDepleted>{0}'s funds are depleted. Remaining {1} silver will be drawn from your coffers.</VOE_FinancingPartiallyDepleted>
-    <VOE_DeliveryEventDesc>Taxes from {0} are being delivered to {1}.\n\nGoods:\n{2}</VOE_DeliveryEventDesc>
-    <VOE_PlayerTaxMap>Player Tax Map</VOE_PlayerTaxMap>
+    <FCVOE_DeliveryOutpostLabel>Tax Delivery Location</FCVOE_DeliveryOutpostLabel>
+    <FCVOE_DeliveryOutpostDesc>Choose where taxes from this settlement are delivered. Currently: {0}</FCVOE_DeliveryOutpostDesc>
+    <FCVOE_FinancingOutpostLabel>Financing Location</FCVOE_FinancingOutpostLabel>
+    <FCVOE_FinancingOutpostDesc>Choose an outpost to fund this settlement's payments. Currently: {0}</FCVOE_FinancingOutpostDesc>
+    <FCVOE_TaxDeliveredToOutpost>Taxes from {0} have arrived at {1}.</FCVOE_TaxDeliveredToOutpost>
+    <FCVOE_TaxDeliveredToOutpostDesc>Tax shipment from {0} has been delivered to outpost {1}.\n\nGoods:\n{2}</FCVOE_TaxDeliveredToOutpostDesc>
+    <FCVOE_TaxRedirected>Tax delivery redirected</FCVOE_TaxRedirected>
+    <FCVOE_TaxRedirectedDesc>The outpost designated to receive taxes from {0} no longer exists. Shipment redirected to {1}.</FCVOE_TaxRedirectedDesc>
+    <FCVOE_InvalidDeliveryOutpost>{0} tried to deliver taxes to an invalid outpost. Delivery destination has been reset.</FCVOE_InvalidDeliveryOutpost>
+    <FCVOE_FinancingPartiallyDepleted>{0}'s funds are depleted. Remaining {1} silver will be drawn from your coffers.</FCVOE_FinancingPartiallyDepleted>
+    <FCVOE_DeliveryEventDesc>Taxes from {0} are being delivered to {1}.\n\nGoods:\n{2}</FCVOE_DeliveryEventDesc>
+    <FCVOE_PlayerTaxMap>Player Tax Map</FCVOE_PlayerTaxMap>
 
     <!-- Settings -->
-    <VOE_Title>Empire: Outposts &amp; Settlements</VOE_Title>
-    <VOE_DebugLogging>Verbose logging</VOE_DebugLogging>
-    <VOE_DebugLoggingDesc>Enable verbose logging.</VOE_DebugLoggingDesc>
+    <FCVOE_Title>Empire: Outposts &amp; Settlements</FCVOE_Title>
+    <FCVOE_DebugLogging>Verbose logging</FCVOE_DebugLogging>
+    <FCVOE_DebugLoggingDesc>Enable verbose logging.</FCVOE_DebugLoggingDesc>
 
     <!-- Per-Feature Toggles -->
-    <VOE_EnableMilitary>Military Integration</VOE_EnableMilitary>
-    <VOE_EnableMilitaryDesc>Outposts can be raided, defensive outposts auto-defend nearby settlements, and outposts appear in the military tab.</VOE_EnableMilitaryDesc>
-    <VOE_EnableDefensiveAura>Passive defensive aura</VOE_EnableDefensiveAura>
-    <VOE_EnableDefensiveAuraDesc>Garrisoned defensive outposts passively stiffen the defense of nearby settlements when raided, even without deploying their forces.</VOE_EnableDefensiveAuraDesc>
-    <VOE_EnableDefensiveAuraDivert>Draw raids toward defensive outposts</VOE_EnableDefensiveAuraDivert>
-    <VOE_EnableDefensiveAuraDivertDesc>Settlements shielded by a nearby defensive outpost become less likely raid targets, shifting enemy attention toward the outposts themselves.</VOE_EnableDefensiveAuraDivertDesc>
-    <VOE_EnableDelivery>Tax Delivery Routing</VOE_EnableDelivery>
-    <VOE_EnableDeliveryDesc>Route settlement tax deliveries to outposts instead of the player's tax map.</VOE_EnableDeliveryDesc>
-    <VOE_EnableFinancing>Outpost Financing</VOE_EnableFinancing>
-    <VOE_EnableFinancingDesc>Outposts can fund settlement payments from their stored silver.</VOE_EnableFinancingDesc>
-    <VOE_EnableResourceLink>Resource Linking</VOE_EnableResourceLink>
-    <VOE_EnableResourceLinkDesc>Production outposts (mining, farming, hunting, logging, drilling, science) can be linked to a nearby settlement to feed its matching resource output instead of shipping physical items.</VOE_EnableResourceLinkDesc>
-    <VOE_EnableEncampment>Encampment Recovery</VOE_EnableEncampment>
-    <VOE_EnableEncampmentDesc>Nearby encampments boost the heal rate of mercenaries at your settlements.</VOE_EnableEncampmentDesc>
-    <VOE_EnableOutpostConversion>Outpost Conversion</VOE_EnableOutpostConversion>
-    <VOE_EnableOutpostConversionDesc>Outposts can be converted into Empire settlements via a gizmo. Towns can become any settlement type; production outposts can become their matching specialized type (e.g. a logging outpost becomes a lumber camp) when a submod that adds those types is installed.</VOE_EnableOutpostConversionDesc>
-    <VOE_EnableRoads>Road Integration</VOE_EnableRoads>
-    <VOE_EnableRoadsDesc>The Empire road builder includes your outposts in its network, building roads to and between them alongside settlements.</VOE_EnableRoadsDesc>
-    <VOE_EnableOutpostMainTab>Faction-wide Outposts tab</VOE_EnableOutpostMainTab>
-    <VOE_EnableOutpostMainTabDesc>Adds an Outposts tab to the Empire+ window, showing every outpost-settlement link by outpost and by settlement.</VOE_EnableOutpostMainTabDesc>
+    <FCVOE_EnableMilitary>Military Integration</FCVOE_EnableMilitary>
+    <FCVOE_EnableMilitaryDesc>Outposts can be raided, defensive outposts auto-defend nearby settlements, and outposts appear in the military tab.</FCVOE_EnableMilitaryDesc>
+    <FCVOE_EnableDefensiveAura>Passive defensive aura</FCVOE_EnableDefensiveAura>
+    <FCVOE_EnableDefensiveAuraDesc>Garrisoned defensive outposts passively stiffen the defense of nearby settlements when raided, even without deploying their forces.</FCVOE_EnableDefensiveAuraDesc>
+    <FCVOE_EnableDefensiveAuraDivert>Draw raids toward defensive outposts</FCVOE_EnableDefensiveAuraDivert>
+    <FCVOE_EnableDefensiveAuraDivertDesc>Settlements shielded by a nearby defensive outpost become less likely raid targets, shifting enemy attention toward the outposts themselves.</FCVOE_EnableDefensiveAuraDivertDesc>
+    <FCVOE_EnableDelivery>Tax Delivery Routing</FCVOE_EnableDelivery>
+    <FCVOE_EnableDeliveryDesc>Route settlement tax deliveries to outposts instead of the player's tax map.</FCVOE_EnableDeliveryDesc>
+    <FCVOE_EnableFinancing>Outpost Financing</FCVOE_EnableFinancing>
+    <FCVOE_EnableFinancingDesc>Outposts can fund settlement payments from their stored silver.</FCVOE_EnableFinancingDesc>
+    <FCVOE_EnableResourceLink>Resource Linking</FCVOE_EnableResourceLink>
+    <FCVOE_EnableResourceLinkDesc>Production outposts (mining, farming, hunting, logging, drilling, science) can be linked to a nearby settlement to feed its matching resource output instead of shipping physical items.</FCVOE_EnableResourceLinkDesc>
+    <FCVOE_EnableEncampment>Encampment Recovery</FCVOE_EnableEncampment>
+    <FCVOE_EnableEncampmentDesc>Nearby encampments boost the heal rate of mercenaries at your settlements.</FCVOE_EnableEncampmentDesc>
+    <FCVOE_EnableOutpostConversion>Outpost Conversion</FCVOE_EnableOutpostConversion>
+    <FCVOE_EnableOutpostConversionDesc>Outposts can be converted into Empire settlements via a gizmo. Towns can become any settlement type; production outposts can become their matching specialized type (e.g. a logging outpost becomes a lumber camp) when a submod that adds those types is installed.</FCVOE_EnableOutpostConversionDesc>
+    <FCVOE_EnableRoads>Road Integration</FCVOE_EnableRoads>
+    <FCVOE_EnableRoadsDesc>The Empire road builder includes your outposts in its network, building roads to and between them alongside settlements.</FCVOE_EnableRoadsDesc>
+    <FCVOE_EnableOutpostMainTab>Faction-wide Outposts tab</FCVOE_EnableOutpostMainTab>
+    <FCVOE_EnableOutpostMainTabDesc>Adds an Outposts tab to the Empire+ window, showing every outpost-settlement link by outpost and by settlement.</FCVOE_EnableOutpostMainTabDesc>
 
     <!-- Outpost -> Settlement Conversion Feature -->
-    <VOE_ConvertOutpostPawns>Fold outpost pawns into settlement</VOE_ConvertOutpostPawns>
-    <VOE_ConvertOutpostPawnsDesc>When an outpost is converted, its workers join the new settlement: assigned as specialists/residents with Empire Refactored: Specialists &amp; Governors installed, otherwise converted into skill-based production bonuses.</VOE_ConvertOutpostPawnsDesc>
-    <VOE_ReducedFoundingCostFactor>Conversion cost (fraction of founding cost)</VOE_ReducedFoundingCostFactor>
-    <VOE_TownFlatAdditive>Town flat production additive</VOE_TownFlatAdditive>
-    <VOE_EnableConversionDelay>Require establishment time before conversion</VOE_EnableConversionDelay>
-    <VOE_EnableConversionDelayDesc>An outpost cannot be converted into a settlement until it has existed for the configured number of days.</VOE_EnableConversionDelayDesc>
-    <VOE_ConversionDelayDays>Days before an outpost can be converted</VOE_ConversionDelayDays>
-    <VOE_RequireOutpost>Found settlements only via outposts</VOE_RequireOutpost>
-    <VOE_RequireOutpostDesc>Empire settlements can no longer be founded directly. Instead, establish an outpost and convert it. On the Found Settlement screen, the Settle button becomes "Send a Caravan".</VOE_RequireOutpostDesc>
+    <FCVOE_ConvertOutpostPawns>Fold outpost pawns into settlement</FCVOE_ConvertOutpostPawns>
+    <FCVOE_ConvertOutpostPawnsDesc>When an outpost is converted, its workers join the new settlement: assigned as specialists/residents with Empire Refactored: Specialists &amp; Governors installed, otherwise converted into skill-based production bonuses.</FCVOE_ConvertOutpostPawnsDesc>
+    <FCVOE_ReducedFoundingCostFactor>Conversion cost (fraction of founding cost)</FCVOE_ReducedFoundingCostFactor>
+    <FCVOE_TownFlatAdditive>Town flat production additive</FCVOE_TownFlatAdditive>
+    <FCVOE_EnableConversionDelay>Require establishment time before conversion</FCVOE_EnableConversionDelay>
+    <FCVOE_EnableConversionDelayDesc>An outpost cannot be converted into a settlement until it has existed for the configured number of days.</FCVOE_EnableConversionDelayDesc>
+    <FCVOE_ConversionDelayDays>Days before an outpost can be converted</FCVOE_ConversionDelayDays>
+    <FCVOE_RequireOutpost>Found settlements only via outposts</FCVOE_RequireOutpost>
+    <FCVOE_RequireOutpostDesc>Empire settlements can no longer be founded directly. Instead, establish an outpost and convert it. On the Found Settlement screen, the Settle button becomes "Send a Caravan".</FCVOE_RequireOutpostDesc>
 
     <!-- Outpost bonus / conversion messages -->
-    <VOE_OutpostBonusDesc>Outpost workforce bonus</VOE_OutpostBonusDesc>
-    <VOE_ConvertToSettlement>Convert to settlement</VOE_ConvertToSettlement>
-    <VOE_ConvertToSettlementDesc>Transform this outpost into an Empire settlement. Its workers join the settlement and the outpost is replaced.</VOE_ConvertToSettlementDesc>
-    <VOE_ConvertPickType>Convert outpost into which settlement type?</VOE_ConvertPickType>
-    <VOE_ConvertReady>Can be converted into a settlement</VOE_ConvertReady>
-    <VOE_ConvertAvailableInDays>Can be converted in {0} day(s)</VOE_ConvertAvailableInDays>
-    <VOE_ConvertNoPawns>This outpost has no workers to form a settlement.</VOE_ConvertNoPawns>
-    <VOE_ConvertBusyPacking>This outpost is being packed up.</VOE_ConvertBusyPacking>
-    <VOE_ConvertBusyAttacked>This outpost is under attack.</VOE_ConvertBusyAttacked>
-    <VOE_ConvertBusyDefending>This outpost's forces are away defending {0}.</VOE_ConvertBusyDefending>
-    <VOE_ConvertInvalidType>This outpost cannot be converted into that settlement type.</VOE_ConvertInvalidType>
-    <VOE_OutpostIncorporated>{0} incorporated</VOE_OutpostIncorporated>
-    <VOE_OutpostIncorporatedDesc>The outpost {0} has been incorporated into your new settlement {1}. {2} worker(s) have joined the settlement.</VOE_OutpostIncorporatedDesc>
+    <FCVOE_OutpostBonusDesc>Outpost workforce bonus</FCVOE_OutpostBonusDesc>
+    <FCVOE_ConvertToSettlement>Convert to settlement</FCVOE_ConvertToSettlement>
+    <FCVOE_ConvertToSettlementDesc>Transform this outpost into an Empire settlement. Its workers join the settlement and the outpost is replaced.</FCVOE_ConvertToSettlementDesc>
+    <FCVOE_ConvertPickType>Convert outpost into which settlement type?</FCVOE_ConvertPickType>
+    <FCVOE_ConvertReady>Can be converted into a settlement</FCVOE_ConvertReady>
+    <FCVOE_ConvertAvailableInDays>Can be converted in {0} day(s)</FCVOE_ConvertAvailableInDays>
+    <FCVOE_ConvertNoPawns>This outpost has no workers to form a settlement.</FCVOE_ConvertNoPawns>
+    <FCVOE_ConvertBusyPacking>This outpost is being packed up.</FCVOE_ConvertBusyPacking>
+    <FCVOE_ConvertBusyAttacked>This outpost is under attack.</FCVOE_ConvertBusyAttacked>
+    <FCVOE_ConvertBusyDefending>This outpost's forces are away defending {0}.</FCVOE_ConvertBusyDefending>
+    <FCVOE_ConvertInvalidType>This outpost cannot be converted into that settlement type.</FCVOE_ConvertInvalidType>
+    <FCVOE_OutpostIncorporated>{0} incorporated</FCVOE_OutpostIncorporated>
+    <FCVOE_OutpostIncorporatedDesc>The outpost {0} has been incorporated into your new settlement {1}. {2} worker(s) have joined the settlement.</FCVOE_OutpostIncorporatedDesc>
 
     <!-- Found-screen restriction -->
-    <VOE_MustFoundViaOutpost>Settlements must be founded by establishing an outpost and converting it.</VOE_MustFoundViaOutpost>
-    <VOE_SendCaravan>Send a Caravan</VOE_SendCaravan>
-    <VOE_SendCaravanNoColony>You need a colony to form a caravan from.</VOE_SendCaravanNoColony>
-    <VOE_OutpostRequirementsTitle>Outposts required</VOE_OutpostRequirementsTitle>
-    <VOE_OutpostRequirementsDesc>To found a {0}, establish and convert one of these outposts:</VOE_OutpostRequirementsDesc>
-    <VOE_OutpostRequirementsNone>No outpost type can become this settlement type. Check that the required submod is installed.</VOE_OutpostRequirementsNone>
+    <FCVOE_MustFoundViaOutpost>Settlements must be founded by establishing an outpost and converting it.</FCVOE_MustFoundViaOutpost>
+    <FCVOE_SendCaravan>Send a Caravan</FCVOE_SendCaravan>
+    <FCVOE_SendCaravanNoColony>You need a colony to form a caravan from.</FCVOE_SendCaravanNoColony>
+    <FCVOE_OutpostRequirementsTitle>Outposts required</FCVOE_OutpostRequirementsTitle>
+    <FCVOE_OutpostRequirementsDesc>To found a {0}, establish and convert one of these outposts:</FCVOE_OutpostRequirementsDesc>
+    <FCVOE_OutpostRequirementsNone>No outpost type can become this settlement type. Check that the required submod is installed.</FCVOE_OutpostRequirementsNone>
 
     <!-- Settings Tabs -->
-    <VOE_TabIntegration>Integration</VOE_TabIntegration>
-    <VOE_TabTowns>Towns</VOE_TabTowns>
+    <FCVOE_TabIntegration>Integration</FCVOE_TabIntegration>
+    <FCVOE_TabTowns>Towns</FCVOE_TabTowns>
 
     <!-- VOE Town spawn requirement (absorbed from "VOE Towns Count Outposts") -->
-    <VOE_TownRequirementsHeader>Town Founding Requirements</VOE_TownRequirementsHeader>
-    <VOE_TownMinTotal>Minimum number of nearby settlements and outposts</VOE_TownMinTotal>
-    <VOE_TownMinSettlements>Minimum number of nearby settlements</VOE_TownMinSettlements>
-    <VOE_TownMinOutposts>Minimum number of nearby outposts</VOE_TownMinOutposts>
-    <VOE_TownRange>Max range to look for settlements or outposts</VOE_TownRange>
-    <VOE_TownExcludeTowns>Exclude Towns from outpost count</VOE_TownExcludeTowns>
-    <VOE_TownExcludeTownsDesc>When on, other Town outposts are not counted toward the nearby-outpost requirement.</VOE_TownExcludeTownsDesc>
-    <VOE_TownNearbySettlements>Not enough nearby settlements, need {0} within {1} tiles</VOE_TownNearbySettlements>
-    <VOE_TownNearbyOutposts>Not enough nearby outposts, need {0} within {1} tiles</VOE_TownNearbyOutposts>
-    <VOE_TownNearbyTotal>Not enough nearby settlements or outposts, need {0} within {1} tiles</VOE_TownNearbyTotal>
-    <VOE_TownRequirements>Need at least {0} settlements or outposts within {1} tiles, of which at least {2} are settlements and {3} are outposts.</VOE_TownRequirements>
+    <FCVOE_TownRequirementsHeader>Town Founding Requirements</FCVOE_TownRequirementsHeader>
+    <FCVOE_TownMinTotal>Minimum number of nearby settlements and outposts</FCVOE_TownMinTotal>
+    <FCVOE_TownMinSettlements>Minimum number of nearby settlements</FCVOE_TownMinSettlements>
+    <FCVOE_TownMinOutposts>Minimum number of nearby outposts</FCVOE_TownMinOutposts>
+    <FCVOE_TownRange>Max range to look for settlements or outposts</FCVOE_TownRange>
+    <FCVOE_TownExcludeTowns>Exclude Towns from outpost count</FCVOE_TownExcludeTowns>
+    <FCVOE_TownExcludeTownsDesc>When on, other Town outposts are not counted toward the nearby-outpost requirement.</FCVOE_TownExcludeTownsDesc>
+    <FCVOE_TownNearbySettlements>Not enough nearby settlements, need {0} within {1} tiles</FCVOE_TownNearbySettlements>
+    <FCVOE_TownNearbyOutposts>Not enough nearby outposts, need {0} within {1} tiles</FCVOE_TownNearbyOutposts>
+    <FCVOE_TownNearbyTotal>Not enough nearby settlements or outposts, need {0} within {1} tiles</FCVOE_TownNearbyTotal>
+    <FCVOE_TownRequirements>Need at least {0} settlements or outposts within {1} tiles, of which at least {2} are settlements and {3} are outposts.</FCVOE_TownRequirements>
 
     <!-- VOE Town xenotype-pure recruiting -->
-    <VOE_TownXenoPureLabel>Same-Xenotype recruiting</VOE_TownXenoPureLabel>
-    <VOE_TownXenoPureDesc>When enabled, this town only recruits new residents matching the xenotype of the recruiting resident (or its race, for non-human residents). In exchange, recruitment happens less often.</VOE_TownXenoPureDesc>
-    <VOE_TownXenoPureHeader>Same-Xenotype Recruiting</VOE_TownXenoPureHeader>
-    <VOE_TownXenoPureChanceDesc>Per-town toggle (gizmo on the town's world map). While a town has same-xenotype recruiting on, its recruit chance is scaled by this multiplier.</VOE_TownXenoPureChanceDesc>
-    <VOE_TownXenoPureChance>Recruit chance multiplier</VOE_TownXenoPureChance>
+    <FCVOE_TownXenoPureLabel>Same-Xenotype recruiting</FCVOE_TownXenoPureLabel>
+    <FCVOE_TownXenoPureDesc>When enabled, this town only recruits new residents matching the xenotype of the recruiting resident (or its race, for non-human residents). In exchange, recruitment happens less often.</FCVOE_TownXenoPureDesc>
+    <FCVOE_TownXenoPureHeader>Same-Xenotype Recruiting</FCVOE_TownXenoPureHeader>
+    <FCVOE_TownXenoPureChanceDesc>Per-town toggle (gizmo on the town's world map). While a town has same-xenotype recruiting on, its recruit chance is scaled by this multiplier.</FCVOE_TownXenoPureChanceDesc>
+    <FCVOE_TownXenoPureChance>Recruit chance multiplier</FCVOE_TownXenoPureChance>
 
     <!-- Resource Linking -->
-    <VOE_ResourceLinkBonusDesc>{0} outpost link</VOE_ResourceLinkBonusDesc>
+    <FCVOE_ResourceLinkBonusDesc>{0} outpost link</FCVOE_ResourceLinkBonusDesc>
 
     <!-- Shared outpost-link gizmo strings -->
-    <VOE_AlreadyLinked>already linked</VOE_AlreadyLinked>
-    <VOE_Linked>linked</VOE_Linked>
-    <VOE_UnlinkAll>Unlink all</VOE_UnlinkAll>
-    <VOE_NoOutpostsInRange>No outposts in range</VOE_NoOutpostsInRange>
-    <VOE_Tiles>tiles</VOE_Tiles>
+    <FCVOE_AlreadyLinked>already linked</FCVOE_AlreadyLinked>
+    <FCVOE_Linked>linked</FCVOE_Linked>
+    <FCVOE_UnlinkAll>Unlink all</FCVOE_UnlinkAll>
+    <FCVOE_NoOutpostsInRange>No outposts in range</FCVOE_NoOutpostsInRange>
+    <FCVOE_Tiles>tiles</FCVOE_Tiles>
 
     <!-- Inspect String -->
-    <VOE_LinkedTo>Linked to: {0}</VOE_LinkedTo>
-    <VOE_NotLinked>Not linked to settlement</VOE_NotLinked>
-    <VOE_DefenseStatusAttacked>Status: Under attack</VOE_DefenseStatusAttacked>
-    <VOE_DefenseStatusCooldown>Status: Cooldown ({0} remaining)</VOE_DefenseStatusCooldown>
-    <VOE_DefenseStatusReady>Status: Ready</VOE_DefenseStatusReady>
-    <VOE_FinancingFor>Financing: {0}</VOE_FinancingFor>
-    <VOE_ReceivingTaxes>Receiving taxes from: {0}</VOE_ReceivingTaxes>
+    <FCVOE_LinkedTo>Linked to: {0}</FCVOE_LinkedTo>
+    <FCVOE_NotLinked>Not linked to settlement</FCVOE_NotLinked>
+    <FCVOE_DefenseStatusAttacked>Status: Under attack</FCVOE_DefenseStatusAttacked>
+    <FCVOE_DefenseStatusCooldown>Status: Cooldown ({0} remaining)</FCVOE_DefenseStatusCooldown>
+    <FCVOE_DefenseStatusReady>Status: Ready</FCVOE_DefenseStatusReady>
+    <FCVOE_FinancingFor>Financing: {0}</FCVOE_FinancingFor>
+    <FCVOE_ReceivingTaxes>Receiving taxes from: {0}</FCVOE_ReceivingTaxes>
 
     <!-- Skill-Based Bonuses Settings -->
-    <VOE_AdditivePerLevel>Additive bonus per skill level</VOE_AdditivePerLevel>
-    <VOE_SkillFloor>Skill floor</VOE_SkillFloor>
-    <VOE_ResourceLinkRange>Resource link max range (tiles)</VOE_ResourceLinkRange>
-    <VOE_PowerConversionMultiplier>Power outpost conversion multiplier</VOE_PowerConversionMultiplier>
+    <FCVOE_AdditivePerLevel>Additive bonus per skill level</FCVOE_AdditivePerLevel>
+    <FCVOE_SkillFloor>Skill floor</FCVOE_SkillFloor>
+    <FCVOE_ResourceLinkRange>Resource link max range (tiles)</FCVOE_ResourceLinkRange>
+    <FCVOE_PowerConversionMultiplier>Power outpost conversion multiplier</FCVOE_PowerConversionMultiplier>
 
     <!-- Passive Defensive Aura Settings -->
-    <VOE_DefensiveAuraRange>Defensive aura range (tiles)</VOE_DefensiveAuraRange>
-    <VOE_DefensiveAuraLevelFactor>Passive defense (fraction of garrison level)</VOE_DefensiveAuraLevelFactor>
-    <VOE_DefensiveAuraSource>{0} nearby defensive outpost(s)</VOE_DefensiveAuraSource>
+    <FCVOE_DefensiveAuraRange>Defensive aura range (tiles)</FCVOE_DefensiveAuraRange>
+    <FCVOE_DefensiveAuraLevelFactor>Passive defense (fraction of garrison level)</FCVOE_DefensiveAuraLevelFactor>
+    <FCVOE_DefensiveAuraSource>{0} nearby defensive outpost(s)</FCVOE_DefensiveAuraSource>
 
     <!-- Outposts settlement subtab + faction-wide main tab -->
-    <VOE_OutpostsTab>Outposts</VOE_OutpostsTab>
-    <VOE_OutpostsMainTab>Outposts</VOE_OutpostsMainTab>
-    <VOE_MainTabByOutpost>By Outpost</VOE_MainTabByOutpost>
-    <VOE_MainTabBySettlement>By Settlement</VOE_MainTabBySettlement>
-    <VOE_TabSectionResourceLinks>Resource links</VOE_TabSectionResourceLinks>
-    <VOE_TabSectionTaxDelivery>Tax delivery</VOE_TabSectionTaxDelivery>
-    <VOE_TabSectionFinancing>Financing</VOE_TabSectionFinancing>
-    <VOE_TabSectionEncampment>Encampment recovery</VOE_TabSectionEncampment>
-    <VOE_TabSectionDefensive>Defensive aura</VOE_TabSectionDefensive>
-    <VOE_TabLink>Link</VOE_TabLink>
-    <VOE_TabUnlink>Unlink</VOE_TabUnlink>
-    <VOE_NoSettlementsInRange>No settlements in range</VOE_NoSettlementsInRange>
-    <VOE_TabChange>Change</VOE_TabChange>
-    <VOE_TabSet>Set</VOE_TabSet>
-    <VOE_TabClear>Clear</VOE_TabClear>
-    <VOE_TabNoLinks>None</VOE_TabNoLinks>
-    <VOE_TabFeeds>boosts {0}</VOE_TabFeeds>
-    <VOE_TabContribution>+{0}</VOE_TabContribution>
-    <VOE_TabLinkedElsewhere>linked elsewhere</VOE_TabLinkedElsewhere>
-    <VOE_MainTabOutpostUnlinked>not linked</VOE_MainTabOutpostUnlinked>
-    <VOE_MainTabNoOutposts>No outposts have been established.</VOE_MainTabNoOutposts>
-    <VOE_MainTabNoSettlements>You have not founded any settlements.</VOE_MainTabNoSettlements>
+    <FCVOE_OutpostsTab>Outposts</FCVOE_OutpostsTab>
+    <FCVOE_OutpostsMainTab>Outposts</FCVOE_OutpostsMainTab>
+    <FCVOE_MainTabByOutpost>By Outpost</FCVOE_MainTabByOutpost>
+    <FCVOE_MainTabBySettlement>By Settlement</FCVOE_MainTabBySettlement>
+    <FCVOE_TabSectionResourceLinks>Resource links</FCVOE_TabSectionResourceLinks>
+    <FCVOE_TabSectionTaxDelivery>Tax delivery</FCVOE_TabSectionTaxDelivery>
+    <FCVOE_TabSectionFinancing>Financing</FCVOE_TabSectionFinancing>
+    <FCVOE_TabSectionEncampment>Encampment recovery</FCVOE_TabSectionEncampment>
+    <FCVOE_TabSectionDefensive>Defensive aura</FCVOE_TabSectionDefensive>
+    <FCVOE_TabLink>Link</FCVOE_TabLink>
+    <FCVOE_TabUnlink>Unlink</FCVOE_TabUnlink>
+    <FCVOE_NoSettlementsInRange>No settlements in range</FCVOE_NoSettlementsInRange>
+    <FCVOE_TabChange>Change</FCVOE_TabChange>
+    <FCVOE_TabSet>Set</FCVOE_TabSet>
+    <FCVOE_TabClear>Clear</FCVOE_TabClear>
+    <FCVOE_TabNoLinks>None</FCVOE_TabNoLinks>
+    <FCVOE_TabFeeds>boosts {0}</FCVOE_TabFeeds>
+    <FCVOE_TabContribution>+{0}</FCVOE_TabContribution>
+    <FCVOE_TabLinkedElsewhere>linked elsewhere</FCVOE_TabLinkedElsewhere>
+    <FCVOE_MainTabOutpostUnlinked>not linked</FCVOE_MainTabOutpostUnlinked>
+    <FCVOE_MainTabNoOutposts>No outposts have been established.</FCVOE_MainTabNoOutposts>
+    <FCVOE_MainTabNoSettlements>You have not founded any settlements.</FCVOE_MainTabNoSettlements>
 
     <!-- Encampment Recovery Settings -->
-    <VOE_EncampmentRange>Encampment range (tiles)</VOE_EncampmentRange>
-    <VOE_EncampmentHealRatePerLevel>Heal rate bonus per Medicine level</VOE_EncampmentHealRatePerLevel>
-    <VOE_EncampmentHealRateDesc>{0} nearby encampment(s): +{1}% merc heal rate</VOE_EncampmentHealRateDesc>
-    <VOE_EncampmentHealRateSource>{0} nearby encampment(s)</VOE_EncampmentHealRateSource>
+    <FCVOE_EncampmentRange>Encampment range (tiles)</FCVOE_EncampmentRange>
+    <FCVOE_EncampmentHealRatePerLevel>Heal rate bonus per Medicine level</FCVOE_EncampmentHealRatePerLevel>
+    <FCVOE_EncampmentHealRateDesc>{0} nearby encampment(s): +{1}% merc heal rate</FCVOE_EncampmentHealRateDesc>
+    <FCVOE_EncampmentHealRateSource>{0} nearby encampment(s)</FCVOE_EncampmentHealRateSource>
 
     <!-- Codex Live Data (dynamic providers) -->
-    <VOE_CodexFeatureDisabled>This feature is turned off in the mod settings.</VOE_CodexFeatureDisabled>
-    <VOE_CodexNoSettlements>You have not founded any settlements yet.</VOE_CodexNoSettlements>
+    <FCVOE_CodexFeatureDisabled>This feature is turned off in the mod settings.</FCVOE_CodexFeatureDisabled>
+    <FCVOE_CodexNoSettlements>You have not founded any settlements yet.</FCVOE_CodexNoSettlements>
 
-    <VOE_CodexOverviewDisabled>All Empire-Vanilla Outposts Expanded integration is currently disabled in the mod settings.</VOE_CodexOverviewDisabled>
-    <VOE_CodexOverviewFeatures>Active integrations:</VOE_CodexOverviewFeatures>
-    <VOE_CodexOverviewNoOutposts>No outposts have been established yet.</VOE_CodexOverviewNoOutposts>
-    <VOE_CodexOverviewOutposts>Outposts established: {0}</VOE_CodexOverviewOutposts>
-    <VOE_CodexOverviewOutpostLine>  {0}: {1}</VOE_CodexOverviewOutpostLine>
+    <FCVOE_CodexOverviewDisabled>All Empire-Vanilla Outposts Expanded integration is currently disabled in the mod settings.</FCVOE_CodexOverviewDisabled>
+    <FCVOE_CodexOverviewFeatures>Active integrations:</FCVOE_CodexOverviewFeatures>
+    <FCVOE_CodexOverviewNoOutposts>No outposts have been established yet.</FCVOE_CodexOverviewNoOutposts>
+    <FCVOE_CodexOverviewOutposts>Outposts established: {0}</FCVOE_CodexOverviewOutposts>
+    <FCVOE_CodexOverviewOutpostLine>  {0}: {1}</FCVOE_CodexOverviewOutpostLine>
 
-    <VOE_CodexDefensiveHeader>Defensive outposts:</VOE_CodexDefensiveHeader>
-    <VOE_CodexDefensiveNone>You have no defensive outposts.</VOE_CodexDefensiveNone>
-    <VOE_CodexDefensiveLine>{0} - military level {1}, range {2}</VOE_CodexDefensiveLine>
-    <VOE_CodexDefensiveAutoOn>Auto-defend: on</VOE_CodexDefensiveAutoOn>
-    <VOE_CodexDefensiveAutoOff>Auto-defend: off</VOE_CodexDefensiveAutoOff>
+    <FCVOE_CodexDefensiveHeader>Defensive outposts:</FCVOE_CodexDefensiveHeader>
+    <FCVOE_CodexDefensiveNone>You have no defensive outposts.</FCVOE_CodexDefensiveNone>
+    <FCVOE_CodexDefensiveLine>{0} - military level {1}, range {2}</FCVOE_CodexDefensiveLine>
+    <FCVOE_CodexDefensiveAutoOn>Auto-defend: on</FCVOE_CodexDefensiveAutoOn>
+    <FCVOE_CodexDefensiveAutoOff>Auto-defend: off</FCVOE_CodexDefensiveAutoOff>
 
-    <VOE_CodexEncampmentHeader>Encampment coverage:</VOE_CodexEncampmentHeader>
-    <VOE_CodexEncampmentNone>No settlements have an encampment within range.</VOE_CodexEncampmentNone>
+    <FCVOE_CodexEncampmentHeader>Encampment coverage:</FCVOE_CodexEncampmentHeader>
+    <FCVOE_CodexEncampmentNone>No settlements have an encampment within range.</FCVOE_CodexEncampmentNone>
 
-    <VOE_CodexDeliveryHeader>Current tax routing:</VOE_CodexDeliveryHeader>
-    <VOE_CodexDeliveryNone>All settlements deliver their taxes to your tax map.</VOE_CodexDeliveryNone>
-    <VOE_CodexDeliveryLine>{0}: delivering to {1}</VOE_CodexDeliveryLine>
+    <FCVOE_CodexDeliveryHeader>Current tax routing:</FCVOE_CodexDeliveryHeader>
+    <FCVOE_CodexDeliveryNone>All settlements deliver their taxes to your tax map.</FCVOE_CodexDeliveryNone>
+    <FCVOE_CodexDeliveryLine>{0}: delivering to {1}</FCVOE_CodexDeliveryLine>
 
-    <VOE_CodexFinancingHeader>Current financing:</VOE_CodexFinancingHeader>
-    <VOE_CodexFinancingNone>No settlement is financed by an outpost.</VOE_CodexFinancingNone>
-    <VOE_CodexFinancingLine>{0}: financed by {1}</VOE_CodexFinancingLine>
+    <FCVOE_CodexFinancingHeader>Current financing:</FCVOE_CodexFinancingHeader>
+    <FCVOE_CodexFinancingNone>No settlement is financed by an outpost.</FCVOE_CodexFinancingNone>
+    <FCVOE_CodexFinancingLine>{0}: financed by {1}</FCVOE_CodexFinancingLine>
 
-    <VOE_CodexScienceHeader>Current research links:</VOE_CodexScienceHeader>
-    <VOE_CodexScienceNone>No science outpost is linked to a settlement.</VOE_CodexScienceNone>
-    <VOE_CodexScienceLine>{0}: linked to {1} ({2} researcher(s))</VOE_CodexScienceLine>
+    <FCVOE_CodexScienceHeader>Current research links:</FCVOE_CodexScienceHeader>
+    <FCVOE_CodexScienceNone>No science outpost is linked to a settlement.</FCVOE_CodexScienceNone>
+    <FCVOE_CodexScienceLine>{0}: linked to {1} ({2} researcher(s))</FCVOE_CodexScienceLine>
 
-    <VOE_CodexResourceLinkHeader>Current resource links:</VOE_CodexResourceLinkHeader>
-    <VOE_CodexResourceLinkNone>No production outpost is linked to a settlement.</VOE_CodexResourceLinkNone>
-    <VOE_CodexResourceLinkLine>{0} &lt;- {1} ({2}: +{3})</VOE_CodexResourceLinkLine>
+    <FCVOE_CodexResourceLinkHeader>Current resource links:</FCVOE_CodexResourceLinkHeader>
+    <FCVOE_CodexResourceLinkNone>No production outpost is linked to a settlement.</FCVOE_CodexResourceLinkNone>
+    <FCVOE_CodexResourceLinkLine>{0} &lt;- {1} ({2}: +{3})</FCVOE_CodexResourceLinkLine>
 
-    <VOE_CodexConversionHeader>Outposts that can become settlements:</VOE_CodexConversionHeader>
-    <VOE_CodexConversionNone>You have no outposts that can be converted into a settlement.</VOE_CodexConversionNone>
-    <VOE_CodexConversionLine>{0} -&gt; {1} ({2})</VOE_CodexConversionLine>
+    <FCVOE_CodexConversionHeader>Outposts that can become settlements:</FCVOE_CodexConversionHeader>
+    <FCVOE_CodexConversionNone>You have no outposts that can be converted into a settlement.</FCVOE_CodexConversionNone>
+    <FCVOE_CodexConversionLine>{0} -&gt; {1} ({2})</FCVOE_CodexConversionLine>
 
     <!-- Patch Notes -->
-    <VOE_PatchTitle>Patch Notes: Outposts &amp; Settlements</VOE_PatchTitle>
-    <VOE_OpenPatchNotes>Open Patch Notes</VOE_OpenPatchNotes>
+    <FCVOE_PatchTitle>Patch Notes: Outposts &amp; Settlements</FCVOE_PatchTitle>
+    <FCVOE_OpenPatchNotes>Open Patch Notes</FCVOE_OpenPatchNotes>
 </LanguageData>

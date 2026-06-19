@@ -17,7 +17,7 @@ namespace EmpireVOE
         public string GetDynamicContent(FactionFC faction)
         {
             if (!EmpireVOESettings.OutpostConversionActive)
-                return "VOE_CodexFeatureDisabled".Translate();
+                return "FCVOE_CodexFeatureDisabled".Translate();
 
             List<Outpost> outposts = Find.WorldObjects?.AllWorldObjects?.OfType<Outpost>()
                                          .Where(o => o.Faction == Faction.OfPlayer)
@@ -30,19 +30,19 @@ namespace EmpireVOE
                 .ToList();
 
             if (convertible.Count == 0)
-                return "VOE_CodexConversionNone".Translate();
+                return "FCVOE_CodexConversionNone".Translate();
 
             StringBuilder sb = new StringBuilder();
-            sb.Append("VOE_CodexConversionHeader".Translate()).Append("\n");
+            sb.Append("FCVOE_CodexConversionHeader".Translate()).Append("\n");
             foreach (Outpost o in convertible)
             {
                 List<WorldSettlementDef> types = OutpostConversionUtil.GetConvertibleTypes(o);
                 string typeList = string.Join(", ", types.Select(t => t.LabelCap.ToString()));
                 int remaining = OutpostConversionUtil.DelayDaysRemaining(o);
                 string status = remaining > 0
-                    ? "VOE_ConvertAvailableInDays".Translate(remaining.ToString())
-                    : "VOE_ConvertReady".Translate();
-                sb.Append("VOE_CodexConversionLine".Translate(o.LabelCap, typeList, status)).Append("\n");
+                    ? "FCVOE_ConvertAvailableInDays".Translate(remaining.ToString())
+                    : "FCVOE_ConvertReady".Translate();
+                sb.Append("FCVOE_CodexConversionLine".Translate(o.LabelCap, typeList, status)).Append("\n");
             }
 
             return sb.ToString().TrimEnd();

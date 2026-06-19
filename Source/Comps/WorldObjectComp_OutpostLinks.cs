@@ -95,12 +95,12 @@ namespace EmpireVOE
             Outpost current = GetDeliveryOutpost();
             string currentLabel = current is object
                 ? current.LabelCap
-                : "VOE_PlayerTaxMap".Translate().ToString();
+                : "FCVOE_PlayerTaxMap".Translate().ToString();
 
             return new Command_Action
             {
-                defaultLabel = "VOE_DeliveryOutpostLabel".Translate(),
-                defaultDesc = "VOE_DeliveryOutpostDesc".Translate(currentLabel),
+                defaultLabel = "FCVOE_DeliveryOutpostLabel".Translate(),
+                defaultDesc = "FCVOE_DeliveryOutpostDesc".Translate(currentLabel),
                 icon = current is object
                     ? current.ExpandingIcon
                     : TexCommand.Install,
@@ -117,8 +117,8 @@ namespace EmpireVOE
 
             return new Command_Action
             {
-                defaultLabel = "VOE_FinancingOutpostLabel".Translate(),
-                defaultDesc = "VOE_FinancingOutpostDesc".Translate(currentLabel),
+                defaultLabel = "FCVOE_FinancingOutpostLabel".Translate(),
+                defaultDesc = "FCVOE_FinancingOutpostDesc".Translate(currentLabel),
                 icon = current is object
                     ? current.ExpandingIcon
                     : TexCommand.Install,
@@ -133,7 +133,7 @@ namespace EmpireVOE
         {
             List<FloatMenuOption> options = new List<FloatMenuOption>();
             options.Add(new FloatMenuOption(
-                "VOE_PlayerTaxMap".Translate(),
+                "FCVOE_PlayerTaxMap".Translate(),
                 delegate { deliveryOutpost = null; }));
 
             foreach (Outpost outpost in OutpostsByDistance())

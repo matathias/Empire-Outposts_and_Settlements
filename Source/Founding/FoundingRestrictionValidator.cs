@@ -20,7 +20,7 @@ namespace EmpireVOE
             if (OutpostConversionUtil.IsConverting) return true;
             if (EmpireVOESettings.OutpostConversionActive && EmpireVOESettings.requireOutpostForSettlement)
             {
-                reason = "VOE_MustFoundViaOutpost".Translate();
+                reason = "FCVOE_MustFoundViaOutpost".Translate();
                 return false;
             }
             return true;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
-	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
-		<defName>VOE_0_2_0</defName>
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_2_0</defName>
 		<label>Skills update</label>
 		<description>Changes all skill-based calculations to use the same formulas as Specialists &amp; Governors. Additionally, adds a merc heal-rate bonus from encampments to nearby settlements.</description>
 		<releaseDate>2026-04-05</releaseDate>
@@ -15,8 +15,8 @@
 		</authors>
 	</FactionColonies.PatchNoteDef>
 
-	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
-		<defName>VOE_0_2_1</defName>
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_2_1</defName>
 		<label>Updates</label>
 		<description>Updates the code to account for changes to Empire Refactored and Specialists &amp; Governors.</description>
 		<releaseDate>2026-04-19</releaseDate>
@@ -29,8 +29,8 @@
 		</authors>
 	</FactionColonies.PatchNoteDef>
 
-	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
-		<defName>VOE_0_2_2</defName>
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_2_2</defName>
 		<label>Tax Redirection Update</label>
 		<description>Updates the tax redirection code after an update to the base mod.</description>
 		<releaseDate>2026-04-19</releaseDate>

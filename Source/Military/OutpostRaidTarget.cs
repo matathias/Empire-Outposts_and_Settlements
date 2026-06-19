@@ -37,8 +37,8 @@ namespace EmpireVOE
         public void OnRaidWon(BattleResult result)
         {
             Find.LetterStack.ReceiveLetter(
-                "VOE_OutpostDefended".Translate(Name),
-                "VOE_OutpostDefendedDesc".Translate(Name),
+                "FCVOE_OutpostDefended".Translate(Name),
+                "FCVOE_OutpostDefendedDesc".Translate(Name),
                 LetterDefOf.PositiveEvent,
                 new LookTargets(outpost));
         }
@@ -68,8 +68,8 @@ namespace EmpireVOE
             }
 
             Find.LetterStack.ReceiveLetter(
-                "VOE_OutpostRaided".Translate(Name),
-                "VOE_OutpostRaidedDesc".Translate(Name, injuries),
+                "FCVOE_OutpostRaided".Translate(Name),
+                "FCVOE_OutpostRaidedDesc".Translate(Name, injuries),
                 LetterDefOf.ThreatBig,
                 new LookTargets(outpost));
         }

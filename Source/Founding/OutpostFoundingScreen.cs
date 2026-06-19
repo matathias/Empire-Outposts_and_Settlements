@@ -33,7 +33,7 @@ namespace EmpireVOE
             if (!RestrictionActive) return null;
             return new FoundingButtonOverride
             {
-                Label = "VOE_SendCaravan".Translate(),
+                Label = "FCVOE_SendCaravan".Translate(),
                 OnClick = SendCaravan
             };
         }
@@ -57,7 +57,7 @@ namespace EmpireVOE
             List<Map> homeMaps = Find.Maps.Where(m => m.IsPlayerHome).ToList();
             if (homeMaps.Count == 0)
             {
-                Messages.Message("VOE_SendCaravanNoColony".Translate(), MessageTypeDefOf.RejectInput);
+                Messages.Message("FCVOE_SendCaravanNoColony".Translate(), MessageTypeDefOf.RejectInput);
                 return;
             }
 

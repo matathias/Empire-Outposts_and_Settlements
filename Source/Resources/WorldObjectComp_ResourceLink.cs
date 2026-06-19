@@ -69,7 +69,7 @@ namespace EmpireVOE
         {
             double bonus = GetResourceAdditiveModifier(resource);
             if (bonus > 0)
-                return TextUtil.AdditiveBonusLine(bonus, "VOE_ResourceLinkBonusDesc".Translate(resource.def.LabelCap));
+                return TextUtil.AdditiveBonusLine(bonus, "FCVOE_ResourceLinkBonusDesc".Translate(resource.def.LabelCap));
             return null;
         }
 

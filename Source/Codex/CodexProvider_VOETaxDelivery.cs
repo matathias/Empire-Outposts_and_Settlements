@@ -15,11 +15,11 @@ namespace EmpireVOE
         {
             if (faction is null) return null;
             if (!EmpireVOESettings.DeliveryActive)
-                return "VOE_CodexFeatureDisabled".Translate();
+                return "FCVOE_CodexFeatureDisabled".Translate();
             if (!faction.settlements.Any())
-                return "VOE_CodexNoSettlements".Translate();
+                return "FCVOE_CodexNoSettlements".Translate();
 
-            string result = "VOE_CodexDeliveryHeader".Translate() + "\n\n";
+            string result = "FCVOE_CodexDeliveryHeader".Translate() + "\n\n";
             bool any = false;
             foreach (WorldSettlementFC s in faction.settlements)
             {
@@ -27,10 +27,10 @@ namespace EmpireVOE
                 Outpost outpost = links?.GetDeliveryOutpost();
                 if (outpost is null) continue;
                 any = true;
-                result += "  " + "VOE_CodexDeliveryLine".Translate(s.Name, outpost.LabelCap) + "\n";
+                result += "  " + "FCVOE_CodexDeliveryLine".Translate(s.Name, outpost.LabelCap) + "\n";
             }
 
-            return any ? result.TrimEnd() : "VOE_CodexDeliveryNone".Translate().ToString();
+            return any ? result.TrimEnd() : "FCVOE_CodexDeliveryNone".Translate().ToString();
         }
     }
 }

@@ -22,7 +22,7 @@ namespace EmpireVOE
             if (comp is null || !comp.IsOnCooldown) return;
 
             __result = true;
-            reason = "VOE_ReinforcementsCooldown".Translate(comp.CooldownTicksLeft.ToTimeString());
+            reason = "FCVOE_ReinforcementsCooldown".Translate(comp.CooldownTicksLeft.ToTimeString());
         }
     }
 }

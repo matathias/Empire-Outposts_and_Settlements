@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
-	<FactionColonies.PatchNoteDef Name="VOEPatchBase" Abstract="True">
+	<FactionColonies.PatchNoteDef Name="FCVOEPatchBase" Abstract="True">
 		<modId>matathias.empirerefvoe</modId>
 		<bannerImagePath>UI/Banners/Banner-VOEIntegration</bannerImagePath>
 
@@ -25,8 +25,8 @@
 	</FactionColonies.PatchNoteDef>
 
 	<!-- ========== TEMPLATE ==========
-	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
-		<defName>VOE_0_1_0</defName>
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_1_0</defName>
 		<label>Short Title</label>
 		<description>One-line summary.</description>
 		<releaseDate>2026-01-01</releaseDate>

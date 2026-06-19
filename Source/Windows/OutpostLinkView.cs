@@ -228,10 +228,10 @@ namespace EmpireVOE
         }
 
         public static LinkBadge TaxDeliveryBadge() =>
-            new LinkBadge("VOE_TabSectionTaxDelivery".Translate(), null, new Color(0.78f, 0.82f, 0.9f));
+            new LinkBadge("FCVOE_TabSectionTaxDelivery".Translate(), null, new Color(0.78f, 0.82f, 0.9f));
 
         public static LinkBadge FinancingBadge() =>
-            new LinkBadge("VOE_TabSectionFinancing".Translate(), null, ColorUtil.Gold);
+            new LinkBadge("FCVOE_TabSectionFinancing".Translate(), null, ColorUtil.Gold);
 
         /// <summary>Lays out badges left-to-right within the area, clamping when out of room.</summary>
         public static void DrawBadgeRow(Rect area, List<LinkBadge> badges)

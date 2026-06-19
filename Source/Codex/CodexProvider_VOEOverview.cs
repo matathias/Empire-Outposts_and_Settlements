@@ -16,29 +16,29 @@ namespace EmpireVOE
         public string GetDynamicContent(FactionFC faction)
         {
             if (EmpireVOESettings.disableIntegration)
-                return "VOE_CodexOverviewDisabled".Translate();
+                return "FCVOE_CodexOverviewDisabled".Translate();
 
-            string result = "VOE_CodexOverviewFeatures".Translate() + "\n";
-            result += FeatureLine("VOE_EnableMilitary", EmpireVOESettings.MilitaryActive);
-            result += FeatureLine("VOE_EnableDelivery", EmpireVOESettings.DeliveryActive);
-            result += FeatureLine("VOE_EnableFinancing", EmpireVOESettings.FinancingActive);
-            result += FeatureLine("VOE_EnableResourceLink", EmpireVOESettings.ResourceLinkActive);
-            result += FeatureLine("VOE_EnableEncampment", EmpireVOESettings.EncampmentActive);
-            result += FeatureLine("VOE_EnableOutpostConversion", EmpireVOESettings.OutpostConversionActive);
-            result += FeatureLine("VOE_EnableRoads", EmpireVOESettings.RoadsActive);
+            string result = "FCVOE_CodexOverviewFeatures".Translate() + "\n";
+            result += FeatureLine("FCVOE_EnableMilitary", EmpireVOESettings.MilitaryActive);
+            result += FeatureLine("FCVOE_EnableDelivery", EmpireVOESettings.DeliveryActive);
+            result += FeatureLine("FCVOE_EnableFinancing", EmpireVOESettings.FinancingActive);
+            result += FeatureLine("FCVOE_EnableResourceLink", EmpireVOESettings.ResourceLinkActive);
+            result += FeatureLine("FCVOE_EnableEncampment", EmpireVOESettings.EncampmentActive);
+            result += FeatureLine("FCVOE_EnableOutpostConversion", EmpireVOESettings.OutpostConversionActive);
+            result += FeatureLine("FCVOE_EnableRoads", EmpireVOESettings.RoadsActive);
             result += "\n";
 
             List<Outpost> outposts = Find.WorldObjects?.AllWorldObjects?.OfType<Outpost>().ToList()
                                      ?? new List<Outpost>();
             if (outposts.Count == 0)
-                return result + "VOE_CodexOverviewNoOutposts".Translate();
+                return result + "FCVOE_CodexOverviewNoOutposts".Translate();
 
-            result += "VOE_CodexOverviewOutposts".Translate(outposts.Count) + "\n";
+            result += "FCVOE_CodexOverviewOutposts".Translate(outposts.Count) + "\n";
             foreach (IGrouping<string, Outpost> group in outposts
                          .GroupBy(o => o.def.LabelCap.ToString())
                          .OrderBy(g => g.Key))
             {
-                result += "VOE_CodexOverviewOutpostLine".Translate(group.Key, group.Count()) + "\n";
+                result += "FCVOE_CodexOverviewOutpostLine".Translate(group.Key, group.Count()) + "\n";
             }
 
             return result.TrimEnd();

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
-	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
-		<defName>VOE_0_3_0</defName>
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_0</defName>
 		<label>Comp Update</label>
 		<description>Refactors the mod to rely more on WorldObjectComps instead of a central WorldComponent.</description>
 		<releaseDate>2026-04-20</releaseDate>
@@ -14,8 +14,8 @@
 		</authors>
 	</FactionColonies.PatchNoteDef>
 
-	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
-		<defName>VOE_0_3_1</defName>
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_1</defName>
 		<label>Toggle Update</label>
 		<description>Makes each of the submod&apos;s integration features individually toggle-able.</description>
 		<releaseDate>2026-04-20</releaseDate>
@@ -28,8 +28,8 @@
 		</authors>
 	</FactionColonies.PatchNoteDef>
 
-	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
-		<defName>VOE_0_3_2</defName>
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_2</defName>
 		<label>API Updates</label>
 		<description>Update the code to handle API changes in the base mod.</description>
 		<releaseDate>2026-06-02</releaseDate>
@@ -42,8 +42,8 @@
 		</authors>
 	</FactionColonies.PatchNoteDef>
 
-	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
-		<defName>VOE_0_3_3</defName>
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_3</defName>
 		<label>Obselesence Update</label>
 		<description>Replaces the choose-a-defender float menu with opening up the base mod&apos;s choose-a-defender window.</description>
 		<releaseDate>2026-06-03</releaseDate>
@@ -57,8 +57,8 @@
 		</authors>
 	</FactionColonies.PatchNoteDef>
 
-	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
-		<defName>VOE_0_3_4</defName>
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_4</defName>
 		<label>Off-surface Settlements</label>
 		<description>Allows settling appropriate Empire settlements on non-surface layers even when the &quot;Can only found on VOE Towns&quot; restriction is enabled. Otherwise, orbital settlements are entirely blocked off.</description>
 		<releaseDate>2026-06-03</releaseDate>
@@ -71,8 +71,8 @@
 		</authors>
 	</FactionColonies.PatchNoteDef>
 
-	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
-		<defName>VOE_0_3_5</defName>
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_5</defName>
 		<label>PlanetTile Update</label>
 		<description>Updates the mod to use PlanetTile instead of int wherever possible. Rimworld allows for PlanetTile to be cast down to an int, but you lose layer info when you do that, which is a bad thing when it&apos;s possible to have Empire settlements on multiple different layers.</description>
 		<releaseDate>2026-06-03</releaseDate>
@@ -85,8 +85,8 @@
 		</authors>
 	</FactionColonies.PatchNoteDef>
 
-	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
-		<defName>VOE_0_3_6</defName>
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_6</defName>
 		<label>Road-builder Compat</label>
 		<description>Adds compatibility with Empire&apos;s road builder. When enabled, VOE outposts will be included in the road network calculations, and roads will be built between them and Empire settlements.</description>
 		<releaseDate>2026-06-13</releaseDate>
@@ -99,8 +99,8 @@
 		</authors>
 	</FactionColonies.PatchNoteDef>
 
-	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
-		<defName>VOE_0_3_7</defName>
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_7</defName>
 		<label>Updates &amp; Info</label>
 		<description>Removes two subsystems that are now obsolete in the base mod, and adds Codex entries for the mod&apos;s mechanics</description>
 		<releaseDate>2026-06-16</releaseDate>
@@ -115,8 +115,8 @@
 		</authors>
 	</FactionColonies.PatchNoteDef>
 
-	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
-		<defName>VOE_0_3_8</defName>
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_8</defName>
 		<label>Town Fixes &amp; Config</label>
 		<description>Folds in my own older mod, &quot;Vanilla Outposts Expanded: Settings for Towns&quot;. Includes a bugfix for towns, as well as expanded configuration for them to replace the hard-coded constants of &quot;3 settlements within 10 tiles&quot;.</description>
 		<releaseDate>2026-06-16</releaseDate>
@@ -129,8 +129,8 @@
 		</authors>
 	</FactionColonies.PatchNoteDef>
 
-	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
-		<defName>VOE_0_3_9</defName>
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_9</defName>
 		<label>Outpost Conversion Expansion</label>
 		<description>Rework how the outpost -&gt; settlement conversion mechanism works. Includes better UI integration, as well as the possibility for non-Town outposts to be turned into settlements.</description>
 		<releaseDate>2026-06-16</releaseDate>
@@ -143,8 +143,8 @@
 		</authors>
 	</FactionColonies.PatchNoteDef>
 
-	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
-		<defName>VOE_0_3_10</defName>
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_10</defName>
 		<label>More Science!</label>
 		<description>Lifts a restriction on research outposts.</description>
 		<releaseDate>2026-06-16</releaseDate>
@@ -157,8 +157,8 @@
 		</authors>
 	</FactionColonies.PatchNoteDef>
 
-	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
-		<defName>VOE_0_3_11</defName>
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_11</defName>
 		<label>Fixes &amp; Updates</label>
 		<description>Handful of bugfixes and balance tweaks.</description>
 		<releaseDate>2026-06-17</releaseDate>
@@ -174,8 +174,8 @@
 		</authors>
 	</FactionColonies.PatchNoteDef>
 
-	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
-		<defName>VOE_0_3_12</defName>
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_12</defName>
 		<label>Minor Fixes</label>
 		<description>A handful of minor fixes.</description>
 		<releaseDate>2026-06-17</releaseDate>
@@ -190,8 +190,8 @@
 		</authors>
 	</FactionColonies.PatchNoteDef>
 
-	<FactionColonies.PatchNoteDef ParentName="VOEPatchBase">
-		<defName>VOE_0_3_13</defName>
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_13</defName>
 		<label>New Features, UI, and Fixes</label>
 		<description>Adds a few new features, and new UI to more easil engage with the mod.</description>
 		<releaseDate>2026-06-19</releaseDate>
@@ -201,6 +201,20 @@
 		<li>Add a &quot;Defensive Aura&quot; to Defensive Outposts, only active when they aren&apos;t audo-defending or otherwise busy. The aura applies a small military level bonus to all Empire settlements within range</li>
 		<li>Add settlement window- and main tab- UI for settlement-outpost linking</li>
 		<li>Update some Codex entries</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_14</defName>
+		<label>Backend Changes</label>
+		<description>A few backend changes to reduce the likelihood of translation strings or defs colliding with Vanilla Outposts Expanded.</description>
+		<releaseDate>2026-06-19</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>VOE -&gt; FCVOE for all translation strings and defNames</li>
 		</patchNoteLines>
 		<authors>
 		<li>Matathias</li>

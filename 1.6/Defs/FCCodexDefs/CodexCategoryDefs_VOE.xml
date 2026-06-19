@@ -19,7 +19,7 @@
 <Defs>
 
     <FactionColonies.CodexCategoryDef>
-        <defName>CodexCat_VOE_Operations</defName>
+        <defName>CodexCat_FCVOE_Operations</defName>
         <label>Outpost Operations</label>
         <description>How Vanilla Outposts Expanded outposts plug into the Empire's military: raids against outposts, defensive auto-defend, and battlefield recovery.</description>
         <color>(0.74, 0.33, 0.28)</color>
@@ -29,7 +29,7 @@
     </FactionColonies.CodexCategoryDef>
 
     <FactionColonies.CodexCategoryDef>
-        <defName>CodexCat_VOE_Economy</defName>
+        <defName>CodexCat_FCVOE_Economy</defName>
         <label>Outpost Economy</label>
         <description>How outposts feed the Empire's economy and infrastructure: tax delivery, financing, research linking, town conversion, and roads.</description>
         <color>(0.20, 0.55, 0.55)</color>

@@ -37,8 +37,8 @@ namespace EmpireVOE
 
             yield return new Command_Toggle
             {
-                defaultLabel = "VOE_TownXenoPureLabel".Translate(),
-                defaultDesc = "VOE_TownXenoPureDesc".Translate(),
+                defaultLabel = "FCVOE_TownXenoPureLabel".Translate(),
+                defaultDesc = "FCVOE_TownXenoPureDesc".Translate(),
                 icon = TexLoad.iconCustomize,
                 isActive = () => xenotypePure,
                 toggleAction = () => xenotypePure = !xenotypePure

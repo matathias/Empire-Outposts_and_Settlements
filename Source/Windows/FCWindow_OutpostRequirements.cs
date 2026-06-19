@@ -69,18 +69,18 @@ namespace EmpireVOE
             float curY = 0f;
             Text.Font = GameFont.Small;
             Text.Anchor = TextAnchor.MiddleCenter;
-            Widgets.Label(new Rect(0, curY, inRect.width, 30f), "VOE_OutpostRequirementsTitle".Translate());
+            Widgets.Label(new Rect(0, curY, inRect.width, 30f), "FCVOE_OutpostRequirementsTitle".Translate());
             curY += 30f + Padding;
 
             Text.Anchor = TextAnchor.UpperLeft;
-            string intro = "VOE_OutpostRequirementsDesc".Translate(type.LabelCap);
+            string intro = "FCVOE_OutpostRequirementsDesc".Translate(type.LabelCap);
             float introH = Text.CalcHeight(intro, inRect.width);
             Widgets.Label(new Rect(0, curY, inRect.width, introH), intro);
             curY += introH + Padding;
 
             if (outposts is null || outposts.Count == 0)
             {
-                string none = "VOE_OutpostRequirementsNone".Translate();
+                string none = "FCVOE_OutpostRequirementsNone".Translate();
                 float h = Text.CalcHeight(none, inRect.width);
                 Widgets.Label(new Rect(0, curY, inRect.width, h), none);
                 curY += h;

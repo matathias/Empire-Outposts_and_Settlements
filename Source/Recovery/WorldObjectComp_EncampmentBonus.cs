@@ -47,7 +47,7 @@ namespace EmpireVOE
 
             return TextUtil.MultiplierBonusLine(
                 stat.IdentityValue + entry.totalHealRateBonus,
-                "VOE_EncampmentHealRateSource".Translate(entry.encampments.Count)) + "\n";
+                "FCVOE_EncampmentHealRateSource".Translate(entry.encampments.Count)) + "\n";
         }
     }
 }
