@@ -34,6 +34,9 @@
         <li>OskarPotocki.VanillaFactionsExpanded.Core</li>
         <li>vanillaexpanded.outposts</li>
         <li>Matathias.Empire.Specialists</li>
+		<li>MrHydralisk.VOEPowerGrid</li>
+		<li>Scorpio.VOEFactory</li>
+		<li>MrHydralisk.VOEAdditionalOutposts</li>
     </loadAfter>
     <modIconPath IgnoreIfNoMatchingField="True">UI/Icons/EmpireLogo</modIconPath>
 </ModMetaData>
