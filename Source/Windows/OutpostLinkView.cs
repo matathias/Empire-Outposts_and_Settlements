@@ -7,16 +7,18 @@ using Verse;
 
 namespace EmpireVOE
 {
-    /// <summary>A single outpost-to-settlement relationship (resource feed / tax delivery / financing).</summary>
-    public struct OutpostRelation
+    /// <summary>A compact role badge (icon + colored label) describing one thing an outpost does.</summary>
+    public struct LinkBadge
     {
-        public WorldSettlementFC settlement;
-        public string role;
+        public string label;
+        public Texture2D icon;
+        public Color color;
 
-        public OutpostRelation(WorldSettlementFC settlement, string role)
+        public LinkBadge(string label, Texture2D icon, Color color)
         {
-            this.settlement = settlement;
-            this.role = role;
+            this.label = label;
+            this.icon = icon;
+            this.color = color;
         }
     }
 
@@ -210,11 +212,73 @@ namespace EmpireVOE
             ls.Gap(2f);
         }
 
-        /// <summary>Distance from a settlement to an outpost, formatted as "{n} tiles".</summary>
-        public static string DistanceLabel(WorldSettlementFC settlement, Outpost outpost)
+        // --- Role badges ---
+
+        private const float BadgeIconSize = 16f;
+        private const float BadgePad = 6f;
+        private const float BadgeGap = 4f;
+
+        /// <summary>One badge per resource the outpost boosts (icon + name in the resource's color).</summary>
+        public static List<LinkBadge> ResourceBadges(Outpost outpost)
         {
-            float distance = Find.WorldGrid.ApproxDistanceInTiles(outpost.Tile, settlement.Tile);
-            return distance.ToString("F1") + " " + "VOE_Tiles".Translate();
+            List<LinkBadge> badges = new List<LinkBadge>();
+            OutpostResourceLinkExtension ext = outpost?.def.GetModExtension<OutpostResourceLinkExtension>();
+            if (ext?.resources is object)
+                foreach (ResourceTypeDef r in ext.resources)
+                    badges.Add(new LinkBadge(r.LabelCap, r.Icon, r.color));
+            return badges;
+        }
+
+        public static LinkBadge TaxDeliveryBadge() =>
+            new LinkBadge("VOE_TabSectionTaxDelivery".Translate(), null, new Color(0.78f, 0.82f, 0.9f));
+
+        public static LinkBadge FinancingBadge() =>
+            new LinkBadge("VOE_TabSectionFinancing".Translate(), null, ColorUtil.Gold);
+
+        /// <summary>Lays out badges left-to-right within the area, clamping when out of room.</summary>
+        public static void DrawBadgeRow(Rect area, List<LinkBadge> badges)
+        {
+            if (badges is null || badges.Count == 0) return;
+
+            GameFont prevFont = Text.Font;
+            Text.Font = GameFont.Small;
+            float h = Mathf.Min(area.height, 22f);
+            float y = area.y + (area.height - h) / 2f;
+            float x = area.x;
+
+            foreach (LinkBadge b in badges)
+            {
+                if (x >= area.xMax) break;
+                float iconW = b.icon != null ? BadgeIconSize + 4f : 0f;
+                float w = BadgePad + iconW + Text.CalcSize(b.label).x + BadgePad;
+                w = Mathf.Min(w, area.xMax - x);
+                DrawBadge(new Rect(x, y, w, h), b);
+                x += w + BadgeGap;
+            }
+
+            Text.Font = prevFont;
+        }
+
+        private static void DrawBadge(Rect rect, LinkBadge badge)
+        {
+            Color prevColor = GUI.color;
+            TextAnchor prevAnchor = Text.Anchor;
+
+            Widgets.DrawBoxSolid(rect, ColorUtil.SetA(badge.color, 0.15f));
+
+            float textX = rect.x + BadgePad;
+            if (badge.icon != null)
+            {
+                GUI.DrawTexture(new Rect(rect.x + BadgePad, rect.y + (rect.height - BadgeIconSize) / 2f, BadgeIconSize, BadgeIconSize), badge.icon);
+                textX += BadgeIconSize + 4f;
+            }
+
+            Text.Anchor = TextAnchor.MiddleLeft;
+            GUI.color = badge.color;
+            Widgets.Label(new Rect(textX, rect.y, rect.xMax - textX - 4f, rect.height), badge.label);
+
+            GUI.color = prevColor;
+            Text.Anchor = prevAnchor;
         }
     }
 }

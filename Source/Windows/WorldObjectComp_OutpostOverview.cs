@@ -99,23 +99,22 @@ namespace EmpireVOE
                 bool linkedHere = comp.IsLinkedHere(outpost);
                 bool linkedElsewhere = ResourceLinkUtil.IsLinkedToOther(outpost, comp);
 
-                // When linked elsewhere the Link/Unlink button is hidden, so let the detail fill that space
-                // instead of clamping early and leaving a blank gap.
+                // When linked elsewhere the Link/Unlink button is hidden, so let the row fill that space.
                 float detailRight = linkedElsewhere ? row.xMax - 4f : buttonRect.x - 8f;
-                Rect detailRect = new Rect(labelRect.xMax + 4f, row.y, detailRight - (labelRect.xMax + 4f), row.height);
+                float detailX = labelRect.xMax + 4f;
 
-                string feeds = "VOE_TabFeeds".Translate(ResourcesFed(outpost));
-                string detail = OutpostLinkView.DistanceLabel(uiSettlement, outpost) + "  -  " + feeds;
+                // Status text (contribution while linked here, else "linked elsewhere"), right-aligned.
+                string status = null;
                 if (linkedHere)
-                {
-                    double contribution = ResourceLinkUtil.ContributionOf(outpost, uiSettlement);
-                    detail += "  (" + "VOE_TabContribution".Translate(contribution.ToString("0.##")) + ")";
-                }
+                    status = "VOE_TabContribution".Translate(ResourceLinkUtil.ContributionOf(outpost, uiSettlement).ToString("0.##"));
                 else if (linkedElsewhere)
-                {
-                    detail += "  -  " + "VOE_TabLinkedElsewhere".Translate();
-                }
-                OutpostLinkView.DrawDetail(detailRect, detail);
+                    status = "VOE_TabLinkedElsewhere".Translate();
+
+                float statusW = status.NullOrEmpty() ? 0f : Mathf.Min(Text.CalcSize(status).x + 8f, (detailRight - detailX) * 0.5f);
+                OutpostLinkView.DrawBadgeRow(new Rect(detailX, row.y, detailRight - detailX - statusW, row.height),
+                    OutpostLinkView.ResourceBadges(outpost));
+                if (!status.NullOrEmpty())
+                    OutpostLinkView.DrawDetail(new Rect(detailRight - statusW, row.y, statusW, row.height), status);
 
                 if (linkedElsewhere)
                     continue;
@@ -161,10 +160,7 @@ namespace EmpireVOE
             foreach (EncampmentData data in entry.encampments)
             {
                 Rect row = ls.GetRect(OutpostLinkView.RowHeight);
-                Rect labelRect = new Rect(row.x, row.y, row.width * 0.5f, row.height);
-                Rect detailRect = new Rect(labelRect.xMax + 4f, row.y, row.width - labelRect.width - 4f, row.height);
-                OutpostLinkView.DrawOutpostLabel(labelRect, data.encampment);
-                OutpostLinkView.DrawDetail(detailRect, OutpostLinkView.DistanceLabel(uiSettlement, data.encampment));
+                OutpostLinkView.DrawOutpostLabel(row, data.encampment);
             }
         }
 
@@ -187,9 +183,8 @@ namespace EmpireVOE
                 Rect labelRect = new Rect(row.x, row.y, row.width * 0.5f, row.height);
                 Rect detailRect = new Rect(labelRect.xMax + 4f, row.y, row.width - labelRect.width - 4f, row.height);
                 OutpostLinkView.DrawOutpostLabel(labelRect, defensive);
-                string detail = "VOE_AuraLevelValue".Translate(DefensiveAuraEntry.OutpostBonus(defensive).ToString("0.#"))
-                    + "  •  " + OutpostLinkView.DistanceLabel(uiSettlement, defensive);
-                OutpostLinkView.DrawDetail(detailRect, detail);
+                OutpostLinkView.DrawDetail(detailRect,
+                    "VOE_AuraLevelValue".Translate(DefensiveAuraEntry.OutpostBonus(defensive).ToString("0.#")));
             }
         }
 
@@ -210,7 +205,7 @@ namespace EmpireVOE
 
             if (current is object)
             {
-                OutpostLinkView.DrawOutpostLabel(labelRect, current, OutpostLinkView.DistanceLabel(uiSettlement, current));
+                OutpostLinkView.DrawOutpostLabel(labelRect, current);
             }
             else
             {
@@ -224,13 +219,6 @@ namespace EmpireVOE
                 clear();
             if (UIUtil.ButtonFlat(changeRect, "VOE_TabChange".Translate()))
                 openMenu();
-        }
-
-        private static string ResourcesFed(Outpost outpost)
-        {
-            OutpostResourceLinkExtension ext = outpost.def.GetModExtension<OutpostResourceLinkExtension>();
-            if (ext?.resources is null) return "";
-            return string.Join(", ", ext.resources.Select(r => r.LabelCap.ToString()).ToArray());
         }
     }
 }
