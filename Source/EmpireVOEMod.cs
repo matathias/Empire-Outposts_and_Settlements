@@ -67,9 +67,11 @@ namespace EmpireVOE
         public static bool EncampmentActive => !disableIntegration && enableEncampment;
         public static bool OutpostConversionActive => !disableIntegration && enableOutpostConversion;
         public static bool RoadsActive => !disableIntegration && enableRoads;
-        // Shield half on by default; raid-diversion half is opt-in. Both gated on the Military toggle.
+        public static bool OutpostMainTabActive => !disableIntegration && enableOutpostMainTab;
+        // Defensive aura has two halves: the passive shield (on by default) and the opt-in raid-diversion
+        // "lightning rod". Both require the aura toggle (DefensiveAuraActive) — disabling the aura disables both.
         public static bool DefensiveAuraActive => !disableIntegration && enableMilitary && enableDefensiveAura;
-        public static bool DefensiveAuraDivertActive => !disableIntegration && enableMilitary && enableDefensiveAuraDivert;
+        public static bool DefensiveAuraDivertActive => DefensiveAuraActive && enableDefensiveAuraDivert;
 
         public override void ExposeData()
         {
@@ -361,7 +363,7 @@ namespace EmpireVOE
                 ref EmpireVOESettings.enableOutpostMainTab,
                 "FCVOE_EnableOutpostMainTabDesc".Translate());
             if (prevMainTab != EmpireVOESettings.enableOutpostMainTab)
-                OutpostMainTab.SetRegistered(EmpireVOESettings.enableOutpostMainTab);
+                OutpostMainTab.SetRegistered(EmpireVOESettings.OutpostMainTabActive);
 
             ls.Gap(12f);
             if (ls.ButtonText("FCVOE_OpenPatchNotes".Translate()))

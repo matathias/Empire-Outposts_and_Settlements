@@ -201,6 +201,7 @@ namespace EmpireVOE
         {
             ToggleMilitary(false);
             EmpireRegistry.Unregister(OutpostFinancer.Instance);
+            OutpostMainTab.SetRegistered(false);
         }
 
         public static void ReregisterAll()
@@ -209,6 +210,7 @@ namespace EmpireVOE
             EmpireRegistry.Register(OutpostFinancer.Instance);
             if (EmpireVOESettings.enableMilitary)
                 ToggleMilitary(true);
+            OutpostMainTab.SetRegistered(EmpireVOESettings.OutpostMainTabActive);
         }
 
         // --- Private helpers ---

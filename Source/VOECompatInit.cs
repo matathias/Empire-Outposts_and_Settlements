@@ -20,7 +20,7 @@ namespace EmpireVOE
             EmpireRegistry.Register(OutpostDeliveryInterceptor.Instance);
             EmpireRegistry.Register(VOERoadNodeProvider.Instance);
             EmpireRegistry.Register(DefensiveAuraRaidWeightProvider.Instance);
-            if (EmpireVOESettings.enableOutpostMainTab)
+            if (EmpireVOESettings.OutpostMainTabActive)
                 EmpireRegistry.Register(OutpostMainTab.Instance);
             EmpireCacheUtil.RegisterCacheInvalidator("EmpireVOE", () =>
             {
@@ -30,7 +30,7 @@ namespace EmpireVOE
                 EmpireRegistry.Register(OutpostDeliveryInterceptor.Instance);
                 EmpireRegistry.Register(VOERoadNodeProvider.Instance);
                 EmpireRegistry.Register(DefensiveAuraRaidWeightProvider.Instance);
-                if (EmpireVOESettings.enableOutpostMainTab)
+                if (EmpireVOESettings.OutpostMainTabActive)
                     EmpireRegistry.Register(OutpostMainTab.Instance);
             });
 
