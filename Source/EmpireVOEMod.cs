@@ -184,6 +184,7 @@ namespace EmpireVOE
 
             Listing_Standard ls = new Listing_Standard();
             ls.Begin(viewRect);
+            Listing_StandardExtensions.ResetRowStripe();
             ls.maxOneColumn = true;
 
             // Master toggle
@@ -231,11 +232,9 @@ namespace EmpireVOE
                     int prevRange = EmpireVOESettings.defensiveAuraRange;
                     float prevFactor = EmpireVOESettings.defensiveAuraLevelFactor;
 
-                    ls.Label("    " + "FCVOE_DefensiveAuraRange".Translate() + ": " + EmpireVOESettings.defensiveAuraRange);
-                    EmpireVOESettings.defensiveAuraRange = (int)ls.Slider(EmpireVOESettings.defensiveAuraRange, 5, 50);
+                    EmpireVOESettings.defensiveAuraRange = ls.SliderTextField("FCVOE_DefensiveAuraRange", "    " + "FCVOE_DefensiveAuraRange".Translate(), EmpireVOESettings.defensiveAuraRange, 5, 50);
 
-                    ls.Label("    " + "FCVOE_DefensiveAuraLevelFactor".Translate() + ": " + EmpireVOESettings.defensiveAuraLevelFactor.ToString("P0"));
-                    EmpireVOESettings.defensiveAuraLevelFactor = (float)System.Math.Round(ls.Slider(EmpireVOESettings.defensiveAuraLevelFactor, 0.05f, 1f), 2);
+                    EmpireVOESettings.defensiveAuraLevelFactor = ls.SliderTextField("FCVOE_DefensiveAuraLevelFactor", "    " + "FCVOE_DefensiveAuraLevelFactor".Translate(), EmpireVOESettings.defensiveAuraLevelFactor, 0.05f, 1f, 2);
 
                     ls.CheckboxLabeled(
                         "    " + "FCVOE_EnableDefensiveAuraDivert".Translate(),
@@ -276,20 +275,16 @@ namespace EmpireVOE
 
             if (EmpireVOESettings.enableResourceLink)
             {
-                ls.Label("  " + "FCVOE_ResourceLinkRange".Translate() + ": " + EmpireVOESettings.resourceLinkRange);
-                EmpireVOESettings.resourceLinkRange = (int)ls.Slider(EmpireVOESettings.resourceLinkRange, 5, 50);
+                EmpireVOESettings.resourceLinkRange = ls.SliderTextField("FCVOE_ResourceLinkRange", "  " + "FCVOE_ResourceLinkRange".Translate(), EmpireVOESettings.resourceLinkRange, 5, 50);
 
-                ls.Label("  " + "FCVOE_AdditivePerLevel".Translate() + ": " + EmpireVOESettings.additivePerLevel.ToString("F3"));
-                EmpireVOESettings.additivePerLevel = (float)System.Math.Round(ls.Slider(EmpireVOESettings.additivePerLevel, 0.005f, 0.1f), 3);
+                EmpireVOESettings.additivePerLevel = ls.SliderTextField("FCVOE_AdditivePerLevel", "  " + "FCVOE_AdditivePerLevel".Translate(), EmpireVOESettings.additivePerLevel, 0.005f, 0.1f, 3);
 
-                ls.Label("  " + "FCVOE_SkillFloor".Translate() + ": " + EmpireVOESettings.skillFloor);
-                EmpireVOESettings.skillFloor = (int)ls.Slider(EmpireVOESettings.skillFloor, 0, 10);
+                EmpireVOESettings.skillFloor = ls.SliderTextField("FCVOE_SkillFloor", "  " + "FCVOE_SkillFloor".Translate(), EmpireVOESettings.skillFloor, 0, 10);
 
                 // Power-outpost conversion (only shown when VOE Power Outposts is installed)
                 if (EmpireVOECompat.PowerOutpostsActive)
                 {
-                    ls.Label("  " + "FCVOE_PowerConversionMultiplier".Translate() + ": " + EmpireVOESettings.powerConversionMultiplier.ToString("F2"));
-                    EmpireVOESettings.powerConversionMultiplier = (float)System.Math.Round(ls.Slider(EmpireVOESettings.powerConversionMultiplier, 0.1f, 5f), 2);
+                    EmpireVOESettings.powerConversionMultiplier = ls.SliderTextField("FCVOE_PowerConversionMultiplier", "  " + "FCVOE_PowerConversionMultiplier".Translate(), EmpireVOESettings.powerConversionMultiplier, 0.1f, 5f, 2);
                 }
             }
 
@@ -303,11 +298,9 @@ namespace EmpireVOE
 
             if (EmpireVOESettings.enableEncampment)
             {
-                ls.Label("  " + "FCVOE_EncampmentRange".Translate() + ": " + EmpireVOESettings.encampmentRange);
-                EmpireVOESettings.encampmentRange = (int)ls.Slider(EmpireVOESettings.encampmentRange, 5, 50);
+                EmpireVOESettings.encampmentRange = ls.SliderTextField("FCVOE_EncampmentRange", "  " + "FCVOE_EncampmentRange".Translate(), EmpireVOESettings.encampmentRange, 5, 50);
 
-                ls.Label("  " + "FCVOE_EncampmentHealRatePerLevel".Translate() + ": " + EmpireVOESettings.encampmentHealRatePerLevel.ToString("F3"));
-                EmpireVOESettings.encampmentHealRatePerLevel = (float)System.Math.Round(ls.Slider(EmpireVOESettings.encampmentHealRatePerLevel, 0f, 0.1f), 3);
+                EmpireVOESettings.encampmentHealRatePerLevel = ls.SliderTextField("FCVOE_EncampmentHealRatePerLevel", "  " + "FCVOE_EncampmentHealRatePerLevel".Translate(), EmpireVOESettings.encampmentHealRatePerLevel, 0f, 0.1f, 3);
             }
 
             ls.GapLine();
@@ -325,11 +318,9 @@ namespace EmpireVOE
                     ref EmpireVOESettings.convertOutpostPawns,
                     "FCVOE_ConvertOutpostPawnsDesc".Translate());
 
-                ls.Label("  " + "FCVOE_ReducedFoundingCostFactor".Translate() + ": " + EmpireVOESettings.reducedFoundingCostFactor.ToString("P0"));
-                EmpireVOESettings.reducedFoundingCostFactor = (float)System.Math.Round(ls.Slider(EmpireVOESettings.reducedFoundingCostFactor, 0.1f, 1f), 2);
+                EmpireVOESettings.reducedFoundingCostFactor = ls.SliderTextField("FCVOE_ReducedFoundingCostFactor", "  " + "FCVOE_ReducedFoundingCostFactor".Translate(), EmpireVOESettings.reducedFoundingCostFactor, 0.1f, 1f, 2);
 
-                ls.Label("  " + "FCVOE_TownFlatAdditive".Translate() + ": " + EmpireVOESettings.townFlatAdditive.ToString("F2"));
-                EmpireVOESettings.townFlatAdditive = (float)System.Math.Round(ls.Slider(EmpireVOESettings.townFlatAdditive, 0f, 2f), 2);
+                EmpireVOESettings.townFlatAdditive = ls.SliderTextField("FCVOE_TownFlatAdditive", "  " + "FCVOE_TownFlatAdditive".Translate(), EmpireVOESettings.townFlatAdditive, 0f, 2f, 2);
 
                 ls.CheckboxLabeled(
                     "  " + "FCVOE_EnableConversionDelay".Translate(),
@@ -338,8 +329,7 @@ namespace EmpireVOE
 
                 if (EmpireVOESettings.enableConversionDelay)
                 {
-                    ls.Label("    " + "FCVOE_ConversionDelayDays".Translate() + ": " + EmpireVOESettings.conversionDelayDays);
-                    EmpireVOESettings.conversionDelayDays = (int)ls.Slider(EmpireVOESettings.conversionDelayDays, 0, 60);
+                    EmpireVOESettings.conversionDelayDays = ls.SliderTextField("FCVOE_ConversionDelayDays", "    " + "FCVOE_ConversionDelayDays".Translate(), EmpireVOESettings.conversionDelayDays, 0, 60);
                 }
 
                 ls.CheckboxLabeled(
@@ -388,22 +378,19 @@ namespace EmpireVOE
 
             Listing_Standard ls = new Listing_Standard();
             ls.Begin(viewRect);
+            Listing_StandardExtensions.ResetRowStripe();
             ls.maxOneColumn = true;
 
             ls.Label("FCVOE_TownRequirementsHeader".Translate());
             ls.GapLine();
 
-            ls.Label("  " + "FCVOE_TownMinTotal".Translate() + ": " + EmpireVOESettings.townMinTotal);
-            EmpireVOESettings.townMinTotal = (int)ls.Slider(EmpireVOESettings.townMinTotal, 0, 20);
+            EmpireVOESettings.townMinTotal = ls.SliderTextField("FCVOE_TownMinTotal", "  " + "FCVOE_TownMinTotal".Translate(), EmpireVOESettings.townMinTotal, 0, 20);
 
-            ls.Label("  " + "FCVOE_TownMinSettlements".Translate() + ": " + EmpireVOESettings.townMinSettlements);
-            EmpireVOESettings.townMinSettlements = (int)ls.Slider(EmpireVOESettings.townMinSettlements, 0, 20);
+            EmpireVOESettings.townMinSettlements = ls.SliderTextField("FCVOE_TownMinSettlements", "  " + "FCVOE_TownMinSettlements".Translate(), EmpireVOESettings.townMinSettlements, 0, 20);
 
-            ls.Label("  " + "FCVOE_TownMinOutposts".Translate() + ": " + EmpireVOESettings.townMinOutposts);
-            EmpireVOESettings.townMinOutposts = (int)ls.Slider(EmpireVOESettings.townMinOutposts, 0, 20);
+            EmpireVOESettings.townMinOutposts = ls.SliderTextField("FCVOE_TownMinOutposts", "  " + "FCVOE_TownMinOutposts".Translate(), EmpireVOESettings.townMinOutposts, 0, 20);
 
-            ls.Label("  " + "FCVOE_TownRange".Translate() + ": " + EmpireVOESettings.townRange);
-            EmpireVOESettings.townRange = (int)ls.Slider(EmpireVOESettings.townRange, 1, 50);
+            EmpireVOESettings.townRange = ls.SliderTextField("FCVOE_TownRange", "  " + "FCVOE_TownRange".Translate(), EmpireVOESettings.townRange, 1, 50);
 
             ls.Gap();
 
@@ -416,8 +403,7 @@ namespace EmpireVOE
 
             ls.Label("FCVOE_TownXenoPureHeader".Translate());
             ls.Label("  " + "FCVOE_TownXenoPureChanceDesc".Translate());
-            ls.Label("  " + "FCVOE_TownXenoPureChance".Translate() + ": " + EmpireVOESettings.townXenotypePureChanceMult.ToString("P0"));
-            EmpireVOESettings.townXenotypePureChanceMult = (float)System.Math.Round(ls.Slider(EmpireVOESettings.townXenotypePureChanceMult, 0.05f, 1f), 2);
+            EmpireVOESettings.townXenotypePureChanceMult = ls.SliderTextField("FCVOE_TownXenoPureChance", "  " + "FCVOE_TownXenoPureChance".Translate(), EmpireVOESettings.townXenotypePureChanceMult, 0.05f, 1f, 2);
 
             townsContentHeight = ls.CurHeight;
             ls.End();
