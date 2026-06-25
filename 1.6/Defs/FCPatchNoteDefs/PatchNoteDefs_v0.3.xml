@@ -220,4 +220,20 @@
 		<li>Matathias</li>
 		</authors>
 	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_15</defName>
+		<label>Minor updates</label>
+		<description>A few minor last-minute updates.</description>
+		<releaseDate>2026-06-25</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Update mod settings to add numeric text fields to the sliders, and also use zebra striping</li>
+		<li>Some fixes to make sure that all of the feature toggles actually correctly gate their features</li>
+		<li>Change to the Found New Settlement companion window to make sure it doesn&apos;t stack with other Empire Refactored submods</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
 </Defs>

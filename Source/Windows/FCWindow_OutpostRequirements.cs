@@ -11,8 +11,10 @@ namespace EmpireVOE
     /// outpost types the player must establish (and then convert) to found the selected settlement type.
     /// Modeled on FactionColonies.FCWindow_CreateColonyStatModifiers.
     /// </summary>
-    public class FCWindow_OutpostRequirements : Window
+    public class FCWindow_OutpostRequirements : Window, IFoundingCompanionWindow
     {
+        public int CompanionOrder => 10;
+
         private const float WindowWidth = 280f;
         private const float Padding = 8f;
 
@@ -42,16 +44,7 @@ namespace EmpireVOE
         protected override void SetInitialSizeAndPosition()
         {
             base.SetInitialSizeAndPosition();
-            CreateColonyWindowFc createWindow = Find.WindowStack.WindowOfType<CreateColonyWindowFc>();
-            if (createWindow != null)
-            {
-                windowRect.x = createWindow.windowRect.x - WindowWidth - 10f;
-                windowRect.y = createWindow.windowRect.y;
-                // Stack below the stat-modifiers companion window if it is also open.
-                FCWindow_CreateColonyStatModifiers statWin = Find.WindowStack.WindowOfType<FCWindow_CreateColonyStatModifiers>();
-                if (statWin != null)
-                    windowRect.y = statWin.windowRect.yMax + 10f;
-            }
+            FoundingScreenHooks.ReflowCompanions();
         }
 
         public override void DoWindowContents(Rect inRect)
