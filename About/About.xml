@@ -12,7 +12,7 @@
 - Defensive Outposts can auto-defend like Empire squads, and outposts in general are vulnerable to Empire raids (though such raids only resolve through auto-battles)
 - Outposts, under the right conditoins, can be transformed into Empire settlements
 - Empire settlements can send their taxes and tithes to a specific outpost, and can also be set to draw all necessary funds from an outpost's coffers
-- Research outposts can be linked to a settlement, providing a boost to that settlement's research production instead of raw research points
+- Production and Science outposts can be linked to a settlement, providing a boost to that settlement's resource production instead of materials or raw research points
 - Encampments accelerate the heal rate of Empire mercs in nearby settlements
 - Outposts are included in Empire's road-building system, resulting in all of your outposts and settlements being connected</description>
     <incompatibleWith>
