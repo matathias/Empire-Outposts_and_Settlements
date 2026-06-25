@@ -4,6 +4,7 @@
         <li>/</li>
         <li>1.6</li>
         <li IfModActive="Matathias.Empire.Specialists">Compat/Specialists</li>
+        <li IfModActive="Matathias.Empire.SupplyChain">Compat/SupplyChain</li>
         <li IfModActive="MrHydralisk.VOEAdditionalOutposts">Compat/VOEAdditionalOutposts</li>
         <li IfModActive="MrHydralisk.VOEPowerGrid">Compat/VOEPowerGrid</li>
         <li IfModActive="Scorpio.VOEFactory">Compat/VOEFactory</li>

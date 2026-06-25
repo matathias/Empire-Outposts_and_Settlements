@@ -25,6 +25,14 @@ namespace EmpireVOE
         public static Action<WorldSettlementFC, List<Pawn>> SpecialistsCallback;
 
         /// <summary>
+        /// Set by the Routes &amp; Resources compat DLL when Matathias.Empire.SupplyChain is active.
+        /// Invoked right after the conversion type-picker opens; the compat docks a companion window
+        /// beside the picker that previews the (reduced) R&amp;R resource cost for the hovered type.
+        /// Null when the SupplyChain submod is not loaded.
+        /// </summary>
+        public static Action<Outpost> ConversionCostCompanionOpener;
+
+        /// <summary>
         /// True while <see cref="ConvertOutpost"/> runs its founding-cost validation. The
         /// founding-restriction validator honors this so a conversion — the intended way to found a
         /// settlement when "require outpost" is on — isn't vetoed by that same restriction.

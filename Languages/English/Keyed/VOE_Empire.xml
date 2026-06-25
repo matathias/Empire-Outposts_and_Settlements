@@ -94,6 +94,12 @@
     <FCVOE_OutpostRequirementsDesc>To found a {0}, establish and convert one of these outposts:</FCVOE_OutpostRequirementsDesc>
     <FCVOE_OutpostRequirementsNone>No outpost type can become this settlement type. Check that the required submod is installed.</FCVOE_OutpostRequirementsNone>
 
+    <!-- Routes & Resources compat: conversion-cost preview -->
+    <FCVOE_ConversionCostTitle>Conversion cost</FCVOE_ConversionCostTitle>
+    <FCVOE_ConversionCostNote>Paid when this outpost is converted to a settlement, not when the outpost is founded.</FCVOE_ConversionCostNote>
+    <FCVOE_ConversionCostHoverPrompt>Hover a settlement type to preview its conversion cost.</FCVOE_ConversionCostHoverPrompt>
+    <FCVOE_ConversionCostDistanceMult>Distance multiplier: x{0}</FCVOE_ConversionCostDistanceMult>
+
     <!-- Settings Tabs -->
     <FCVOE_TabIntegration>Integration</FCVOE_TabIntegration>
     <FCVOE_TabTowns>Towns</FCVOE_TabTowns>

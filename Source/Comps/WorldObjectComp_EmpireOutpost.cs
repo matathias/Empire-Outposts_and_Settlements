@@ -79,10 +79,15 @@ namespace EmpireVOE
                         defaultLabel = "FCVOE_ConvertToSettlement".Translate(),
                         defaultDesc = "FCVOE_ConvertToSettlementDesc".Translate(),
                         icon = TexCommand.Install,
-                        action = () => Find.WindowStack.Add(new FCWindow_SettlementTypePicker(
-                            types,
-                            selected => OutpostConversionUtil.ConvertOutpost(Outpost, selected),
-                            "FCVOE_ConvertPickType"))
+                        action = () =>
+                        {
+                            Find.WindowStack.Add(new FCWindow_SettlementTypePicker(
+                                types,
+                                selected => OutpostConversionUtil.ConvertOutpost(Outpost, selected),
+                                "FCVOE_ConvertPickType"));
+                            // R&R compat (if loaded) docks a cost-preview window beside the picker.
+                            OutpostConversionUtil.ConversionCostCompanionOpener?.Invoke(Outpost);
+                        }
                     };
                     if (!OutpostConversionUtil.CanConvertNow(Outpost, out string convertReason))
                     {

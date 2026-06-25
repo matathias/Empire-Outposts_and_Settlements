@@ -236,4 +236,18 @@
 		<li>Matathias</li>
 		</authors>
 	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_16</defName>
+		<label>Routes &amp; Resources Compatibility</label>
+		<description>Adds compability with Routes &amp; Resources when the &quot;Found Settlement only via outpost&quot; option is enabled.</description>
+		<releaseDate>2026-06-25</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>When &quot;Found settlements via outposts&quot; mode is enabled, changed Routes &amp; Resources resource-cost window to show the cost of converting, not founding. Also expose this info on the conversion screen</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
 </Defs>

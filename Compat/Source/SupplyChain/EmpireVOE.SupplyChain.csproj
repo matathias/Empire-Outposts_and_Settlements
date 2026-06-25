@@ -4,15 +4,13 @@
         <TargetFramework>net48</TargetFramework>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
-        <OutputPath>..\1.6\Assemblies</OutputPath>
+        <OutputPath>..\..\SupplyChain\Assemblies</OutputPath>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-        <BaseOutputPath>..\1.6\Assemblies</BaseOutputPath>
+        <BaseOutputPath>..\..\SupplyChain\Assemblies</BaseOutputPath>
         <Configurations>Debug;Release;Testing</Configurations>
         <PlatformTarget>x64</PlatformTarget>
-        <RootNamespace>EmpireVOE</RootNamespace>
-        <AssemblyName>EmpireVOE</AssemblyName>
-        <AssemblyVersion>0.3.16.0</AssemblyVersion>
-        <FileVersion>0.3.16.0</FileVersion>
+        <RootNamespace>EmpireVOE.SupplyChain</RootNamespace>
+        <AssemblyName>EmpireVOE.SupplyChain</AssemblyName>
     </PropertyGroup>
     <ItemGroup>
         <!-- Rimworld -->
@@ -23,30 +21,34 @@
     <ItemGroup>
         <!-- Empire base mod -->
         <Reference Include="Empire">
-            <HintPath>..\..\Empire\1.6\Assemblies\Empire.dll</HintPath>
+            <HintPath>..\..\..\..\Empire\1.6\Assemblies\Empire.dll</HintPath>
             <Private>False</Private>
         </Reference>
-        <!-- VEF Outposts framework -->
-        <Reference Include="Outposts">
-            <HintPath>..\References\Outposts.dll</HintPath>
+        <!-- EmpireVOE main assembly -->
+        <Reference Include="EmpireVOE">
+            <HintPath>..\..\..\1.6\Assemblies\EmpireVOE.dll</HintPath>
             <Private>False</Private>
         </Reference>
-        <!-- VOE -->
-        <Reference Include="VOE">
-            <HintPath>..\References\VOE.dll</HintPath>
+        <!-- Empire Routes & Resources (SupplyChain) submod -->
+        <Reference Include="Empire.SupplyChain">
+            <HintPath>..\..\..\..\Empire-SupplyChain\1.6\Assemblies\Empire.SupplyChain.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <!-- RimWorld -->
         <Reference Include="Assembly-CSharp">
-            <HintPath>..\..\Empire\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
+            <HintPath>..\..\..\..\Empire\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
             <Private>False</Private>
         </Reference>
+        <Reference Include="Outposts">
+          <HintPath>..\..\..\References\Outposts.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
         <Reference Include="UnityEngine">
-            <HintPath>..\..\Empire\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
+            <HintPath>..\..\..\..\Empire\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="UnityEngine.CoreModule">
-            <HintPath>..\..\Empire\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+            <HintPath>..\..\..\..\Empire\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
             <Private>False</Private>
         </Reference>
     </ItemGroup>
