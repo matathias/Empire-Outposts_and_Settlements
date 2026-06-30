@@ -36,6 +36,7 @@
         </Reference>
         <Reference Include="VOE">
           <HintPath>..\..\..\References\VOE.dll</HintPath>
+          <Private>False</Private>
         </Reference>
         <Reference Include="VOE Power Grid">
           <HintPath>..\..\..\References\VOE Power Grid.dll</HintPath>
