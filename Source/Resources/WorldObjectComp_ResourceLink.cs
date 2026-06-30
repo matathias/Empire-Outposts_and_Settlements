@@ -88,7 +88,7 @@ namespace EmpireVOE
             return Find.WorldObjects.AllWorldObjects
                 .OfType<Outpost>()
                 .Where(o => ResourceLinkUtil.IsLinkable(o)
-                            && Find.WorldGrid.ApproxDistanceInTiles(o.Tile, parent.Tile) <= EmpireVOESettings.resourceLinkRange)
+                            && ResourceLinkUtil.InLinkRange(o, parent.Tile))
                 .OrderBy(o => Find.WorldGrid.ApproxDistanceInTiles(o.Tile, parent.Tile))
                 .ToList();
         }

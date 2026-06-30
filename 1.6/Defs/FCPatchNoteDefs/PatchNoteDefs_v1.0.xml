@@ -13,4 +13,19 @@
 		<li>Matathias</li>
 		</authors>
 	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_1_0_1</defName>
+		<label>Road Toggling</label>
+		<description>Minor change to the road-building integration.</description>
+		<releaseDate>2026-06-30</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+			<li>Adds a gizmo to Outposts to let the player toggle whether or not they are included in Empire&apos;s road builder</li>
+			<li>Outposts from VOE:Power Grid can now only link to settlements that are within its transmission range</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
 </Defs>

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using FactionColonies;
 using Outposts;
 using RimWorld;
+using RimWorld.Planet;
 using Verse;
 
 namespace EmpireVOE
@@ -34,6 +35,15 @@ namespace EmpireVOE
         public virtual double Contribution(Outpost outpost, WorldSettlementFC settlement)
         {
             return ResourceLinkUtil.SkillSum(outpost, this);
+        }
+
+        /// <summary>
+        /// Whether <paramref name="settlementTile"/> is within this outpost's resource-linking range. Default is
+        /// the flat global resourceLinkRange; subclasses (power) override with an outpost-specific range.
+        /// </summary>
+        public virtual bool InLinkRange(Outpost outpost, PlanetTile settlementTile)
+        {
+            return Find.WorldGrid.ApproxDistanceInTiles(outpost.Tile, settlementTile) <= EmpireVOESettings.resourceLinkRange;
         }
     }
 }

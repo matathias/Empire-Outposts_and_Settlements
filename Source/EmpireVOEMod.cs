@@ -19,6 +19,8 @@ namespace EmpireVOE
         public static bool enableEncampment = true;
         public static bool enableOutpostConversion = true;
         public static bool enableRoads = true;
+        // Per-outpost default for the road-building opt-in toggle (each outpost can override via its gizmo)
+        public static bool roadsDefaultOn = true;
         public static bool enableOutpostMainTab = true;
 
         // Skill-based bonuses (used by resource linking and outpost conversion)
@@ -108,6 +110,7 @@ namespace EmpireVOE
 
             // Road Integration
             Scribe_Values.Look(ref enableRoads, "enableRoads", true);
+            Scribe_Values.Look(ref roadsDefaultOn, "roadsDefaultOn", true);
 
             // Outpost -> Settlement conversion
             Scribe_Values.Look(ref requireOutpostForSettlement, "requireOutpostForSettlement", false);
@@ -352,6 +355,15 @@ namespace EmpireVOE
             {
                 // Force the road network to recompute so outpost nodes are added/removed.
                 FindFC.RoadBuilder?.FlagUpdateRoadQueues();
+            }
+
+            if (EmpireVOESettings.enableRoads)
+            {
+                // Per-outpost default only — changing it affects future outposts, not existing ones, so no recompute.
+                ls.CheckboxLabeled(
+                    "  " + "FCVOE_RoadsDefaultOn".Translate(),
+                    ref EmpireVOESettings.roadsDefaultOn,
+                    "FCVOE_RoadsDefaultOnDesc".Translate());
             }
 
             ls.GapLine();

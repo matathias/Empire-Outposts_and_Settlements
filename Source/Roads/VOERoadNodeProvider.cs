@@ -23,8 +23,11 @@ namespace EmpireVOE
             if (!EmpireVOESettings.RoadsActive || Find.World is null) yield break;
             foreach (Outpost outpost in Find.WorldObjects.AllWorldObjects.OfType<Outpost>())
             {
-                if (outpost.Faction == Faction.OfPlayer)
-                    yield return outpost.Tile;
+                if (outpost.Faction != Faction.OfPlayer) continue;
+                // Respect the per-outpost road opt-in (default true if the comp is somehow absent).
+                WorldObjectComp_EmpireOutpost comp = outpost.GetComponent<WorldObjectComp_EmpireOutpost>();
+                if (comp is object && !comp.buildRoads) continue;
+                yield return outpost.Tile;
             }
         }
     }

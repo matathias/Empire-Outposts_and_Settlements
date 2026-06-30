@@ -212,7 +212,7 @@ namespace EmpireVOE
             List<FloatMenuOption> options = new List<FloatMenuOption>();
             foreach (WorldSettlementFC s in uiFaction.settlements)
             {
-                if (Find.WorldGrid.ApproxDistanceInTiles(outpost.Tile, s.Tile) > EmpireVOESettings.resourceLinkRange) continue;
+                if (!ResourceLinkUtil.InLinkRange(outpost, s.Tile)) continue;
                 if (s.GetComponent<WorldObjectComp_ResourceLink>() is null) continue;
                 WorldSettlementFC captured = s;
                 options.Add(new FloatMenuOption(s.Name,

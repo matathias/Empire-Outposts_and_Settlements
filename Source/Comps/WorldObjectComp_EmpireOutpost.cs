@@ -26,16 +26,31 @@ namespace EmpireVOE
     {
         [Unsaved] public OutpostRaidTarget raidTarget;
 
+        // Per-outpost opt-in for road building. Seeded from EmpireVOESettings.roadsDefaultOn on fresh
+        // creation; toggled via the road gizmo. Honored by VOERoadNodeProvider.
+        public bool buildRoads = true;
+
         private Outpost Outpost => (Outpost)parent;
 
         public override void Initialize(WorldObjectCompProperties props)
         {
             base.Initialize(props);
+            // Fresh outpost only: Initialize also runs during LoadingVars, so guard on Scribe.mode to seed
+            // the road opt-in from the setting only for newly created outposts. On load, PostExposeData
+            // restores the saved value instead.
+            if (Scribe.mode == LoadSaveMode.Inactive)
+                buildRoads = EmpireVOESettings.roadsDefaultOn;
             // Road integration is independent of the Military toggle: flag the road
             // network to recompute so this outpost is picked up as a road node.
             if (EmpireVOESettings.RoadsActive) FindFC.RoadBuilder?.FlagUpdateRoadQueues();
             if (!EmpireVOESettings.MilitaryActive) return;
             Register();
+        }
+
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            Scribe_Values.Look(ref buildRoads, "voeBuildRoads", true);
         }
 
         public override void PostPostRemove()
@@ -52,6 +67,24 @@ namespace EmpireVOE
 
         public override IEnumerable<Gizmo> GetGizmos()
         {
+            // Per-outpost road-building opt-in toggle
+            if (EmpireVOESettings.RoadsActive && parent.Faction == Faction.OfPlayer)
+            {
+                yield return new Command_Toggle
+                {
+                    defaultLabel = "FCVOE_BuildRoads".Translate(),
+                    defaultDesc = "FCVOE_BuildRoadsDesc".Translate(),
+                    icon = TexLoad.iconCustomize,
+                    isActive = () => buildRoads,
+                    toggleAction = () =>
+                    {
+                        buildRoads = !buildRoads;
+                        // Recompute the MST so this outpost's road node is added/dropped.
+                        FindFC.RoadBuilder?.FlagUpdateRoadQueues();
+                    }
+                };
+            }
+
             // Military "Change Defender" gizmo
             if (EmpireVOESettings.MilitaryActive)
             {

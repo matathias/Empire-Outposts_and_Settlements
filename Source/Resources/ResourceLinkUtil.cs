@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using FactionColonies;
 using Outposts;
+using RimWorld.Planet;
 using Verse;
 
 namespace EmpireVOE
@@ -46,6 +47,13 @@ namespace EmpireVOE
         {
             OutpostResourceLinkExtension ext = outpost?.def.GetModExtension<OutpostResourceLinkExtension>();
             return ext is null ? 0 : ext.Contribution(outpost, settlement);
+        }
+
+        /// <summary>Whether the settlement at <paramref name="settlementTile"/> is within the outpost's link range.</summary>
+        public static bool InLinkRange(Outpost outpost, PlanetTile settlementTile)
+        {
+            OutpostResourceLinkExtension ext = outpost?.def.GetModExtension<OutpostResourceLinkExtension>();
+            return ext is object && ext.InLinkRange(outpost, settlementTile);
         }
 
         /// <summary>

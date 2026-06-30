@@ -4,6 +4,7 @@ using EmpireVOE;
 using FactionColonies;
 using HarmonyLib;
 using Outposts;
+using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 using VOEPowerGrid;
@@ -38,6 +39,18 @@ namespace EmpireVOE.PowerGrid
             float loss = per > 0 ? Mathf.Clamp01((dist / (float)per - 1f) / 100f) : 0f;
 
             return units * (1.0 - loss);
+        }
+
+        /// <summary>
+        /// A settlement may link to a power outpost only when it is within the outpost's transmission range
+        /// (<c>PowerNetworkRange</c> = transmission towers x the grid mod's per-tower range). This replaces the
+        /// flat global resourceLinkRange for power outposts, matching VOE's own outlet gating.
+        /// </summary>
+        public override bool InLinkRange(Outpost outpost, PlanetTile settlementTile)
+        {
+            Outpost_PowerGrid pg = outpost as Outpost_PowerGrid;
+            if (pg is null) return false;
+            return Find.WorldGrid.TraversalDistanceBetween(pg.Tile, settlementTile) <= pg.PowerNetworkRange;
         }
     }
 

@@ -80,20 +80,4 @@
 		</match>
 	</Operation>
 
-	<!-- Outpost_Mercenary_Camp: combat pawns can auto-defend Empire settlements and
-	     appear in the military tab, the same way base VOE's Outpost_Defensive does. -->
-	<Operation Class="PatchOperationConditional">
-		<xpath>Defs/WorldObjectDef[defName="Outpost_Mercenary_Camp"]/comps</xpath>
-		<nomatch Class="PatchOperationAdd">
-			<xpath>Defs/WorldObjectDef[defName="Outpost_Mercenary_Camp"]</xpath>
-			<value><comps /></value>
-		</nomatch>
-	</Operation>
-	<Operation Class="PatchOperationAdd">
-		<xpath>Defs/WorldObjectDef[defName="Outpost_Mercenary_Camp"]/comps</xpath>
-		<value>
-			<li Class="EmpireVOE.WorldObjectCompProperties_EmpireDefensive" />
-		</value>
-	</Operation>
-
 </Patch>
