@@ -13,3 +13,6 @@ Empire and Vanilla Outposts Expanded - two of the oldest and, at least at one po
 
 ## Dependencies
 Obviously depends on both [Empire Refactored](https://github.com/matathias/Empire-1_6-Continued) and [Vanilla Outposts Expanded](https://steamcommunity.com/sharedfiles/filedetails/?id=2688941031).
+
+## Attribution
+Uses [Trail icon](https://game-icons.net/1x1/delapouite/trail.html#download) by [Delapouite](https://delapouite.com/) from [Game-icons.net](https://game-icons.net/) under the [CC BY 3.0 licence](https://creativecommons.org/licenses/by/3.0/)

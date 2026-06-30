@@ -116,10 +116,11 @@ namespace EmpireVOE
         }
 
         /// <summary>
-        /// When a linked outpost's pawn roster changes, refresh the owning settlement's resource caches so
-        /// the skill-scaled contribution recomputes.
+        /// Invalidate the resource caches of the settlement(s) that link this outpost, so its contribution is
+        /// recomputed from the outpost's current state (pawn skills, power output, etc.). Cheap no-op when the
+        /// outpost isn't linked.
         /// </summary>
-        public static void NotifyOutpostRosterChanged(Outpost outpost)
+        public static void InvalidateLinkedSettlements(Outpost outpost)
         {
             if (outpost is null || !IsLinked(outpost)) return;
             FactionFC faction = FindFC.FactionComp;
@@ -131,5 +132,11 @@ namespace EmpireVOE
                     s.InvalidateResourceCaches();
             }
         }
+
+        /// <summary>
+        /// When a linked outpost's pawn roster changes, refresh the owning settlement's resource caches so
+        /// the skill-scaled contribution recomputes.
+        /// </summary>
+        public static void NotifyOutpostRosterChanged(Outpost outpost) => InvalidateLinkedSettlements(outpost);
     }
 }

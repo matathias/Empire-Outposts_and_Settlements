@@ -74,7 +74,7 @@ namespace EmpireVOE
                 {
                     defaultLabel = "FCVOE_BuildRoads".Translate(),
                     defaultDesc = "FCVOE_BuildRoadsDesc".Translate(),
-                    icon = TexLoad.iconCustomize,
+                    icon = VOETex.Trail,
                     isActive = () => buildRoads,
                     toggleAction = () =>
                     {

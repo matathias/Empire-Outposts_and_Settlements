@@ -28,4 +28,19 @@
 		<li>Matathias</li>
 		</authors>
 	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_1_0_2</defName>
+		<label>Power Grid Compat</label>
+		<description>Minor update to the Power Grid compatibility patch.</description>
+		<releaseDate>2026-06-30</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Bugfix: when a power-generating outpost built a new generator, the bonus it provides to a linked settlement wouldn&apos;t increase</li>
+		<li>Add a new icon for the per-outpost road-building toggle</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
 </Defs>

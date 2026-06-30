@@ -3,7 +3,7 @@
     <name>Empire Refactored: Outposts &amp; Settlements</name>
     <author>Matathias</author>
     <packageId>Matathias.EmpireRefVOE</packageId>
-    <modVersion>1.0.1</modVersion>
+    <modVersion>1.0.2</modVersion>
     <supportedVersions><li>1.6</li></supportedVersions>
     <description>Empire and Vanilla Outposts Expanded - two of the oldest and, at least at one point in time, most popular mods to enable a semblence of 4X gameplay in Rimworld. Yet, they operate entirely independently of each other, with no integration whatsoever.
 
@@ -14,7 +14,9 @@
 - Empire settlements can send their taxes and tithes to a specific outpost, and can also be set to draw all necessary funds from an outpost's coffers
 - Production and Science outposts can be linked to a settlement, providing a boost to that settlement's resource production instead of materials or raw research points
 - Encampments accelerate the heal rate of Empire mercs in nearby settlements
-- Outposts are included in Empire's road-building system, resulting in all of your outposts and settlements being connected</description>
+- Outposts are included in Empire's road-building system, resulting in all of your outposts and settlements being connected
+
+Uses icons from Game-icons.net, licenced under CC BY 3.0</description>
     <incompatibleWith>
         <!-- Folded into this mod: its Town spawn-requirement config and planet-layer fix are now built in. -->
         <li>matathias.voetownscountoutposts</li>

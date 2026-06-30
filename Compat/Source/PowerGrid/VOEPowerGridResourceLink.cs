@@ -96,4 +96,23 @@ namespace EmpireVOE.PowerGrid
                 __instance.PowerOutput = 0f;
         }
     }
+
+    /// <summary>
+    /// When a power outpost gains or loses a generator (or transmission tower), refresh any settlement that
+    /// resource-links it so its RTD_Power contribution recomputes from the new ProducedPower. ConstructFinish /
+    /// DeconstructStart are the discrete, non-virtual build/remove events — unlike the virtual
+    /// UpdateProducedPower (overridden by Solar/Wind/Refuelable, so a base-method patch is bypassed) and
+    /// RecashProducedPower (called every ~250 ticks by Solar/Wind to track weather, which would over-invalidate).
+    /// </summary>
+    [HarmonyPatch(typeof(Outpost_PowerGrid), nameof(Outpost_PowerGrid.ConstructFinish))]
+    public static class Patch_Outpost_PowerGrid_ConstructFinish
+    {
+        private static void Postfix(Outpost_PowerGrid __instance) => ResourceLinkUtil.InvalidateLinkedSettlements(__instance);
+    }
+
+    [HarmonyPatch(typeof(Outpost_PowerGrid), nameof(Outpost_PowerGrid.DeconstructStart))]
+    public static class Patch_Outpost_PowerGrid_DeconstructStart
+    {
+        private static void Postfix(Outpost_PowerGrid __instance) => ResourceLinkUtil.InvalidateLinkedSettlements(__instance);
+    }
 }
