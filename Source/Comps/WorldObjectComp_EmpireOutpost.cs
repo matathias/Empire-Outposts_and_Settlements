@@ -26,6 +26,11 @@ namespace EmpireVOE
     {
         [Unsaved] public OutpostRaidTarget raidTarget;
 
+        // Reverse index of the resource link (the settlement-side authoritative list is
+        // WorldObjectComp_ResourceLink.linkedOutposts). Runtime-only: maintained on link/unlink and rebuilt
+        // on load — never serialized.
+        [Unsaved] public WorldSettlementFC linkedSettlement;
+
         // Per-outpost opt-in for road building. Seeded from EmpireVOESettings.roadsDefaultOn on fresh
         // creation; toggled via the road gizmo. Honored by VOERoadNodeProvider.
         public bool buildRoads = true;
@@ -267,15 +272,10 @@ namespace EmpireVOE
 
         private List<string> GetLinkedSettlementNames(Outpost outpost)
         {
+            // An outpost links to at most one settlement; use the O(1) reverse index.
             List<string> names = new List<string>();
-            FactionFC faction = FindFC.FactionComp;
-            if (faction is null) return names;
-            foreach (WorldSettlementFC s in faction.settlements)
-            {
-                WorldObjectComp_ResourceLink link = s.GetComponent<WorldObjectComp_ResourceLink>();
-                if (link?.linkedOutposts is object && link.linkedOutposts.Contains(outpost))
-                    names.Add(s.Name);
-            }
+            WorldSettlementFC linked = ResourceLinkUtil.LinkedSettlementOf(outpost);
+            if (linked is object) names.Add(linked.Name);
             return names;
         }
 

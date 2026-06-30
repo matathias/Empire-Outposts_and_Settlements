@@ -39,7 +39,14 @@ namespace EmpireVOE
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 if (linkedOutposts is null) linkedOutposts = new List<Outpost>();
-                ResourceLinkUtil.MarkDirty();
+                // Rebuild the outpost -> settlement reverse index from this authoritative list (cross-refs are
+                // resolved by now, so the outposts and their comps exist). Runtime-only; not serialized.
+                foreach (Outpost outpost in linkedOutposts)
+                {
+                    if (outpost is null || outpost.Destroyed) continue;
+                    WorldObjectComp_EmpireOutpost oc = outpost.GetComponent<WorldObjectComp_EmpireOutpost>();
+                    if (oc is object) oc.linkedSettlement = parent as WorldSettlementFC;
+                }
             }
         }
 
@@ -95,11 +102,17 @@ namespace EmpireVOE
 
         internal void ToggleLink(Outpost outpost)
         {
+            WorldObjectComp_EmpireOutpost oc = outpost.GetComponent<WorldObjectComp_EmpireOutpost>();
             if (linkedOutposts.Contains(outpost))
+            {
                 linkedOutposts.Remove(outpost);
+                if (oc is object && oc.linkedSettlement == parent) oc.linkedSettlement = null;
+            }
             else
+            {
                 linkedOutposts.Add(outpost);
-            ResourceLinkUtil.MarkDirty();
+                if (oc is object) oc.linkedSettlement = parent as WorldSettlementFC;
+            }
             (parent as WorldSettlementFC)?.InvalidateResourceCaches();
             ResourceLinkUtil.NotifyLinkChanged(outpost);
         }
@@ -109,10 +122,13 @@ namespace EmpireVOE
             if (linkedOutposts.Count == 0) return;
             List<Outpost> cleared = new List<Outpost>(linkedOutposts);
             linkedOutposts.Clear();
-            ResourceLinkUtil.MarkDirty();
             (parent as WorldSettlementFC)?.InvalidateResourceCaches();
             foreach (Outpost outpost in cleared)
+            {
+                WorldObjectComp_EmpireOutpost oc = outpost?.GetComponent<WorldObjectComp_EmpireOutpost>();
+                if (oc is object && oc.linkedSettlement == parent) oc.linkedSettlement = null;
                 ResourceLinkUtil.NotifyLinkChanged(outpost);
+            }
         }
     }
 }

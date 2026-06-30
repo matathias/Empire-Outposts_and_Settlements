@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using FactionColonies;
 using Outposts;
 using RimWorld.Planet;
@@ -64,73 +63,39 @@ namespace EmpireVOE
 
         internal static void NotifyLinkChanged(Outpost outpost) => LinkChanged?.Invoke(outpost);
 
-        /*-*-*- Cross-settlement claimed-outpost registry (one outpost -> one settlement) -*-*-*/
+        /*-*-*- Outpost -> settlement reverse index (one outpost -> one settlement) -*-*-*/
 
-        // Set of all outposts linked by some settlement. Used by the delivery-suppression patches for O(1)
-        // lookup and by the management tab to grey out already-claimed outposts. Rebuilt lazily when dirty.
-        private static readonly HashSet<Outpost> claimedOutposts = new HashSet<Outpost>();
-        private static bool dirty = true;
+        // The settlement-side WorldObjectComp_ResourceLink.linkedOutposts list is authoritative; the reverse
+        // pointer lives (runtime-only) on each outpost's WorldObjectComp_EmpireOutpost.linkedSettlement,
+        // maintained on link/unlink and rebuilt on load. This makes "is it linked?" and "which settlement?"
+        // both O(1) with no scan over all settlements.
 
-        internal static void MarkDirty()
+        /// <summary>The settlement that resource-links this outpost, or null. O(1) via the reverse index;
+        /// a destroyed settlement reads as unlinked.</summary>
+        public static WorldSettlementFC LinkedSettlementOf(Outpost outpost)
         {
-            dirty = true;
+            WorldSettlementFC s = outpost?.GetComponent<WorldObjectComp_EmpireOutpost>()?.linkedSettlement;
+            return (s is object && !s.Destroyed) ? s : null;
         }
 
         /// <summary>Whether the outpost is linked to any settlement.</summary>
-        public static bool IsLinked(Outpost outpost)
-        {
-            EnsureFresh();
-            return claimedOutposts.Contains(outpost);
-        }
+        public static bool IsLinked(Outpost outpost) => LinkedSettlementOf(outpost) is object;
 
         /// <summary>Whether the outpost is linked to a settlement other than <paramref name="excluding"/>.</summary>
         public static bool IsLinkedToOther(Outpost outpost, WorldObjectComp_ResourceLink excluding)
         {
-            EnsureFresh();
-            return claimedOutposts.Contains(outpost)
-                   && (excluding?.linkedOutposts is null || !excluding.linkedOutposts.Contains(outpost));
-        }
-
-        private static void EnsureFresh()
-        {
-            if (!dirty) return;
-            Rebuild();
-            dirty = false;
-        }
-
-        private static void Rebuild()
-        {
-            claimedOutposts.Clear();
-            FactionFC faction = FindFC.FactionComp;
-            if (faction is null) return;
-            foreach (WorldSettlementFC s in faction.settlements)
-            {
-                WorldObjectComp_ResourceLink comp = s.GetComponent<WorldObjectComp_ResourceLink>();
-                if (comp?.linkedOutposts is null) continue;
-                foreach (Outpost outpost in comp.linkedOutposts)
-                {
-                    if (outpost is object && !outpost.Destroyed)
-                        claimedOutposts.Add(outpost);
-                }
-            }
+            WorldSettlementFC s = LinkedSettlementOf(outpost);
+            return s is object && s.GetComponent<WorldObjectComp_ResourceLink>() != excluding;
         }
 
         /// <summary>
-        /// Invalidate the resource caches of the settlement(s) that link this outpost, so its contribution is
+        /// Invalidate the resource caches of the settlement that links this outpost, so its contribution is
         /// recomputed from the outpost's current state (pawn skills, power output, etc.). Cheap no-op when the
         /// outpost isn't linked.
         /// </summary>
         public static void InvalidateLinkedSettlements(Outpost outpost)
         {
-            if (outpost is null || !IsLinked(outpost)) return;
-            FactionFC faction = FindFC.FactionComp;
-            if (faction is null) return;
-            foreach (WorldSettlementFC s in faction.settlements)
-            {
-                WorldObjectComp_ResourceLink comp = s.GetComponent<WorldObjectComp_ResourceLink>();
-                if (comp?.linkedOutposts is object && comp.linkedOutposts.Contains(outpost))
-                    s.InvalidateResourceCaches();
-            }
+            LinkedSettlementOf(outpost)?.InvalidateResourceCaches();
         }
 
         /// <summary>

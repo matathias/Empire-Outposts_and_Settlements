@@ -187,17 +187,8 @@ namespace EmpireVOE
             Text.Anchor = prevAnchor;
         }
 
-        /// <summary>The settlement an outpost is currently resource-linked to, or null.</summary>
-        private WorldSettlementFC LinkedSettlement(Outpost outpost)
-        {
-            if (uiFaction is null) return null;
-            foreach (WorldSettlementFC s in uiFaction.settlements)
-            {
-                WorldObjectComp_ResourceLink rl = s.GetComponent<WorldObjectComp_ResourceLink>();
-                if (rl is object && rl.IsLinkedHere(outpost)) return s;
-            }
-            return null;
-        }
+        /// <summary>The settlement an outpost is currently resource-linked to, or null. O(1) via the reverse index.</summary>
+        private WorldSettlementFC LinkedSettlement(Outpost outpost) => ResourceLinkUtil.LinkedSettlementOf(outpost);
 
         /// <summary>Unlinks if already linked; otherwise opens a float menu of in-range settlements to link to.</summary>
         private void ToggleOutpostLink(Outpost outpost)
