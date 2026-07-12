@@ -71,25 +71,6 @@ namespace EmpireVOE
             return financingOutpost;
         }
 
-        /// <summary>
-        /// Collects all distinct financing outposts across all Empire settlements.
-        /// </summary>
-        public static IEnumerable<Outpost> GetAllDistinctFinancingOutposts()
-        {
-            FactionFC faction = FindFC.FactionComp;
-            if (faction is null) yield break;
-
-            HashSet<Outpost> seen = new HashSet<Outpost>();
-            foreach (WorldSettlementFC settlement in faction.settlements)
-            {
-                WorldObjectComp_OutpostLinks comp = settlement.GetComponent<WorldObjectComp_OutpostLinks>();
-                if (comp is null) continue;
-                Outpost outpost = comp.GetFinancingOutpost();
-                if (outpost is object && seen.Add(outpost))
-                    yield return outpost;
-            }
-        }
-
         private Command_Action CreateDeliveryGizmo()
         {
             Outpost current = GetDeliveryOutpost();

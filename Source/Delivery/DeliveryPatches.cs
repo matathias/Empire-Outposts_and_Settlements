@@ -124,30 +124,4 @@ namespace EmpireVOE
             return true;
         }
     }
-
-    /// <summary>
-    /// Postfix on PaymentUtil.GetSilver — adds silver from all distinct
-    /// financing outposts to the total available silver count.
-    /// </summary>
-    [HarmonyPatch(typeof(PaymentUtil))]
-    [HarmonyPatch("GetSilver")]
-    public static class Patch_GetSilver
-    {
-        public static void Postfix(ref int __result)
-        {
-            if (!EmpireVOESettings.FinancingActive) return;
-
-            foreach (Outpost outpost in WorldObjectComp_OutpostLinks.GetAllDistinctFinancingOutposts())
-            {
-                if (Find.WorldObjects.WorldObjectAt<Outpost>(outpost.Tile) is null)
-                    continue;
-
-                foreach (Thing t in outpost.Things)
-                {
-                    if (t.def == ThingDefOf.Silver)
-                        __result += t.stackCount;
-                }
-            }
-        }
-    }
 }

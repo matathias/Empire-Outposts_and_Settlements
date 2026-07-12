@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using FactionColonies;
 using Outposts;
 using RimWorld;
@@ -8,8 +8,10 @@ using Verse;
 namespace EmpireVOE
 {
     /// <summary>
-    /// ISilverPaymentModifier that drains silver from a settlement's designated
-    /// financing outpost before falling through to normal player coffers.
+    /// ISilverPaymentModifier that lets a settlement's designated financing outpost cover part of a
+    /// silver payment before it falls through to player coffers. Reports how much the outpost can
+    /// cover (reducing the effective amount) but defers the actual drain to a commit action, so the
+    /// outpost is only touched once the payment is confirmed affordable and actually commits.
     /// Registered with SilverPaymentRegistry during init.
     /// </summary>
     public class OutpostFinancer : ISilverPaymentModifier
@@ -33,11 +35,29 @@ namespace EmpireVOE
                 return;
             }
 
-            int remaining = context.Amount;
-            bool deducted = false;
+            // Sum available silver WITHOUT touching the outpost, so a pure affordability query stays
+            // side-effect-free and a payment that turns out unaffordable never drains the outpost.
+            int available = 0;
+            foreach (Thing t in outpost.Things)
+            {
+                if (t.def == ThingDefOf.Silver) available += t.stackCount;
+            }
 
-            // Drain silver stacks from outpost inventory
-            List<Thing> things = outpost.Things.ToList();
+            int cover = Math.Min(available, context.Amount);
+            if (cover <= 0) return;
+
+            context.Amount -= cover;
+            context.Commit(() => DrainOutpost(outpost, cover));
+        }
+
+        // Destroys exactly <paramref name="amount"/> silver from the outpost. cover never exceeds the
+        // amount counted above, so this always fully drains what it promised; the guard is defensive.
+        private static void DrainOutpost(Outpost outpost, int amount)
+        {
+            int remaining = amount;
+
+            // Copy the items so removing from the outpost's inventory doesn't disturb iteration.
+            List<Thing> things = new List<Thing>(outpost.Things);
             foreach (Thing t in things)
             {
                 if (remaining <= 0) break;
@@ -47,23 +67,19 @@ namespace EmpireVOE
                 {
                     remaining -= t.stackCount;
                     outpost.TakeItem(t).Destroy(DestroyMode.Vanish);
-                    deducted = true;
                 }
                 else
                 {
                     outpost.TakeItem(t.SplitOff(remaining)).Destroy(DestroyMode.Vanish);
                     remaining = 0;
-                    deducted = true;
                 }
             }
 
-            if (deducted && remaining > 0)
+            if (remaining > 0)
             {
-                DeliveryUtil.DebugLog("Financing outpost " + outpost.LabelCap + " partially depleted. Remaining: " + remaining);
-                Messages.Message("FCVOE_FinancingPartiallyDepleted".Translate(outpost.LabelCap, remaining), MessageTypeDefOf.NeutralEvent);
+                DeliveryUtil.DebugLog("Financing outpost " + outpost.LabelCap
+                    + " drained less than promised (short by " + remaining + ")");
             }
-
-            context.Amount = remaining;
         }
     }
 }

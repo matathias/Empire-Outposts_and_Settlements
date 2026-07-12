@@ -29,7 +29,6 @@
     <FCVOE_TaxRedirected>Tax delivery redirected</FCVOE_TaxRedirected>
     <FCVOE_TaxRedirectedDesc>The outpost designated to receive taxes from {0} no longer exists. Shipment redirected to {1}.</FCVOE_TaxRedirectedDesc>
     <FCVOE_InvalidDeliveryOutpost>{0} tried to deliver taxes to an invalid outpost. Delivery destination has been reset.</FCVOE_InvalidDeliveryOutpost>
-    <FCVOE_FinancingPartiallyDepleted>{0}'s funds are depleted. Remaining {1} silver will be drawn from your coffers.</FCVOE_FinancingPartiallyDepleted>
     <FCVOE_DeliveryEventDesc>Taxes from {0} are being delivered to {1}.\n\nGoods:\n{2}</FCVOE_DeliveryEventDesc>
     <FCVOE_PlayerTaxMap>Player Tax Map</FCVOE_PlayerTaxMap>
 
