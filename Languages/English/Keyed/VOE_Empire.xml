@@ -88,6 +88,8 @@
     <FCVOE_ConvertInvalidType>This outpost cannot be converted into that settlement type.</FCVOE_ConvertInvalidType>
     <FCVOE_OutpostIncorporated>{0} incorporated</FCVOE_OutpostIncorporated>
     <FCVOE_OutpostIncorporatedDesc>The outpost {0} has been incorporated into your new settlement {1}. {2} worker(s) have joined the settlement.</FCVOE_OutpostIncorporatedDesc>
+    <FCVOE_OutpostGoodsShipped>Goods shipped from {0}</FCVOE_OutpostGoodsShipped>
+    <FCVOE_OutpostGoodsShippedDesc>The stored goods of {0} are being shipped to {1}.\n\nGoods:\n{2}</FCVOE_OutpostGoodsShippedDesc>
 
     <!-- Found-screen restriction -->
     <FCVOE_MustFoundViaOutpost>Settlements must be founded by establishing an outpost and converting it.</FCVOE_MustFoundViaOutpost>

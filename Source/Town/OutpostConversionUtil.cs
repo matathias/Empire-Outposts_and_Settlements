@@ -222,6 +222,22 @@ namespace EmpireVOE
                 if (bonusComp != null) bonusComp.SetTownFlatAdditive(EmpireVOESettings.townFlatAdditive);
             }
 
+            // Ship the outpost's stored goods back to the player before it is destroyed
+            // (containedItems were previously lost on Destroy).
+            List<Thing> storedGoods = outpost.Things.ToList();
+            foreach (Thing t in storedGoods)
+                outpost.TakeItem(t);            // detach from the outpost's containedItems list
+
+            if (storedGoods.Count > 0)
+            {
+                Letter goodsLetter = LetterMaker.MakeLetter(
+                    "FCVOE_OutpostGoodsShipped".Translate(outpostName),
+                    "FCVOE_OutpostGoodsShippedDesc".Translate(
+                        outpostName, settlement.Name, DeliveryUtil.GoodsToString(storedGoods)),
+                    LetterDefOf.PositiveEvent);
+                DeliveryEvent.CreateDeliveryEvent(storedGoods, tile, goodsLetter);
+            }
+
             outpost.Destroy();
 
             Find.LetterStack.ReceiveLetter(
