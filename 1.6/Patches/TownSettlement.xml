@@ -5,50 +5,23 @@
 	<!-- Settlement comps                                              -->
 	<!-- ============================================================ -->
 
-	<!-- Add WorldObjectComp_OutpostBonus to all Empire settlement defs that have a comps list -->
+	<Operation Class="PatchOperationConditional">
+		<xpath>Defs/FactionColonies.WorldSettlementDef[@Name="WorldSettlementDefBase"]/comps</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>Defs/FactionColonies.WorldSettlementDef[@Name="WorldSettlementDefBase"]</xpath>
+			<value>
+				<comps />
+			</value>
+		</nomatch>
+	</Operation>
 	<Operation Class="PatchOperationAdd">
-		<xpath>Defs/FactionColonies.WorldSettlementDef[comps]/comps</xpath>
+		<xpath>Defs/FactionColonies.WorldSettlementDef[@Name="WorldSettlementDefBase"]/comps</xpath>
 		<value>
 			<li Class="EmpireVOE.WorldObjectCompProperties_OutpostBonus" />
-		</value>
-	</Operation>
-
-	<!-- Add WorldObjectComp_ResourceLink to all Empire settlement defs that have a comps list -->
-	<Operation Class="PatchOperationAdd">
-		<xpath>Defs/FactionColonies.WorldSettlementDef[comps]/comps</xpath>
-		<value>
 			<li Class="EmpireVOE.WorldObjectCompProperties_ResourceLink" />
-		</value>
-	</Operation>
-
-	<!-- Add WorldObjectComp_EncampmentBonus to all Empire settlement defs that have a comps list -->
-	<Operation Class="PatchOperationAdd">
-		<xpath>Defs/FactionColonies.WorldSettlementDef[comps]/comps</xpath>
-		<value>
 			<li Class="EmpireVOE.WorldObjectCompProperties_EncampmentBonus" />
-		</value>
-	</Operation>
-
-	<!-- Add WorldObjectComp_OutpostLinks to all Empire settlement defs that have a comps list -->
-	<Operation Class="PatchOperationAdd">
-		<xpath>Defs/FactionColonies.WorldSettlementDef[comps]/comps</xpath>
-		<value>
 			<li Class="EmpireVOE.WorldObjectCompProperties_OutpostLinks" />
-		</value>
-	</Operation>
-
-	<!-- Add WorldObjectComp_DefensiveAura (passive defense from nearby defensive outposts) -->
-	<Operation Class="PatchOperationAdd">
-		<xpath>Defs/FactionColonies.WorldSettlementDef[comps]/comps</xpath>
-		<value>
 			<li Class="EmpireVOE.WorldObjectCompProperties_DefensiveAura" />
-		</value>
-	</Operation>
-
-	<!-- Add WorldObjectComp_OutpostOverview (settlement-window "Outposts" management subtab) -->
-	<Operation Class="PatchOperationAdd">
-		<xpath>Defs/FactionColonies.WorldSettlementDef[comps]/comps</xpath>
-		<value>
 			<li Class="EmpireVOE.WorldObjectCompProperties_OutpostOverview" />
 		</value>
 	</Operation>
