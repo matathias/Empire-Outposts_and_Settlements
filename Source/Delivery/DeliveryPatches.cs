@@ -1,8 +1,8 @@
 using FactionColonies;
 using FactionColonies.util;
-using HarmonyLib;
 using Outposts;
 using RimWorld;
+using RimWorld.Planet;
 using Verse;
 
 namespace EmpireVOE
@@ -61,6 +61,13 @@ namespace EmpireVOE
             if (!evt.source.Valid) return false;
 
             Map taxMap = FindFC.TaxMap;
+            // Ordinary tax events are bound for the capital (FCEventMaker sets location = capitalLocation);
+            // only events we redirected point at an outpost tile. Test against the capital tile directly:
+            // it holds even when the capital's map is unloaded and TaxMap falls back to another home map,
+            // whereas the old `location != taxMap.Tile` check misclassified every ordinary tax event as an
+            // outpost delivery and hijacked it.
+            PlanetTile capital = FindFC.FactionComp?.capitalLocation ?? PlanetTile.Invalid;
+            if (capital.Valid && evt.location == capital) return false;
             if (taxMap is object && evt.location == taxMap.Tile) return false;
 
             Outpost destination = Find.WorldObjects.WorldObjectAt<Outpost>(evt.location);
@@ -110,11 +117,24 @@ namespace EmpireVOE
                     links.deliveryOutpost = null;
             }
 
+            // No player home map at all: there is nowhere to redirect to. Building a redirect whose
+            // location falls back to evt.source would re-enter this interceptor every cycle (infinite
+            // loop + message spam). Bail out and let the base mod log the undeliverable tax instead.
+            if (taxMap is null)
+            {
+                DeliveryUtil.DebugLog("No tax map available; skipping redirect to avoid a re-interception loop.");
+                return false;
+            }
+
             // Create redirect event to tax map
             FCEvent redirect = FCEventMaker.MakeEvent(FCEventDefOf.taxColony);
             redirect.source = evt.source;
             redirect.goods = evt.goods;
-            redirect.location = taxMap?.Tile ?? evt.source;
+            redirect.location = taxMap.Tile;
+            // Preserve the delivery mode locked at the event's creation (MakeEvent leaves it default) and
+            // start the progress bar at the beginning of this new travel leg.
+            redirect.deliveryMode = evt.deliveryMode;
+            redirect.tickStarted = Find.TickManager.TicksGame;
             redirect.timeTillTrigger = Find.TickManager.TicksGame + TravelUtil.ReturnTicksToArrive(evt.source, redirect.location);
             redirect.customDescription = "FCVOE_TaxRedirectedDesc".Translate(source is object ? source.Name : "Unknown", "FCVOE_PlayerTaxMap".Translate());
             redirect.hasCustomDescription = true;

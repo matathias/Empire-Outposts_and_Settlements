@@ -205,6 +205,10 @@ namespace EmpireVOE
                     WorldObjectComp_EmpireOutpost.UnregisterAll();
                 else
                     WorldObjectComp_EmpireOutpost.ReregisterAll();
+                // Aura / heal contributions appear or disappear wholesale with the master toggle;
+                // drop the baked-in caches (both dirty settlement stat/resource caches internally).
+                DefensiveAuraCache.Invalidate();
+                EncampmentCache.Invalidate();
             }
 
             ls.CheckboxLabeled(
@@ -223,14 +227,19 @@ namespace EmpireVOE
             if (prevMil != EmpireVOESettings.enableMilitary && !EmpireVOESettings.disableIntegration)
             {
                 WorldObjectComp_EmpireOutpost.ToggleMilitary(EmpireVOESettings.enableMilitary);
+                // The defensive aura is gated on enableMilitary; drop its baked-in stat contribution.
+                DefensiveAuraCache.Invalidate();
             }
 
             if (EmpireVOESettings.enableMilitary)
             {
+                bool prevAura = EmpireVOESettings.enableDefensiveAura;
                 ls.CheckboxLabeled(
                     "  " + "FCVOE_EnableDefensiveAura".Translate(),
                     ref EmpireVOESettings.enableDefensiveAura,
                     "FCVOE_EnableDefensiveAuraDesc".Translate());
+                if (prevAura != EmpireVOESettings.enableDefensiveAura)
+                    DefensiveAuraCache.Invalidate();
 
                 if (EmpireVOESettings.enableDefensiveAura)
                 {
@@ -273,13 +282,21 @@ namespace EmpireVOE
             ls.GapLine();
 
             // --- Resource Linking ---
+            bool prevResourceLink = EmpireVOESettings.enableResourceLink;
             ls.CheckboxLabeled(
                 "FCVOE_EnableResourceLink".Translate(),
                 ref EmpireVOESettings.enableResourceLink,
                 "FCVOE_EnableResourceLinkDesc".Translate());
+            bool resourceCachesDirty = prevResourceLink != EmpireVOESettings.enableResourceLink;
+            bool skillFloorChanged = false;
 
             if (EmpireVOESettings.enableResourceLink)
             {
+                int prevLinkRange = EmpireVOESettings.resourceLinkRange;
+                float prevAdditive = EmpireVOESettings.additivePerLevel;
+                int prevSkillFloor = EmpireVOESettings.skillFloor;
+                float prevPowerMult = EmpireVOESettings.powerConversionMultiplier;
+
                 EmpireVOESettings.resourceLinkRange = ls.SliderTextField("FCVOE_ResourceLinkRange", "  " + "FCVOE_ResourceLinkRange".Translate(), EmpireVOESettings.resourceLinkRange, 5, 50);
 
                 EmpireVOESettings.additivePerLevel = ls.SliderTextField("FCVOE_AdditivePerLevel", "  " + "FCVOE_AdditivePerLevel".Translate(), EmpireVOESettings.additivePerLevel, 0.005f, 0.1f, 3);
@@ -291,22 +308,49 @@ namespace EmpireVOE
                 {
                     EmpireVOESettings.powerConversionMultiplier = ls.SliderTextField("FCVOE_PowerConversionMultiplier", "  " + "FCVOE_PowerConversionMultiplier".Translate(), EmpireVOESettings.powerConversionMultiplier, 0.1f, 5f, 2);
                 }
+
+                skillFloorChanged = prevSkillFloor != EmpireVOESettings.skillFloor;
+                if (prevLinkRange != EmpireVOESettings.resourceLinkRange ||
+                    System.Math.Abs(prevAdditive - EmpireVOESettings.additivePerLevel) > 0.0001f ||
+                    System.Math.Abs(prevPowerMult - EmpireVOESettings.powerConversionMultiplier) > 0.0001f ||
+                    skillFloorChanged)
+                {
+                    resourceCachesDirty = true;
+                }
             }
+
+            if (resourceCachesDirty)
+                FindFC.FactionComp?.InvalidateAllSettlementStatCaches();
 
             ls.GapLine();
 
             // --- Encampment Recovery ---
+            bool prevEncampment = EmpireVOESettings.enableEncampment;
             ls.CheckboxLabeled(
                 "FCVOE_EnableEncampment".Translate(),
                 ref EmpireVOESettings.enableEncampment,
                 "FCVOE_EnableEncampmentDesc".Translate());
+            // skillFloor (rendered under Resource Linking) also feeds the encampment heal formula.
+            bool encampmentCacheDirty = prevEncampment != EmpireVOESettings.enableEncampment || skillFloorChanged;
 
             if (EmpireVOESettings.enableEncampment)
             {
+                int prevEncampmentRange = EmpireVOESettings.encampmentRange;
+                float prevHealRate = EmpireVOESettings.encampmentHealRatePerLevel;
+
                 EmpireVOESettings.encampmentRange = ls.SliderTextField("FCVOE_EncampmentRange", "  " + "FCVOE_EncampmentRange".Translate(), EmpireVOESettings.encampmentRange, 5, 50);
 
                 EmpireVOESettings.encampmentHealRatePerLevel = ls.SliderTextField("FCVOE_EncampmentHealRatePerLevel", "  " + "FCVOE_EncampmentHealRatePerLevel".Translate(), EmpireVOESettings.encampmentHealRatePerLevel, 0f, 0.1f, 3);
+
+                if (prevEncampmentRange != EmpireVOESettings.encampmentRange ||
+                    System.Math.Abs(prevHealRate - EmpireVOESettings.encampmentHealRatePerLevel) > 0.0001f)
+                {
+                    encampmentCacheDirty = true;
+                }
             }
+
+            if (encampmentCacheDirty)
+                EncampmentCache.Invalidate();
 
             ls.GapLine();
 

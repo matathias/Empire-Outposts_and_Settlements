@@ -32,7 +32,27 @@ namespace EmpireVOE
 
         public int MilitaryLevel => OutpostMilitaryUtil.MilitaryLevel(outpost);
 
-        public bool IsUnderAttack { get; set; }
+        // Fallback backing for wrappers whose outpost carries no Empire comp (test fixtures only).
+        private bool localUnderAttack;
+
+        // Backed by the owning comp's persisted field when present, so the flag survives save/load —
+        // this wrapper is [Unsaved] and rebuilt on load, and the base military system writes the flag
+        // at operation creation. Without persistence, a save during the raid warning would drop the
+        // outpost back into the raid-selection pool and double-book it.
+        public bool IsUnderAttack
+        {
+            get
+            {
+                WorldObjectComp_EmpireOutpost comp = outpost.GetComponent<WorldObjectComp_EmpireOutpost>();
+                return comp is object ? comp.outpostUnderAttack : localUnderAttack;
+            }
+            set
+            {
+                WorldObjectComp_EmpireOutpost comp = outpost.GetComponent<WorldObjectComp_EmpireOutpost>();
+                if (comp is object) comp.outpostUnderAttack = value;
+                else localUnderAttack = value;
+            }
+        }
 
         public void OnRaidWon(BattleResult result)
         {
@@ -63,7 +83,9 @@ namespace EmpireVOE
                 int itemsToDestroy = Math.Min(itemCount, Rand.Range(1, 4));
                 foreach (Thing thing in outpost.Things.InRandomOrder().Take(itemsToDestroy).ToList())
                 {
-                    thing.Destroy();
+                    // Take out of the outpost's deep-scribed containedItems first — a bare Destroy()
+                    // leaves the destroyed entry in the list, which then errors on save.
+                    outpost.TakeItem(thing).Destroy(DestroyMode.Vanish);
                 }
             }
 

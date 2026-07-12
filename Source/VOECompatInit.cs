@@ -32,6 +32,11 @@ namespace EmpireVOE
                 EmpireRegistry.Register(DefensiveAuraRaidWeightProvider.Instance);
                 if (EmpireVOESettings.OutpostMainTabActive)
                     EmpireRegistry.Register(OutpostMainTab.Instance);
+                // Drop the PlanetTile-keyed static caches too — they collide across worlds, so
+                // loading another save would otherwise inherit the previous world's auras/heal
+                // bonuses and pin its outpost objects.
+                DefensiveAuraCache.Invalidate();
+                EncampmentCache.Invalidate();
             });
 
             // Found-screen integration: replace the Settle button with "Send a Caravan" and drive the

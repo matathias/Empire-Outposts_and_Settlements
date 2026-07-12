@@ -1,3 +1,4 @@
+using System;
 using HarmonyLib;
 using RimWorld;
 using VOE;
@@ -6,7 +7,7 @@ namespace EmpireVOE
 {
     /// <summary>
     /// Static flag for research suppression. Set by Outpost_Science.Tick prefix,
-    /// checked by ResearchManager.ResearchPerformed prefix, cleared by Tick postfix.
+    /// checked by ResearchManager.ResearchPerformed prefix, cleared by Tick finalizer.
     /// Safe because RimWorld is single-threaded.
     /// </summary>
     internal static class ScienceResearchSuppression
@@ -31,9 +32,13 @@ namespace EmpireVOE
             }
         }
 
-        private static void Postfix()
+        // Finalizer (not Postfix) so the flag is always cleared even if Tick() throws — a Postfix
+        // would be skipped on exception, leaving research suppressed for every colony until another
+        // science outpost ticks cleanly.
+        private static Exception Finalizer(Exception __exception)
         {
             ScienceResearchSuppression.suppressResearch = false;
+            return __exception;
         }
     }
 

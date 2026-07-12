@@ -22,23 +22,30 @@ namespace EmpireVOE.Specialists
             VOELog.MessageForce("EmpireVOE - Specialists compat loaded.");
         }
 
-        private static void AssignTownPawns(WorldSettlementFC settlement, List<Pawn> pawns)
+        /// <summary>
+        /// Assigns the outpost pawns as specialists/residents. Returns the pawns it did NOT place so
+        /// the caller can fold them into the world instead of losing them.
+        /// </summary>
+        private static List<Pawn> AssignTownPawns(WorldSettlementFC settlement, List<Pawn> pawns)
         {
             WorldObjectComp_SettlementSpecialists comp = settlement.GetComponent<WorldObjectComp_SettlementSpecialists>();
             if (comp is null)
             {
-                VOELog.Warning($"VOESpecialistsCompat: Settlement {settlement.Name} has no SettlementSpecialists comp. Pawns will not be assigned.");
-                return;
+                VOELog.Warning($"VOESpecialistsCompat: Settlement {settlement.Name} has no SettlementSpecialists comp. Pawns will be folded into the world instead.");
+                return new List<Pawn>(pawns); // hand every pawn back so none is orphaned
             }
 
             foreach (Pawn pawn in pawns)
             {
                 SkillRecord best = BestNonDisabledSkill(pawn);
-                if (best != null && best.Level >= SpecialistSkillThreshold
+                if (best is object && best.Level >= SpecialistSkillThreshold
                     && comp.SpecialistCount < comp.MaxSpecialists)
                 {
                     SpecialistRoleDef bestRole = FindBestRole(pawn);
-                    // AssignSpecialist handles per-role maxPerSettlement caps internally
+                    // AssignSpecialist rejects (without placing) when the role is at its per-settlement
+                    // cap, which would orphan the pawn. Fall back to Resident (null role, always placed).
+                    if (comp.RoleAtCap(bestRole))
+                        bestRole = null;
                     comp.AssignSpecialist(pawn, bestRole);
                 }
                 else
@@ -47,6 +54,7 @@ namespace EmpireVOE.Specialists
                     comp.AssignSpecialist(pawn, null);
                 }
             }
+            return new List<Pawn>(); // every pawn was placed as a specialist or resident
         }
 
         /// <summary>

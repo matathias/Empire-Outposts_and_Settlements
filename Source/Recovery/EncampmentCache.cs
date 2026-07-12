@@ -87,6 +87,10 @@ namespace EmpireVOE
         public static void Invalidate()
         {
             cache.Clear();
+            // The heal bonus feeds mercHealRateMultiplier through the cached settlement stat partial
+            // (WorldObjectComp_EncampmentBonus), so dirty the settlement stat caches too — otherwise
+            // settlements serve the stale heal rate until an unrelated invalidation.
+            FindFC.FactionComp?.InvalidateAllSettlementStatCaches();
         }
     }
 }

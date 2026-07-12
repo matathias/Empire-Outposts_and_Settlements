@@ -45,7 +45,12 @@ namespace EmpireVOE
                 OutpostResourceLinkExtension ext = d.GetModExtension<OutpostResourceLinkExtension>();
                 TestAssert.IsTrue(ext.resources is object && ext.resources.Count > 0,
                     $"{d.defName} resource-link extension declares no resources");
-                TestAssert.IsNotNull(ext.skill, $"{d.defName} resource-link extension declares no skill");
+
+                // Subclasses that override Contribution (e.g. the Power-grid extension) compute their
+                // yield without the skill-sum default, so they legitimately declare no skill.
+                bool overridesContribution = ext.GetType().GetMethod("Contribution").DeclaringType != typeof(OutpostResourceLinkExtension);
+                if (!overridesContribution)
+                    TestAssert.IsNotNull(ext.skill, $"{d.defName} resource-link extension declares no skill");
             }
         }
     }

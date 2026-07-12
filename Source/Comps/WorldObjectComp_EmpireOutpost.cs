@@ -35,6 +35,11 @@ namespace EmpireVOE
         // creation; toggled via the road gizmo. Honored by VOERoadNodeProvider.
         public bool buildRoads = true;
 
+        // "Under attack" state for the raid-target wrapper. Owned here (not on the [Unsaved] raidTarget)
+        // so it survives a save/reload during the 24h raid warning window — OutpostRaidTarget.IsUnderAttack
+        // reads/writes through to this field.
+        public bool outpostUnderAttack;
+
         private Outpost Outpost => (Outpost)parent;
 
         public override void Initialize(WorldObjectCompProperties props)
@@ -56,12 +61,22 @@ namespace EmpireVOE
         {
             base.PostExposeData();
             Scribe_Values.Look(ref buildRoads, "voeBuildRoads", true);
+            Scribe_Values.Look(ref outpostUnderAttack, "voeOutpostUnderAttack");
         }
 
         public override void PostPostRemove()
         {
             base.PostPostRemove();
             Unregister();
+            // Prune this outpost from its resource-linking settlement (via the reverse pointer) so the
+            // stale additive bonus is dropped immediately and the destroyed entry isn't written as a
+            // dangling LookMode.Reference. ToggleLink removes the link and invalidates the settlement's
+            // resource caches.
+            if (linkedSettlement is object)
+            {
+                WorldObjectComp_ResourceLink rl = linkedSettlement.GetComponent<WorldObjectComp_ResourceLink>();
+                rl?.ToggleLink(Outpost);
+            }
             // Drop this outpost's road node; cached edges are invalidated automatically.
             if (EmpireVOESettings.RoadsActive) FindFC.RoadBuilder?.FlagUpdateRoadQueues();
             if (parent is Outpost_Encampment)

@@ -19,10 +19,11 @@ namespace EmpireVOE
     {
         /// <summary>
         /// Set by the Specialists compat DLL when Matathias.Empire.Specialists is active.
-        /// Receives the new settlement and the outpost pawns to assign as specialists/residents.
-        /// Null when the Specialists submod is not loaded.
+        /// Receives the new settlement and the outpost pawns to assign as specialists/residents, and
+        /// returns the pawns it did NOT place. The caller folds those leftovers into the world so no
+        /// pawn is orphaned. Null when the Specialists submod is not loaded.
         /// </summary>
-        public static Action<WorldSettlementFC, List<Pawn>> SpecialistsCallback;
+        public static Func<WorldSettlementFC, List<Pawn>, List<Pawn>> SpecialistsCallback;
 
         /// <summary>
         /// Set by the Routes &amp; Resources compat DLL when Matathias.Empire.SupplyChain is active.
@@ -63,7 +64,16 @@ namespace EmpireVOE
                 if (d is null) continue;
                 if (!d.available) continue;
                 if (!d.IsUnlocked()) continue;
-                if (!d.AllowsTileLayer(outpost.Tile)) continue;
+                // Full tile validation (layer + impassable hilliness + allowed/blocked biomes), matching
+                // what normal founding enforces. Falls back to the layer-only check if the type has no
+                // SettlementTypeExtension. Adjacency is intentionally not checked — a type transition
+                // happens on a tile that already hosts this settlement.
+                SettlementTypeExtension typeExt = d.GetSettlementTypeExtension();
+                if (typeExt is object)
+                {
+                    if (!typeExt.TileIsValidForTypeTransition(outpost.Tile)) continue;
+                }
+                else if (!d.AllowsTileLayer(outpost.Tile)) continue;
                 result.Add(d);
             }
             return result;
@@ -171,6 +181,19 @@ namespace EmpireVOE
             PlanetTile tile = outpost.Tile;
             float factor = EmpireVOESettings.reducedFoundingCostFactor;
 
+            // Re-validate the tile against the target type (layer + hilliness + biomes) so conversion
+            // can't produce a state normal founding forbids, surfacing the specific reason.
+            SettlementTypeExtension typeExt = type.GetSettlementTypeExtension();
+            if (typeExt is object)
+            {
+                StringBuilder tileReason = new StringBuilder();
+                if (!typeExt.TileIsValidForTypeTransition(tile, tileReason))
+                {
+                    Messages.Message(tileReason.ToString(), MessageTypeDefOf.RejectInput);
+                    return false;
+                }
+            }
+
             // Cost gate (factor scales both silver and R&R resources)
             BiomeResourceDef biome = ResolveBiome(type, tile);
             int reducedSilver = (int)(ColonyUtil.GetFoundingCost(type, biome, faction) * factor);
@@ -260,14 +283,21 @@ namespace EmpireVOE
 
             if (SpecialistsCallback != null)
             {
+                Faction empire = FindFC.EmpireFaction;
+                List<Pawn> leftovers;
                 try
                 {
-                    SpecialistsCallback(settlement, pawns);
+                    leftovers = SpecialistsCallback(settlement, pawns) ?? new List<Pawn>();
                 }
                 catch (Exception e)
                 {
                     VOELog.Error("OutpostConversionUtil: Specialists callback failed: " + e);
+                    leftovers = pawns; // callback aborted mid-way — fold everyone the standard way
                 }
+                // VEF RemovePawn only drops the pawn from the outpost roster (no PassToWorld), so any
+                // pawn the callback didn't place must be folded into the world first or it vanishes.
+                foreach (Pawn pawn in leftovers)
+                    FoldPawnToWorld(pawn, empire);
                 foreach (Pawn pawn in pawns)
                     outpost.RemovePawn(pawn);
                 return count;
@@ -278,9 +308,7 @@ namespace EmpireVOE
             Faction empireFaction = FindFC.EmpireFaction;
             foreach (Pawn pawn in pawns)
             {
-                pawn.SetFaction(empireFaction);
-                if (!pawn.IsWorldPawn())
-                    Find.WorldPawns.PassToWorld(pawn, PawnDiscardDecideMode.KeepForever);
+                FoldPawnToWorld(pawn, empireFaction);
                 outpost.RemovePawn(pawn);
             }
 
@@ -298,6 +326,18 @@ namespace EmpireVOE
                 }
             }
             return count;
+        }
+
+        /// <summary>
+        /// Transfers a pawn to the Empire faction and registers it as a world pawn so it survives the
+        /// outpost's destruction (VEF RemovePawn does not do this itself).
+        /// </summary>
+        private static void FoldPawnToWorld(Pawn pawn, Faction empireFaction)
+        {
+            if (pawn is null) return;
+            pawn.SetFaction(empireFaction);
+            if (!pawn.IsWorldPawn())
+                Find.WorldPawns.PassToWorld(pawn, PawnDiscardDecideMode.KeepForever);
         }
 
         /// <summary>
