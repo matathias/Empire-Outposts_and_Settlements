@@ -54,6 +54,7 @@ namespace EmpireVOE
             {
                 if (!(wo is Outpost_Encampment enc)) continue;
                 if (enc.PawnCount == 0) continue;
+                if (enc.Tile.Layer != settlement.Tile.Layer) continue;   // encampment heal bonus doesn't cross planet layers
                 float distance = Find.WorldGrid.ApproxDistanceInTiles(enc.Tile, settlement.Tile);
                 if (distance > EmpireVOESettings.encampmentRange) continue;
 

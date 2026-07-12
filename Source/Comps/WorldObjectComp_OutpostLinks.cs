@@ -156,9 +156,14 @@ namespace EmpireVOE
 
         private IEnumerable<Outpost> OutpostsByDistance()
         {
+            // Same-layer outposts first, ordered by true distance; cross-layer ones sink to the
+            // bottom (ApproxDistanceInTiles is layer-local, so its cross-layer value is meaningless).
             return Find.WorldObjects.AllWorldObjects
                 .OfType<Outpost>()
-                .OrderBy(o => Find.WorldGrid.ApproxDistanceInTiles(o.Tile, parent.Tile));
+                .OrderBy(o => o.Tile.Layer == parent.Tile.Layer ? 0 : 1)
+                .ThenBy(o => o.Tile.Layer == parent.Tile.Layer
+                    ? Find.WorldGrid.ApproxDistanceInTiles(o.Tile, parent.Tile)
+                    : 0f);
         }
     }
 }
