@@ -232,10 +232,9 @@ namespace EmpireVOE
             WorldSettlementFC settlement = ColonyUtil.CreatePlayerColonySettlement(tile, type);
 
             string outpostName = outpost.Name;
-            int pawnCount = 0;
             if (EmpireVOESettings.convertOutpostPawns)
             {
-                pawnCount = FoldOutpostPawns(outpost, settlement);
+                FoldOutpostPawns(outpost, settlement);
             }
 
             OutpostConversionExtension ext = outpost.def.GetModExtension<OutpostConversionExtension>();
@@ -263,11 +262,8 @@ namespace EmpireVOE
 
             outpost.Destroy();
 
-            Find.LetterStack.ReceiveLetter(
-                "FCVOE_OutpostIncorporated".Translate(outpostName),
-                "FCVOE_OutpostIncorporatedDesc".Translate(outpostName, settlement.Name, pawnCount),
-                LetterDefOf.PositiveEvent,
-                new LookTargets(settlement));
+            // CreatePlayerColonySettlement already sends the "FCSettlementFormed" letter; a second
+            // incorporation letter here just duplicated that notification.
             return true;
         }
 

@@ -26,7 +26,12 @@ namespace EmpireVOE
             if (outposts.Count == 0)
                 return "FCVOE_CodexDefensiveNone".Translate();
 
-            string result = "FCVOE_CodexDefensiveHeader".Translate() + "\n\n";
+            // Live efficiency scale, read straight from the formula so it can never drift from balance.
+            string result = "FCVOE_CodexDefensiveEfficiencyScale".Translate(
+                VOEFormulas.Efficiency(0).ToString("0.##"),
+                VOEFormulas.Efficiency(10).ToString("0.##"),
+                VOEFormulas.Efficiency(20).ToString("0.##")) + "\n\n";
+            result += "FCVOE_CodexDefensiveHeader".Translate() + "\n\n";
             foreach (Outpost_Defensive outpost in outposts)
             {
                 WorldObjectComp_EmpireDefensive comp = outpost.GetComponent<WorldObjectComp_EmpireDefensive>();

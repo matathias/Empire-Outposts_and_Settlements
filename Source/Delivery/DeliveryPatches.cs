@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using FactionColonies;
 using FactionColonies.util;
 using Outposts;
@@ -76,12 +77,31 @@ namespace EmpireVOE
             if (destination is object)
             {
                 // Deliver goods to outpost
+                List<Pawn> reroutedPawns = null;
                 foreach (Thing t in evt.goods)
                 {
                     if (t is Pawn p)
-                        destination.AddPawn(p);
+                    {
+                        // AddPawn refuses ideology-unwilling / vehicle pawns. Rather than strand a
+                        // refused pawn, redirect it straight to the player's colony.
+                        if (!destination.AddPawn(p))
+                            (reroutedPawns ?? (reroutedPawns = new List<Pawn>())).Add(p);
+                    }
                     else
                         destination.AddItem(t);
+                }
+
+                if (reroutedPawns is object)
+                {
+                    // Drop the rerouted pawns from the outpost delivery's goods so its arrival letter
+                    // (built below from evt.goods) doesn't list pawns that never actually joined it.
+                    foreach (Pawn rerouted in reroutedPawns)
+                        evt.goods.Remove(rerouted);
+
+                    string rerouteLabel = "FCVOE_DeliveryPawnRerouted".Translate(destination.LabelCap);
+                    string rerouteText = "FCVOE_DeliveryPawnReroutedDesc".Translate(
+                        destination.LabelCap, DeliveryUtil.GoodsToString(reroutedPawns.ConvertAll<Thing>(p => p)));
+                    VOEPawnUtil.DeliverPawnsToPlayer(reroutedPawns, destination.Tile, rerouteLabel, rerouteText);
                 }
 
                 // Notify via the base mod's delivery notification utility so the

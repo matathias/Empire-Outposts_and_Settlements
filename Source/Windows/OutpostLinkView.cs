@@ -54,14 +54,14 @@ namespace EmpireVOE
 
             Rect labelRect = new Rect(iconRect.xMax + 6f, rect.y, rect.width - IconSize - 6f, rect.height);
             // VOE overrides Outpost.Label => Name, so Name/LabelCap are both null for an un-renamed
-            // outpost; RenamableLabel falls back to def.label and is never null (Text.ClampTextWithEllipsis
+            // outpost; RenamableLabel falls back to def.label and is never null (ClampWithEllipsis
             // dereferences the string with no null guard).
             string label = outpost.RenamableLabel;
             if (!suffix.NullOrEmpty()) label += "  " + suffix;
 
             TextAnchor prevAnchor = Text.Anchor;
             Text.Anchor = TextAnchor.MiddleLeft;
-            Widgets.Label(labelRect, Text.ClampTextWithEllipsis(labelRect, label));
+            Widgets.Label(labelRect, TextUtil.ClampWithEllipsis(labelRect, label));
             Text.Anchor = prevAnchor;
 
             if (jumpOnClick)
@@ -93,7 +93,7 @@ namespace EmpireVOE
             Color prevColor = GUI.color;
             Text.Anchor = anchor;
             GUI.color = color;
-            Widgets.Label(labelRect, Text.ClampTextWithEllipsis(labelRect, settlement.Name));
+            Widgets.Label(labelRect, TextUtil.ClampWithEllipsis(labelRect, settlement.Name));
             GUI.color = prevColor;
             Text.Anchor = prevAnchor;
 
@@ -110,7 +110,7 @@ namespace EmpireVOE
             Color prevColor = GUI.color;
             Text.Anchor = TextAnchor.MiddleRight;
             GUI.color = new Color(0.7f, 0.7f, 0.7f);
-            Widgets.Label(rect, Text.ClampTextWithEllipsis(rect, text));
+            Widgets.Label(rect, TextUtil.ClampWithEllipsis(rect, text));
             GUI.color = prevColor;
             Text.Anchor = prevAnchor;
         }
@@ -167,7 +167,7 @@ namespace EmpireVOE
             Text.Anchor = TextAnchor.MiddleLeft;
             GUI.color = AccentUtil.GetSettlementAccent(settlement);
             Rect nameRect = new Rect(textX, rect.y, rect.xMax - textX - 6f, rect.height);
-            Widgets.Label(nameRect, Text.ClampTextWithEllipsis(nameRect, settlement.Name));
+            Widgets.Label(nameRect, TextUtil.ClampWithEllipsis(nameRect, settlement.Name));
             GUI.color = prevColor;
             Text.Anchor = prevAnchor;
             Text.Font = prevFont;

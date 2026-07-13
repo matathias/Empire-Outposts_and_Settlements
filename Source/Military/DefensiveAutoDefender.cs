@@ -141,10 +141,26 @@ namespace EmpireVOE
         public void ReturnDefendingPawns(List<Pawn> pawns)
         {
             if (pawns is null) return;
+            List<Pawn> failed = null;
             foreach (Pawn pawn in pawns)
             {
                 if (pawn is object && !pawn.Dead && !pawn.Destroyed)
-                    outpost.AddPawn(pawn);
+                {
+                    if (!outpost.AddPawn(pawn))
+                        (failed ?? (failed = new List<Pawn>())).Add(pawn);
+                }
+            }
+
+            if (failed is object)
+            {
+                // These defenders originated from this outpost, so a rejection here is unexpected —
+                // surface it — and hand the pawns back to the player rather than losing them.
+                VOELog.Error($"Outpost '{outpost.Name}' refused {failed.Count} returning defender(s) that " +
+                    "originated from it; delivering them to the player instead.");
+                string label = "FCVOE_DefenderReturnFailed".Translate(outpost.LabelCap);
+                string text = "FCVOE_DefenderReturnFailedDesc".Translate(
+                    outpost.LabelCap, DeliveryUtil.GoodsToString(failed.ConvertAll<Thing>(p => p)));
+                VOEPawnUtil.DeliverPawnsToPlayer(failed, outpost.Tile, label, text);
             }
         }
     }

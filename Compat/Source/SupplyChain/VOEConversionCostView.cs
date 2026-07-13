@@ -129,7 +129,13 @@ namespace EmpireVOE.SupplyChain
             if (wc.Mode == SupplyChainMode.Simple)
                 return wc.Stockpile;
 
-            WorldSettlementFC source = FoundingCostUtil.FindNearestSettlement(tile);
+            // Match the actual charge source: the real deduction routes through
+            // FoundingCostValidator.GetEffectiveSource, which honors an explicitly-selected source that
+            // outlives the founding window. Previewing FindNearestSettlement directly could show a
+            // different settlement than the one charged. Fall back only if the validator is unavailable.
+            WorldSettlementFC source = wc.FoundingValidator is object
+                ? wc.FoundingValidator.GetEffectiveSource(tile)
+                : FoundingCostUtil.FindNearestSettlement(tile);
             if (source is null) return null;
 
             WorldObjectComp_SupplyChain comp = SupplyChainCache.GetSettlementComp(source);

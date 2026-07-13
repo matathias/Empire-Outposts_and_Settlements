@@ -80,7 +80,10 @@ namespace EmpireVOE
                     for (int i = 0; i < pawnCount; i++)
                     {
                         Pawn pawn = PawnGenerator.GeneratePawn(PawnKindDefOf.Colonist, Faction.OfPlayer);
-                        outpost.AddPawn(pawn);
+                        // AddPawn can reject a pawn (ideology/vehicle); discard the leftover so the
+                        // fixture doesn't leak a holderless pawn.
+                        if (!outpost.AddPawn(pawn))
+                            pawn.Destroy(DestroyMode.Vanish);
                     }
                     return outpost;
                 }

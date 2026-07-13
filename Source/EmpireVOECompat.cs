@@ -1,4 +1,3 @@
-using System.Linq;
 using Verse;
 
 namespace EmpireVOE
@@ -22,8 +21,10 @@ namespace EmpireVOE
 
         private static bool ModActive(string packageId)
         {
-            string target = packageId.ToLower();
-            return LoadedModManager.RunningMods.Any(mod => mod.PackageId.ToLower() == target);
+            // ignorePostfix so a Steam Workshop copy (PackageId gets a "_steam" suffix) still matches;
+            // exact equality would miss it and leave PowerOutpostsActive false while LoadFolders'
+            // suffix-trimmed IfModActive still loads the compat.
+            return ModLister.GetActiveModWithIdentifier(packageId, true) is object;
         }
     }
 }

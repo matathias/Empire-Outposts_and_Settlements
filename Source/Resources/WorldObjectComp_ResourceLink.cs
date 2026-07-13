@@ -110,25 +110,17 @@ namespace EmpireVOE
             }
             else
             {
+                // An outpost may be linked by at most one settlement. If it's already linked elsewhere,
+                // cleanly remove that link first (drops its entry and invalidates the old settlement's
+                // caches) rather than silently overwriting the back-pointer and leaking a stale link.
+                if (oc is object && oc.linkedSettlement is object && oc.linkedSettlement != parent)
+                    oc.linkedSettlement.GetComponent<WorldObjectComp_ResourceLink>()?.ToggleLink(outpost);
+
                 linkedOutposts.Add(outpost);
                 if (oc is object) oc.linkedSettlement = parent as WorldSettlementFC;
             }
             (parent as WorldSettlementFC)?.InvalidateResourceCaches();
             ResourceLinkUtil.NotifyLinkChanged(outpost);
-        }
-
-        internal void UnlinkAll()
-        {
-            if (linkedOutposts.Count == 0) return;
-            List<Outpost> cleared = new List<Outpost>(linkedOutposts);
-            linkedOutposts.Clear();
-            (parent as WorldSettlementFC)?.InvalidateResourceCaches();
-            foreach (Outpost outpost in cleared)
-            {
-                WorldObjectComp_EmpireOutpost oc = outpost?.GetComponent<WorldObjectComp_EmpireOutpost>();
-                if (oc is object && oc.linkedSettlement == parent) oc.linkedSettlement = null;
-                ResourceLinkUtil.NotifyLinkChanged(outpost);
-            }
         }
     }
 }

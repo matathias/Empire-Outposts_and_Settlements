@@ -8,7 +8,8 @@
     <FCVOE_OutpostRaidedDesc>Your outpost {0} was raided! {1} colonists were injured and some supplies were lost.</FCVOE_OutpostRaidedDesc>
     <FCVOE_ChangeDefender>Change Defender</FCVOE_ChangeDefender>
     <FCVOE_ChangeDefenderDesc>Select an Empire settlement to defend this outpost.</FCVOE_ChangeDefenderDesc>
-    <FCVOE_DefenderChanged>{0} is now defending {1}.</FCVOE_DefenderChanged>
+    <FCVOE_DefenderReturnFailed>Defenders returned from {0}</FCVOE_DefenderReturnFailed>
+    <FCVOE_DefenderReturnFailedDesc>The outpost {0} could not take back some of its returning defenders, so they are being sent to your colony instead.\n\n{1}</FCVOE_DefenderReturnFailedDesc>
 	<FCVOE_DefenseIdle>Idle</FCVOE_DefenseIdle>
     <FCVOE_StatusDefending>Defending {0}</FCVOE_StatusDefending>
     <FCVOE_StatusRegrouping>Regrouping ({0})</FCVOE_StatusRegrouping>
@@ -26,11 +27,12 @@
     <FCVOE_FinancingOutpostDesc>Choose an outpost to fund this settlement's payments. Currently: {0}</FCVOE_FinancingOutpostDesc>
     <FCVOE_TaxDeliveredToOutpost>Taxes from {0} have arrived at {1}.</FCVOE_TaxDeliveredToOutpost>
     <FCVOE_TaxDeliveredToOutpostDesc>Tax shipment from {0} has been delivered to outpost {1}.\n\nGoods:\n{2}</FCVOE_TaxDeliveredToOutpostDesc>
-    <FCVOE_TaxRedirected>Tax delivery redirected</FCVOE_TaxRedirected>
     <FCVOE_TaxRedirectedDesc>The outpost designated to receive taxes from {0} no longer exists. Shipment redirected to {1}.</FCVOE_TaxRedirectedDesc>
     <FCVOE_InvalidDeliveryOutpost>{0} tried to deliver taxes to an invalid outpost. Delivery destination has been reset.</FCVOE_InvalidDeliveryOutpost>
     <FCVOE_DeliveryEventDesc>Taxes from {0} are being delivered to {1}.\n\nGoods:\n{2}</FCVOE_DeliveryEventDesc>
     <FCVOE_PlayerTaxMap>Player Tax Map</FCVOE_PlayerTaxMap>
+    <FCVOE_DeliveryPawnRerouted>Arrivals rerouted from {0}</FCVOE_DeliveryPawnRerouted>
+    <FCVOE_DeliveryPawnReroutedDesc>Some new arrivals could not join the outpost {0} and are being sent to your colony instead.\n\n{1}</FCVOE_DeliveryPawnReroutedDesc>
 
     <!-- Settings -->
     <FCVOE_Title>Empire: Outposts &amp; Settlements</FCVOE_Title>
@@ -86,8 +88,6 @@
     <FCVOE_ConvertBusyAttacked>This outpost is under attack.</FCVOE_ConvertBusyAttacked>
     <FCVOE_ConvertBusyDefending>This outpost's forces are away defending {0}.</FCVOE_ConvertBusyDefending>
     <FCVOE_ConvertInvalidType>This outpost cannot be converted into that settlement type.</FCVOE_ConvertInvalidType>
-    <FCVOE_OutpostIncorporated>{0} incorporated</FCVOE_OutpostIncorporated>
-    <FCVOE_OutpostIncorporatedDesc>The outpost {0} has been incorporated into your new settlement {1}. {2} worker(s) have joined the settlement.</FCVOE_OutpostIncorporatedDesc>
     <FCVOE_OutpostGoodsShipped>Goods shipped from {0}</FCVOE_OutpostGoodsShipped>
     <FCVOE_OutpostGoodsShippedDesc>The stored goods of {0} are being shipped to {1}.\n\nGoods:\n{2}</FCVOE_OutpostGoodsShippedDesc>
 
@@ -132,13 +132,6 @@
     <!-- Resource Linking -->
     <FCVOE_ResourceLinkBonusDesc>{0} outpost link</FCVOE_ResourceLinkBonusDesc>
 
-    <!-- Shared outpost-link gizmo strings -->
-    <FCVOE_AlreadyLinked>already linked</FCVOE_AlreadyLinked>
-    <FCVOE_Linked>linked</FCVOE_Linked>
-    <FCVOE_UnlinkAll>Unlink all</FCVOE_UnlinkAll>
-    <FCVOE_NoOutpostsInRange>No outposts in range</FCVOE_NoOutpostsInRange>
-    <FCVOE_Tiles>tiles</FCVOE_Tiles>
-
     <!-- Inspect String -->
     <FCVOE_LinkedTo>Linked to: {0}</FCVOE_LinkedTo>
     <FCVOE_NotLinked>Not linked to settlement</FCVOE_NotLinked>
@@ -173,11 +166,8 @@
     <FCVOE_TabUnlink>Unlink</FCVOE_TabUnlink>
     <FCVOE_NoSettlementsInRange>No settlements in range</FCVOE_NoSettlementsInRange>
     <FCVOE_TabChange>Change</FCVOE_TabChange>
-    <FCVOE_TabSet>Set</FCVOE_TabSet>
     <FCVOE_TabClear>Clear</FCVOE_TabClear>
     <FCVOE_TabNoLinks>None</FCVOE_TabNoLinks>
-    <FCVOE_TabFeeds>boosts {0}</FCVOE_TabFeeds>
-    <FCVOE_TabContribution>+{0}</FCVOE_TabContribution>
     <FCVOE_TabLinkedElsewhere>linked elsewhere</FCVOE_TabLinkedElsewhere>
     <FCVOE_MainTabOutpostUnlinked>not linked</FCVOE_MainTabOutpostUnlinked>
     <FCVOE_MainTabNoOutposts>No outposts have been established.</FCVOE_MainTabNoOutposts>
@@ -199,6 +189,7 @@
     <FCVOE_CodexOverviewOutposts>Outposts established: {0}</FCVOE_CodexOverviewOutposts>
     <FCVOE_CodexOverviewOutpostLine>  {0}: {1}</FCVOE_CodexOverviewOutpostLine>
 
+    <FCVOE_CodexDefensiveEfficiencyScale>Combat efficiency scale: {0}x at average 0 skill, {1}x at 10, {2}x at 20.</FCVOE_CodexDefensiveEfficiencyScale>
     <FCVOE_CodexDefensiveHeader>Defensive outposts:</FCVOE_CodexDefensiveHeader>
     <FCVOE_CodexDefensiveNone>You have no defensive outposts.</FCVOE_CodexDefensiveNone>
     <FCVOE_CodexDefensiveLine>{0} - military level {1}, range {2}</FCVOE_CodexDefensiveLine>
