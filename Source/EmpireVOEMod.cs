@@ -159,6 +159,13 @@ namespace EmpireVOE
             }
         }
 
+        public static string GetModVersion()
+        {
+            var mod = LoadedModManager.GetMod<EmpireVOEMod>();
+            string version = mod?.Content?.ModMetaData?.ModVersion;
+            return version.NullOrEmpty() ? "Unknown" : version;
+        }
+
         public override string SettingsCategory()
         {
             return "FCVOE_Title".Translate();
@@ -191,6 +198,9 @@ namespace EmpireVOE
             ls.Begin(viewRect);
             Listing_StandardExtensions.ResetRowStripe();
             ls.maxOneColumn = true;
+
+            ls.Label("FCVOE_ModVersion".Translate(GetModVersion()));
+            ls.Gap(10f);
 
             // Master toggle
             bool prev = EmpireVOESettings.disableIntegration;

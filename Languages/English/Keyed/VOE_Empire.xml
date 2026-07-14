@@ -36,6 +36,7 @@
 
     <!-- Settings -->
     <FCVOE_Title>Empire: Outposts &amp; Settlements</FCVOE_Title>
+    <FCVOE_ModVersion>Outposts &amp; Settlements Version: {0}</FCVOE_ModVersion>
     <FCVOE_DebugLogging>Verbose logging</FCVOE_DebugLogging>
     <FCVOE_DebugLoggingDesc>Enable verbose logging.</FCVOE_DebugLoggingDesc>
 
