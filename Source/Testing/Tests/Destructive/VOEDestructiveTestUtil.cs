@@ -5,6 +5,7 @@ using Outposts;
 using RimWorld;
 using RimWorld.Planet;
 using Verse;
+using VOE;
 
 namespace EmpireVOE
 {
@@ -33,6 +34,32 @@ namespace EmpireVOE
                 .FirstOrDefault(o => o.Faction == Faction.OfPlayer
                     && o.def.GetModExtension<OutpostConversionExtension>() is object
                     && OutpostConversionUtil.GetConvertibleTypes(o).Count > 0);
+        }
+
+        /// <summary>The first <see cref="WorldObjectDef"/> whose worldObjectClass is an
+        /// <see cref="Outpost_Defensive"/>, or null.</summary>
+        public static WorldObjectDef FindDefensiveOutpostDef()
+        {
+            return DefDatabase<WorldObjectDef>.AllDefsListForReading.FirstOrDefault(d =>
+                d.worldObjectClass is object && typeof(Outpost_Defensive).IsAssignableFrom(d.worldObjectClass));
+        }
+
+        /// <summary>
+        /// A live player <see cref="Outpost_Defensive"/>, or a freshly created transient one carrying the
+        /// Empire defensive comp. Null if neither is possible (caller skips). Shared by every defensive-outpost
+        /// test so the fixture (and its VEF create recipe) lives in one place.
+        /// </summary>
+        public static Outpost_Defensive FirstOrTransientDefensiveOutpost()
+        {
+            Outpost_Defensive existing = Find.WorldObjects.AllWorldObjects
+                .OfType<Outpost_Defensive>()
+                .FirstOrDefault(o => o.Faction == Faction.OfPlayer);
+            if (existing is object) return existing;
+
+            WorldObjectDef def = FindDefensiveOutpostDef();
+            if (def is null) return null;
+
+            return CreateTransientOutpost(def) as Outpost_Defensive;
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 using System.Linq;
 using FactionColonies;
 using Outposts;
+using RimWorld;
 using Verse;
 
 namespace EmpireVOE
@@ -63,6 +64,54 @@ namespace EmpireVOE
             TestAssert.DoesNotThrow(() => target.OnRaidLost(new BattleResult()), "OnRaidLost threw");
 
             DestructiveTestUtil.AssertEmpireInvariants(f, "OutpostRaidTarget_OnRaidLost");
+        }
+
+        /// <summary>
+        /// T5: OnRaidLost's item-destruction is bounded — it removes min(itemCount, Rand.Range(1,4)) = 1..3
+        /// stored items when the outpost has any. Stocks a transient outpost with 5 distinct stacks (so the
+        /// count exceeds the cap) and asserts exactly 1..3 were destroyed. The pawn-injury half is random in
+        /// which parts it hits, so it stays covered by the non-throw contract above.
+        /// </summary>
+        [EmpireDestructiveTest("VOE.Destructive.Military")]
+        public static void OutpostRaidTarget_OnRaidLost_DestroysBoundedItems()
+        {
+            FactionFC f = DestructiveTestUtil.RequireFaction();
+
+            // Transient so we never destroy the player's real stored goods or injure their pawns.
+            Outpost outpost = VOEDestructiveTestUtil.CreateTransientOutpost();
+            if (outpost is null) TestAssert.Skip("Could not create a transient outpost");
+
+            try
+            {
+                // Five distinct stacks so they don't merge and the count is above the 3-item destroy cap.
+                AddStack(outpost, ThingDefOf.Silver, 50);
+                AddStack(outpost, ThingDefOf.Steel, 50);
+                AddStack(outpost, ThingDefOf.WoodLog, 50);
+                AddStack(outpost, ThingDefOf.Gold, 50);
+                AddStack(outpost, ThingDefOf.Plasteel, 50);
+
+                int before = outpost.Things.Count();
+                if (before < 4) TestAssert.Skip("Could not stock enough distinct items");
+
+                new OutpostRaidTarget(outpost).OnRaidLost(new BattleResult());
+
+                int destroyed = before - outpost.Things.Count();
+                TestAssert.GreaterThan(destroyed, 0, "A raid loss should destroy at least one stored item");
+                TestAssert.LessThanOrEqual(destroyed, 3, "A raid loss should destroy at most three stored items");
+            }
+            finally
+            {
+                VOEDestructiveTestUtil.SafeRemoveOutpost(outpost);
+            }
+
+            DestructiveTestUtil.AssertEmpireInvariants(f, "OutpostRaidTarget_OnRaidLost_Items");
+        }
+
+        private static void AddStack(Outpost outpost, ThingDef def, int count)
+        {
+            Thing thing = ThingMaker.MakeThing(def);
+            thing.stackCount = count;
+            outpost.AddItem(thing);
         }
 
         [EmpireDestructiveTest("VOE.Destructive.Military")]
