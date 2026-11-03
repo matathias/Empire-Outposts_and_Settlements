@@ -133,7 +133,7 @@ if ($aboutContent -match '<modVersion>') {
 Set-Content $aboutPath -Value $aboutContent -NoNewline
 
 # --- Update AssemblyVersion in .csproj ---
-$csprojPath = "Source\EmpireVOE.csproj"
+$csprojPath = "Source\Core\EmpireVOE.csproj"
 if (Test-Path $csprojPath) {
     $assemblyVersion = "$major.$minor.$patch.0"
     $csprojContent = Get-Content $csprojPath -Raw

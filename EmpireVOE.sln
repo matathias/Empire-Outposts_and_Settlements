@@ -3,19 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36518.9
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpireVOE", "Source\EmpireVOE.csproj", "{75687B87-284D-FE44-ACE3-C626D235C0EA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpireVOE", "Source\Core\EmpireVOE.csproj", "{75687B87-284D-FE44-ACE3-C626D235C0EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpireVOE.Specialists", "Compat\Source\Specialists\EmpireVOE.Specialists.csproj", "{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpireVOE.Specialists", "Source\Patch-Specialists\EmpireVOE.Specialists.csproj", "{DA64012E-1280-499B-940A-814302357F05}"
 	ProjectSection(ProjectDependencies) = postProject
 		{75687B87-284D-FE44-ACE3-C626D235C0EA} = {75687B87-284D-FE44-ACE3-C626D235C0EA}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpireVOE.PowerGrid", "Compat\Source\PowerGrid\EmpireVOE.PowerGrid.csproj", "{B2C3D4E5-F6A7-8901-BCDE-F23456789012}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpireVOE.PowerGrid", "Source\Patch-PowerGrid\EmpireVOE.PowerGrid.csproj", "{B2C3D4E5-F6A7-8901-BCDE-F23456789012}"
 	ProjectSection(ProjectDependencies) = postProject
 		{75687B87-284D-FE44-ACE3-C626D235C0EA} = {75687B87-284D-FE44-ACE3-C626D235C0EA}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpireVOE.SupplyChain", "Compat\Source\SupplyChain\EmpireVOE.SupplyChain.csproj", "{309A6240-B261-610C-D244-76A8B9E302AC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmpireVOE.SupplyChain", "Source\Patch-SupplyChain\EmpireVOE.SupplyChain.csproj", "{309A6240-B261-610C-D244-76A8B9E302AC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{75687B87-284D-FE44-ACE3-C626D235C0EA} = {75687B87-284D-FE44-ACE3-C626D235C0EA}
 	EndProjectSection
@@ -33,12 +33,12 @@ Global
 		{75687B87-284D-FE44-ACE3-C626D235C0EA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{75687B87-284D-FE44-ACE3-C626D235C0EA}.Testing|Any CPU.ActiveCfg = Testing|Any CPU
 		{75687B87-284D-FE44-ACE3-C626D235C0EA}.Testing|Any CPU.Build.0 = Testing|Any CPU
-		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Testing|Any CPU.ActiveCfg = Testing|Any CPU
-		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Testing|Any CPU.Build.0 = Testing|Any CPU
+		{DA64012E-1280-499B-940A-814302357F05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA64012E-1280-499B-940A-814302357F05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA64012E-1280-499B-940A-814302357F05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA64012E-1280-499B-940A-814302357F05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA64012E-1280-499B-940A-814302357F05}.Testing|Any CPU.ActiveCfg = Testing|Any CPU
+		{DA64012E-1280-499B-940A-814302357F05}.Testing|Any CPU.Build.0 = Testing|Any CPU
 		{B2C3D4E5-F6A7-8901-BCDE-F23456789012}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B2C3D4E5-F6A7-8901-BCDE-F23456789012}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2C3D4E5-F6A7-8901-BCDE-F23456789012}.Release|Any CPU.ActiveCfg = Release|Any CPU
