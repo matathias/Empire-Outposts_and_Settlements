@@ -1,167 +1,159 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using FactionColonies;
-using RimWorld;
-using RimWorld.Planet;
-using Verse;
 using VOE;
 
-namespace EmpireVOE
+namespace EmpireVOE;
+
+/// <summary>
+/// IAutoDefender wrapper for Outpost_Defensive. Allows defensive outposts to
+/// auto-defend nearby Empire settlements (and other IRaidTargets).
+/// Not used for Outpost_Artillery — that has its own purpose.
+/// </summary>
+public class DefensiveAutoDefender : IAutoDefender
 {
-    /// <summary>
-    /// IAutoDefender wrapper for Outpost_Defensive. Allows defensive outposts to
-    /// auto-defend nearby Empire settlements (and other IRaidTargets).
-    /// Not used for Outpost_Artillery — that has its own purpose.
-    /// </summary>
-    public class DefensiveAutoDefender : IAutoDefender
+    private readonly Outpost_Defensive outpost;
+    private readonly WorldObjectComp_EmpireDefensive comp;
+
+    // Busy/target state lives on the comp so it persists across save/reload (this object is [Unsaved]).
+    public bool Busy => comp.defending;
+    public string DefendingTargetName => comp.defendingTarget is not null ? comp.defendingTarget.LabelCap : "";
+
+    public DefensiveAutoDefender(Outpost_Defensive outpost)
     {
-        private readonly Outpost_Defensive outpost;
-        private readonly WorldObjectComp_EmpireDefensive comp;
+        this.outpost = outpost;
+        comp = outpost.GetComponent<WorldObjectComp_EmpireDefensive>();
+    }
 
-        // Busy/target state lives on the comp so it persists across save/reload (this object is [Unsaved]).
-        public bool Busy => comp.defending;
-        public string DefendingTargetName => comp.defendingTarget is object ? comp.defendingTarget.LabelCap : "";
+    public WorldObject WorldObject => outpost;
 
-        public DefensiveAutoDefender(Outpost_Defensive outpost)
+    public int MilitaryLevel => CalculateMilitaryLevel();
+
+    /// <summary>Skill-based combat efficiency multiplier ("how well they fight"), distinct from
+    /// MilitaryLevel ("how much force"). Same value fed into CreateDefendingForce.</summary>
+    public double Efficiency => CalculateEfficiency();
+
+    public int Range => outpost.Range;
+
+    public bool CanAutoDefend => comp.autoDefend
+                                 && outpost.PawnCount > 1
+                                 && !outpost.Packing
+                                 && !comp.defending
+                                 && !comp.IsOnCooldown;
+
+    public MilitaryForce CreateDefendingForce()
+    {
+        double level = MilitaryLevel;
+        double efficiency = CalculateEfficiency();
+        return new MilitaryForce(level, efficiency, null, Faction.OfPlayer);
+    }
+
+    public void OnDefensePledged(WorldObject target)
+    {
+        comp.defending = true;
+        comp.defendingTarget = target;
+    }
+
+    public void OnDefenseStarted(WorldObject target)
+    {
+        comp.defending = true;
+        comp.defendingTarget = target;
+    }
+
+    public void OnDefenseReplaced()
+    {
+        comp.defending = false;
+        comp.defendingTarget = null;
+    }
+
+    public void OnDefenseComplete(bool won, BattleResult result)
+    {
+        comp.defending = false;
+        comp.defendingTarget = null;
+
+        // 2-day base cooldown (shorter than Empire's 3-day since outposts are simpler)
+        int cooldown = GenDate.TicksPerDay * 2;
+        if (!won)
         {
-            this.outpost = outpost;
-            comp = outpost.GetComponent<WorldObjectComp_EmpireDefensive>();
-        }
-
-        public WorldObject WorldObject => outpost;
-
-        public int MilitaryLevel => CalculateMilitaryLevel();
-
-        /// <summary>Skill-based combat efficiency multiplier ("how well they fight"), distinct from
-        /// MilitaryLevel ("how much force"). Same value fed into CreateDefendingForce.</summary>
-        public double Efficiency => CalculateEfficiency();
-
-        public int Range => outpost.Range;
-
-        public bool CanAutoDefend => comp.autoDefend
-                                     && outpost.PawnCount > 1
-                                     && !outpost.Packing
-                                     && !comp.defending
-                                     && !comp.IsOnCooldown;
-
-        public MilitaryForce CreateDefendingForce()
-        {
-            double level = MilitaryLevel;
-            double efficiency = CalculateEfficiency();
-            return new MilitaryForce(level, efficiency, null, Faction.OfPlayer);
-        }
-
-        public void OnDefensePledged(WorldObject target)
-        {
-            comp.defending = true;
-            comp.defendingTarget = target;
-        }
-
-        public void OnDefenseStarted(WorldObject target)
-        {
-            comp.defending = true;
-            comp.defendingTarget = target;
-        }
-
-        public void OnDefenseReplaced()
-        {
-            comp.defending = false;
-            comp.defendingTarget = null;
-        }
-
-        public void OnDefenseComplete(bool won, BattleResult result)
-        {
-            comp.defending = false;
-            comp.defendingTarget = null;
-
-            // 2-day base cooldown (shorter than Empire's 3-day since outposts are simpler)
-            int cooldown = GenDate.TicksPerDay * 2;
-            if (!won)
+            int injuries = Math.Max(1, outpost.PawnCount / 4);
+            foreach (Pawn pawn in outpost.AllPawns.InRandomOrder().Take(injuries))
             {
-                int injuries = Math.Max(1, outpost.PawnCount / 4);
-                foreach (Pawn pawn in outpost.AllPawns.InRandomOrder().Take(injuries))
+                BodyPartRecord part = pawn.health.hediffSet.GetRandomNotMissingPart(DamageDefOf.Cut);
+                if (part is not null)
                 {
-                    BodyPartRecord part = pawn.health.hediffSet.GetRandomNotMissingPart(DamageDefOf.Cut);
-                    if (part is object)
-                    {
-                        pawn.TakeDamage(new DamageInfo(DamageDefOf.Cut, Rand.Range(5f, 15f), 0f,
-                            -1f, null, part));
-                    }
-                }
-                // Extra day cooldown on loss
-                cooldown += GenDate.TicksPerDay;
-            }
-            comp.SetCooldown(cooldown);
-        }
-
-        /// <summary>
-        /// Military Level is priced off the live garrison via <see cref="OutpostMilitaryUtil"/> (the base
-        /// mod's cost->level curve), the single source of truth shared with OutpostRaidTarget so the tab,
-        /// world-map infobox, and raid resolution all agree. Combat *efficiency* stays skill-based
-        /// (<see cref="CalculateEfficiency"/>) — level is "how much force", efficiency is "how well they fight".
-        /// </summary>
-        private int CalculateMilitaryLevel()
-        {
-            return OutpostMilitaryUtil.MilitaryLevel(outpost);
-        }
-
-        /// <summary>
-        /// Efficiency = skill-dominant (better fighters hit harder per round).
-        /// Pawn count has no effect - purely about quality.
-        /// Linear in skill: slope 0.05 from skill 0 to 20, then half that (slope 0.025) above 20.
-        /// Anchored at: skill 0 -> 0.5, skill 10 -> 1.0, skill 20 -> 1.5.
-        /// Above 20: keeps rising at half the rate (for mods with skills beyond the vanilla cap).
-        /// </summary>
-        private double CalculateEfficiency()
-        {
-            double avgSkill = outpost.CapablePawns
-                .Select(p => (double)Math.Max(
-                    p.skills.GetSkill(SkillDefOf.Shooting).Level,
-                    p.skills.GetSkill(SkillDefOf.Melee).Level))
-                .DefaultIfEmpty(5)
-                .Average();
-            return VOEFormulas.Efficiency(avgSkill);
-        }
-
-        public List<Pawn> GetDefendingPawns()
-        {
-            if (outpost.PawnCount <= 1) return null;
-
-            List<Pawn> pawns = outpost.CapablePawns.ToList();
-            if (pawns.Count > 1)
-                pawns.RemoveAt(pawns.Count - 1); // keep at least 1 behind
-
-            foreach (Pawn pawn in pawns)
-                outpost.RemovePawn(pawn);
-
-            return pawns;
-        }
-
-        public void ReturnDefendingPawns(List<Pawn> pawns)
-        {
-            if (pawns is null) return;
-            List<Pawn> failed = null;
-            foreach (Pawn pawn in pawns)
-            {
-                if (pawn is object && !pawn.Dead && !pawn.Destroyed)
-                {
-                    if (!outpost.AddPawn(pawn))
-                        (failed ?? (failed = new List<Pawn>())).Add(pawn);
+                    pawn.TakeDamage(new DamageInfo(DamageDefOf.Cut, Rand.Range(5f, 15f), 0f,
+                        -1f, null, part));
                 }
             }
+            // Extra day cooldown on loss
+            cooldown += GenDate.TicksPerDay;
+        }
+        comp.SetCooldown(cooldown);
+    }
 
-            if (failed is object)
+    /// <summary>
+    /// Military Level is priced off the live garrison via <see cref="OutpostMilitaryUtil"/> (the base
+    /// mod's cost->level curve), the single source of truth shared with OutpostRaidTarget so the tab,
+    /// world-map infobox, and raid resolution all agree. Combat *efficiency* stays skill-based
+    /// (<see cref="CalculateEfficiency"/>) — level is "how much force", efficiency is "how well they fight".
+    /// </summary>
+    private int CalculateMilitaryLevel()
+    {
+        return OutpostMilitaryUtil.MilitaryLevel(outpost);
+    }
+
+    /// <summary>
+    /// Efficiency = skill-dominant (better fighters hit harder per round).
+    /// Pawn count has no effect - purely about quality.
+    /// Linear in skill: slope 0.05 from skill 0 to 20, then half that (slope 0.025) above 20.
+    /// Anchored at: skill 0 -> 0.5, skill 10 -> 1.0, skill 20 -> 1.5.
+    /// Above 20: keeps rising at half the rate (for mods with skills beyond the vanilla cap).
+    /// </summary>
+    private double CalculateEfficiency()
+    {
+        double avgSkill = outpost.CapablePawns
+            .Select(p => (double)Math.Max(
+                p.skills.GetSkill(SkillDefOf.Shooting).Level,
+                p.skills.GetSkill(SkillDefOf.Melee).Level))
+            .DefaultIfEmpty(5)
+            .Average();
+        return VOEFormulas.Efficiency(avgSkill);
+    }
+
+    public List<Pawn> GetDefendingPawns()
+    {
+        if (outpost.PawnCount <= 1) return null;
+
+        List<Pawn> pawns = outpost.CapablePawns.ToList();
+        if (pawns.Count > 1)
+            pawns.RemoveAt(pawns.Count - 1); // keep at least 1 behind
+
+        foreach (Pawn pawn in pawns)
+            outpost.RemovePawn(pawn);
+
+        return pawns;
+    }
+
+    public void ReturnDefendingPawns(List<Pawn> pawns)
+    {
+        if (pawns is null) return;
+        List<Pawn> failed = null;
+        foreach (Pawn pawn in pawns)
+        {
+            if (pawn is not null && !pawn.Dead && !pawn.Destroyed)
             {
-                // These defenders originated from this outpost, so a rejection here is unexpected —
-                // surface it — and hand the pawns back to the player rather than losing them.
-                VOELog.Error($"Outpost '{outpost.Name}' refused {failed.Count} returning defender(s) that " +
-                    "originated from it; delivering them to the player instead.");
-                string label = "FCVOE_DefenderReturnFailed".Translate(outpost.LabelCap);
-                string text = "FCVOE_DefenderReturnFailedDesc".Translate(
-                    outpost.LabelCap, DeliveryUtil.GoodsToString(failed.ConvertAll<Thing>(p => p)));
-                VOEPawnUtil.DeliverPawnsToPlayer(failed, outpost.Tile, label, text);
+                if (!outpost.AddPawn(pawn))
+                    (failed ??= []).Add(pawn);
             }
+        }
+
+        if (failed is not null)
+        {
+            // These defenders originated from this outpost, so a rejection here is unexpected —
+            // surface it — and hand the pawns back to the player rather than losing them.
+            VOELog.Error($"Outpost '{outpost.Name}' refused {failed.Count} returning defender(s) that " +
+                "originated from it; delivering them to the player instead.");
+            string label = "FCVOE_DefenderReturnFailed".Translate(outpost.LabelCap);
+            string text = "FCVOE_DefenderReturnFailedDesc".Translate(
+                outpost.LabelCap, DeliveryUtil.GoodsToString(failed.ConvertAll<Thing>(p => p)));
+            VOEPawnUtil.DeliverPawnsToPlayer(failed, outpost.Tile, label, text);
         }
     }
 }

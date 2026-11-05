@@ -1,140 +1,133 @@
-using System;
-using System.Linq;
-using FactionColonies;
 using Outposts;
-using RimWorld;
-using RimWorld.Planet;
-using Verse;
 using VOE;
 
-namespace EmpireVOE
+namespace EmpireVOE;
+
+/// <summary>
+/// EmpireVOE-specific helpers for the destructive test tier. Builds on the base mod's
+/// <see cref="DestructiveTestUtil"/> (faction guard + invariant battery) and adds outpost fixtures:
+/// finding a live player outpost, or creating a transient one with the same recipe VEF's
+/// <c>Dialog_CreateCamp</c> uses. Transient outposts are NOT cleaned up unless the test calls
+/// <see cref="SafeRemoveOutpost"/>.
+/// </summary>
+public static class VOEDestructiveTestUtil
 {
-    /// <summary>
-    /// EmpireVOE-specific helpers for the destructive test tier. Builds on the base mod's
-    /// <see cref="DestructiveTestUtil"/> (faction guard + invariant battery) and adds outpost fixtures:
-    /// finding a live player outpost, or creating a transient one with the same recipe VEF's
-    /// <c>Dialog_CreateCamp</c> uses. Transient outposts are NOT cleaned up unless the test calls
-    /// <see cref="SafeRemoveOutpost"/>.
-    /// </summary>
-    public static class VOEDestructiveTestUtil
+    /// <summary>First player-owned outpost in the world, or null (caller skips).</summary>
+    public static Outpost FirstPlayerOutpost()
     {
-        /// <summary>First player-owned outpost in the world, or null (caller skips).</summary>
-        public static Outpost FirstPlayerOutpost()
+        return Find.WorldObjects.AllWorldObjects
+            .OfType<Outpost>()
+            .FirstOrDefault(o => o.Faction == Faction.OfPlayer);
+    }
+
+    /// <summary>First player outpost with a non-empty conversion mapping, or null (caller skips).</summary>
+    public static Outpost FirstConvertibleOutpost()
+    {
+        return Find.WorldObjects.AllWorldObjects
+            .OfType<Outpost>()
+            .FirstOrDefault(o => o.Faction == Faction.OfPlayer
+                && o.def.GetModExtension<OutpostConversionExtension>() is not null
+                && OutpostConversionUtil.GetConvertibleTypes(o).Count > 0);
+    }
+
+    /// <summary>The first <see cref="WorldObjectDef"/> whose worldObjectClass is an
+    /// <see cref="Outpost_Defensive"/>, or null.</summary>
+    public static WorldObjectDef FindDefensiveOutpostDef()
+    {
+        return DefDatabase<WorldObjectDef>.AllDefsListForReading.FirstOrDefault(d =>
+            d.worldObjectClass is not null && typeof(Outpost_Defensive).IsAssignableFrom(d.worldObjectClass));
+    }
+
+    /// <summary>
+    /// A live player <see cref="Outpost_Defensive"/>, or a freshly created transient one carrying the
+    /// Empire defensive comp. Null if neither is possible (caller skips). Shared by every defensive-outpost
+    /// test so the fixture (and its VEF create recipe) lives in one place.
+    /// </summary>
+    public static Outpost_Defensive FirstOrTransientDefensiveOutpost()
+    {
+        Outpost_Defensive existing = Find.WorldObjects.AllWorldObjects
+            .OfType<Outpost_Defensive>()
+            .FirstOrDefault(o => o.Faction == Faction.OfPlayer);
+        if (existing is not null) return existing;
+
+        WorldObjectDef def = FindDefensiveOutpostDef();
+        if (def is null) return null;
+
+        return CreateTransientOutpost(def) as Outpost_Defensive;
+    }
+
+    /// <summary>
+    /// A player-owned <see cref="WorldObjectDef"/> whose worldObjectClass is an <see cref="Outpost"/>.
+    /// When <paramref name="requireConversion"/> is true, only defs carrying an
+    /// <see cref="OutpostConversionExtension"/> are considered. Null if none exist.
+    /// </summary>
+    public static WorldObjectDef FindOutpostDef(bool requireConversion)
+    {
+        foreach (WorldObjectDef wod in DefDatabase<WorldObjectDef>.AllDefsListForReading)
         {
-            return Find.WorldObjects.AllWorldObjects
-                .OfType<Outpost>()
-                .FirstOrDefault(o => o.Faction == Faction.OfPlayer);
+            if (wod.worldObjectClass is null) continue;
+            if (!typeof(Outpost).IsAssignableFrom(wod.worldObjectClass)) continue;
+            if (requireConversion && wod.GetModExtension<OutpostConversionExtension>() is null) continue;
+            return wod;
         }
+        return null;
+    }
 
-        /// <summary>First player outpost with a non-empty conversion mapping, or null (caller skips).</summary>
-        public static Outpost FirstConvertibleOutpost()
+    /// <summary>
+    /// Creates a real player outpost on a randomly-found valid surface tile, mirroring VEF's
+    /// <c>Dialog_CreateCamp</c> recipe (make -> name -> tile -> faction -> register -> add pawns).
+    /// Returns null if no suitable def/tile was found or creation threw (caller skips). This mutates
+    /// live world state.
+    /// </summary>
+    public static Outpost CreateTransientOutpost(WorldObjectDef def = null, int pawnCount = 3, bool requireConversion = false)
+    {
+        def ??= FindOutpostDef(requireConversion);
+        if (def is null) return null;
+
+        try
         {
-            return Find.WorldObjects.AllWorldObjects
-                .OfType<Outpost>()
-                .FirstOrDefault(o => o.Faction == Faction.OfPlayer
-                    && o.def.GetModExtension<OutpostConversionExtension>() is object
-                    && OutpostConversionUtil.GetConvertibleTypes(o).Count > 0);
-        }
-
-        /// <summary>The first <see cref="WorldObjectDef"/> whose worldObjectClass is an
-        /// <see cref="Outpost_Defensive"/>, or null.</summary>
-        public static WorldObjectDef FindDefensiveOutpostDef()
-        {
-            return DefDatabase<WorldObjectDef>.AllDefsListForReading.FirstOrDefault(d =>
-                d.worldObjectClass is object && typeof(Outpost_Defensive).IsAssignableFrom(d.worldObjectClass));
-        }
-
-        /// <summary>
-        /// A live player <see cref="Outpost_Defensive"/>, or a freshly created transient one carrying the
-        /// Empire defensive comp. Null if neither is possible (caller skips). Shared by every defensive-outpost
-        /// test so the fixture (and its VEF create recipe) lives in one place.
-        /// </summary>
-        public static Outpost_Defensive FirstOrTransientDefensiveOutpost()
-        {
-            Outpost_Defensive existing = Find.WorldObjects.AllWorldObjects
-                .OfType<Outpost_Defensive>()
-                .FirstOrDefault(o => o.Faction == Faction.OfPlayer);
-            if (existing is object) return existing;
-
-            WorldObjectDef def = FindDefensiveOutpostDef();
-            if (def is null) return null;
-
-            return CreateTransientOutpost(def) as Outpost_Defensive;
-        }
-
-        /// <summary>
-        /// A player-owned <see cref="WorldObjectDef"/> whose worldObjectClass is an <see cref="Outpost"/>.
-        /// When <paramref name="requireConversion"/> is true, only defs carrying an
-        /// <see cref="OutpostConversionExtension"/> are considered. Null if none exist.
-        /// </summary>
-        public static WorldObjectDef FindOutpostDef(bool requireConversion)
-        {
-            foreach (WorldObjectDef wod in DefDatabase<WorldObjectDef>.AllDefsListForReading)
+            for (int attempt = 0; attempt < 500; attempt++)
             {
-                if (wod.worldObjectClass is null) continue;
-                if (!typeof(Outpost).IsAssignableFrom(wod.worldObjectClass)) continue;
-                if (requireConversion && wod.GetModExtension<OutpostConversionExtension>() is null) continue;
-                return wod;
-            }
-            return null;
-        }
+                PlanetTile tile = TileFinder.RandomSettlementTileFor(Find.WorldGrid.Surface, FindFC.EmpireFaction);
+                if (!tile.Valid) continue;
+                if (Find.WorldObjects.AnyWorldObjectAt(tile)) continue;
 
-        /// <summary>
-        /// Creates a real player outpost on a randomly-found valid surface tile, mirroring VEF's
-        /// <c>Dialog_CreateCamp</c> recipe (make -> name -> tile -> faction -> register -> add pawns).
-        /// Returns null if no suitable def/tile was found or creation threw (caller skips). This mutates
-        /// live world state.
-        /// </summary>
-        public static Outpost CreateTransientOutpost(WorldObjectDef def = null, int pawnCount = 3, bool requireConversion = false)
-        {
-            if (def is null) def = FindOutpostDef(requireConversion);
-            if (def is null) return null;
+                Outpost outpost = (Outpost)WorldObjectMaker.MakeWorldObject(def);
+                outpost.Name = "VOE Test Outpost";
+                outpost.Tile = tile;
+                outpost.SetFaction(Faction.OfPlayer);
+                Find.WorldObjects.Add(outpost);
 
-            try
-            {
-                for (int attempt = 0; attempt < 500; attempt++)
+                for (int i = 0; i < pawnCount; i++)
                 {
-                    PlanetTile tile = TileFinder.RandomSettlementTileFor(Find.WorldGrid.Surface, FindFC.EmpireFaction);
-                    if (!tile.Valid) continue;
-                    if (Find.WorldObjects.AnyWorldObjectAt(tile)) continue;
-
-                    Outpost outpost = (Outpost)WorldObjectMaker.MakeWorldObject(def);
-                    outpost.Name = "VOE Test Outpost";
-                    outpost.Tile = tile;
-                    outpost.SetFaction(Faction.OfPlayer);
-                    Find.WorldObjects.Add(outpost);
-
-                    for (int i = 0; i < pawnCount; i++)
-                    {
-                        Pawn pawn = PawnGenerator.GeneratePawn(PawnKindDefOf.Colonist, Faction.OfPlayer);
-                        // AddPawn can reject a pawn (ideology/vehicle); discard the leftover so the
-                        // fixture doesn't leak a holderless pawn.
-                        if (!outpost.AddPawn(pawn))
-                            pawn.Destroy(DestroyMode.Vanish);
-                    }
-                    return outpost;
+                    Pawn pawn = PawnGenerator.GeneratePawn(PawnKindDefOf.Colonist, Faction.OfPlayer);
+                    // AddPawn can reject a pawn (ideology/vehicle); discard the leftover so the
+                    // fixture doesn't leak a holderless pawn.
+                    if (!outpost.AddPawn(pawn))
+                        pawn.Destroy(DestroyMode.Vanish);
                 }
+                return outpost;
             }
-            catch (Exception ex)
-            {
-                VOELog.Warning($"VOEDestructiveTestUtil.CreateTransientOutpost threw (ignored): {ex}");
-            }
-            return null;
         }
-
-        /// <summary>Removes an outpost via the real teardown path, swallowing+logging any exception so
-        /// cleanup-as-an-action never masks the test's actual result.</summary>
-        public static void SafeRemoveOutpost(Outpost outpost)
+        catch (Exception ex)
         {
-            if (outpost is null || outpost.Destroyed) return;
-            try
-            {
-                outpost.Destroy();
-            }
-            catch (Exception ex)
-            {
-                VOELog.Warning($"VOEDestructiveTestUtil.SafeRemoveOutpost threw (ignored): {ex}");
-            }
+            VOELog.Warning($"VOEDestructiveTestUtil.CreateTransientOutpost threw (ignored): {ex}");
+        }
+        return null;
+    }
+
+    /// <summary>Removes an outpost via the real teardown path, swallowing+logging any exception so
+    /// cleanup-as-an-action never masks the test's actual result.</summary>
+    public static void SafeRemoveOutpost(Outpost outpost)
+    {
+        if (outpost is null || outpost.Destroyed) return;
+        try
+        {
+            outpost.Destroy();
+        }
+        catch (Exception ex)
+        {
+            VOELog.Warning($"VOEDestructiveTestUtil.SafeRemoveOutpost threw (ignored): {ex}");
         }
     }
 }

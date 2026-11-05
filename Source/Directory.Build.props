@@ -27,6 +27,8 @@
         <Using Include="Verse" />
         <Using Include="RimWorld" />
         <Using Include="RimWorld.Planet" />
+        <!-- EmpireVOE sits outside the FactionColonies namespace, so it needs the root too -->
+        <Using Include="FactionColonies" />
         <Using Include="FactionColonies.util" />
     </ItemGroup>
 </Project>
