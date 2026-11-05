@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <!-- Shared settings (framework, language version, RimWorld/Harmony refs) live in ../Directory.Build.props -->
     <PropertyGroup>
-        <OutputPath>..\..\Compat\1.6\SupplyChain\Assemblies</OutputPath>
-        <BaseOutputPath>..\..\Compat\1.6\SupplyChain\Assemblies</BaseOutputPath>
+        <OutputPath>..\..\Compat\1.7\SupplyChain\Assemblies</OutputPath>
+        <BaseOutputPath>..\..\Compat\1.7\SupplyChain\Assemblies</BaseOutputPath>
         <AssemblyName>EmpireVOE.SupplyChain</AssemblyName>
         <RootNamespace>EmpireVOE.SupplyChain</RootNamespace>
     </PropertyGroup>
@@ -14,12 +14,12 @@
     <ItemGroup>
         <!-- Empire main mod -->
         <Reference Include="Empire">
-            <HintPath>..\..\..\Empire\1.6\Assemblies\Empire.dll</HintPath>
+            <HintPath>..\..\..\Empire\1.7\Assemblies\Empire.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <!-- Empire Supply Chain submod -->
         <Reference Include="Empire.SupplyChain">
-            <HintPath>..\..\..\Empire-SupplyChain\1.6\Assemblies\Empire.SupplyChain.dll</HintPath>
+            <HintPath>..\..\..\Empire-SupplyChain\1.7\Assemblies\Empire.SupplyChain.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <!-- VEF Outposts framework -->

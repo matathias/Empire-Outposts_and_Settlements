@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <!-- Shared settings (framework, language version, RimWorld/Harmony refs) live in ../Directory.Build.props -->
     <PropertyGroup>
-        <OutputPath>..\..\1.6\Assemblies</OutputPath>
-        <BaseOutputPath>..\..\1.6\Assemblies</BaseOutputPath>
+        <OutputPath>..\..\1.7\Assemblies</OutputPath>
+        <BaseOutputPath>..\..\1.7\Assemblies</BaseOutputPath>
         <AssemblyName>EmpireVOE</AssemblyName>
         <RootNamespace>EmpireVOE</RootNamespace>
         <AssemblyVersion>1.1.1.0</AssemblyVersion>
@@ -11,7 +11,7 @@
     <ItemGroup>
         <!-- Empire main mod -->
         <Reference Include="Empire">
-            <HintPath>..\..\..\Empire\1.6\Assemblies\Empire.dll</HintPath>
+            <HintPath>..\..\..\Empire\1.7\Assemblies\Empire.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <!-- VEF Outposts framework -->

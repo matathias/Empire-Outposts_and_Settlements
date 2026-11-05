@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+	<!-- ============================================================ -->
+	<!-- VOE: Additional Outposts (MrHydralisk.VOEAdditionalOutposts)   -->
+	<!-- Resource-link mappings                                         -->
+	<!--                                                               -->
+	<!-- This folder only loads when that mod is active. Each outpost   -->
+	<!-- below delivers through the base Outpost.Produce(), so the      -->
+	<!-- resource-link delivery suppression applies cleanly. resources/ -->
+	<!-- skill are direct def cross-references (Empire RTD_* and vanilla -->
+	<!-- SkillDefs), always present when this loads.                    -->
+	<!--                                                               -->
+	<!-- Excluded here (no clean resource / silver income / not         -->
+	<!-- production): Construction Site, Circus, Mercenary Camp,        -->
+	<!-- Embassy, Border Post, Prison, Educational Center, Church.      -->
+	<!-- ============================================================ -->
+
+	<!-- Outpost_Restaurant -> Food (Cooking) -->
+	<Operation Class="PatchOperationConditional">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Restaurant"]/modExtensions</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>Defs/WorldObjectDef[defName="Outpost_Restaurant"]</xpath>
+			<value><modExtensions /></value>
+		</nomatch>
+	</Operation>
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Restaurant"]/modExtensions</xpath>
+		<value>
+			<li Class="EmpireVOE.OutpostResourceLinkExtension">
+				<resources>
+					<li>RTD_Food</li>
+				</resources>
+				<skill>Cooking</skill>
+			</li>
+		</value>
+	</Operation>
+
+	<!-- Outpost_Ranch -> Animals (Animals) -->
+	<Operation Class="PatchOperationConditional">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Ranch"]/modExtensions</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>Defs/WorldObjectDef[defName="Outpost_Ranch"]</xpath>
+			<value><modExtensions /></value>
+		</nomatch>
+	</Operation>
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Ranch"]/modExtensions</xpath>
+		<value>
+			<li Class="EmpireVOE.OutpostResourceLinkExtension">
+				<resources>
+					<li>RTD_Animals</li>
+				</resources>
+				<skill>Animals</skill>
+			</li>
+		</value>
+	</Operation>
+
+	<!-- Outpost_Field_Hospital -> Medicine (Medicine) -->
+	<Operation Class="PatchOperationConditional">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Field_Hospital"]/modExtensions</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>Defs/WorldObjectDef[defName="Outpost_Field_Hospital"]</xpath>
+			<value><modExtensions /></value>
+		</nomatch>
+	</Operation>
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Field_Hospital"]/modExtensions</xpath>
+		<value>
+			<li Class="EmpireVOE.OutpostResourceLinkExtension">
+				<resources>
+					<li>RTD_Medicine</li>
+				</resources>
+				<skill>Medicine</skill>
+			</li>
+		</value>
+	</Operation>
+
+	<!-- OutpostAO_Fishing -> Food (Animals).
+	     Odyssey-DLC-gated def: only patch if it actually exists, otherwise the
+	     unconditional Add below would log a missing-xpath error. -->
+	<Operation Class="PatchOperationConditional">
+		<xpath>Defs/WorldObjectDef[defName="OutpostAO_Fishing"]</xpath>
+		<match Class="PatchOperationSequence">
+			<operations>
+				<li Class="PatchOperationConditional">
+					<xpath>Defs/WorldObjectDef[defName="OutpostAO_Fishing"]/modExtensions</xpath>
+					<nomatch Class="PatchOperationAdd">
+						<xpath>Defs/WorldObjectDef[defName="OutpostAO_Fishing"]</xpath>
+						<value><modExtensions /></value>
+					</nomatch>
+				</li>
+				<li Class="PatchOperationAdd">
+					<xpath>Defs/WorldObjectDef[defName="OutpostAO_Fishing"]/modExtensions</xpath>
+					<value>
+						<li Class="EmpireVOE.OutpostResourceLinkExtension">
+							<resources>
+								<li>RTD_Food</li>
+							</resources>
+							<skill>Animals</skill>
+						</li>
+					</value>
+				</li>
+			</operations>
+		</match>
+	</Operation>
+
+</Patch>

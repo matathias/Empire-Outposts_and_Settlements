@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_0</defName>
+		<label>Comp Update</label>
+		<description>Refactors the mod to rely more on WorldObjectComps instead of a central WorldComponent.</description>
+		<releaseDate>2026-04-20</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Breaks down the monolithic WorldComponent into a handful of WorldObjectComps</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_1</defName>
+		<label>Toggle Update</label>
+		<description>Makes each of the submod&apos;s integration features individually toggle-able.</description>
+		<releaseDate>2026-04-20</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Adds individual toggles for each of the integration mechanics</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_2</defName>
+		<label>API Updates</label>
+		<description>Update the code to handle API changes in the base mod.</description>
+		<releaseDate>2026-06-02</releaseDate>
+		<patchNoteType>Patch</patchNoteType>
+		<patchNoteLines>
+		<li>Various API changes such as *Registry -&gt; EmpireRegistry and FactionCache -&gt; FindFC</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_3</defName>
+		<label>Obselesence Update</label>
+		<description>Replaces the choose-a-defender float menu with opening up the base mod&apos;s choose-a-defender window.</description>
+		<releaseDate>2026-06-03</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Entirely removes OutpostDefenderGizmo, replacing it with a call to Dialog_DefendSettlement</li>
+		<li>Replaces an obsolete reference to settlementFCDefending in FindAttackEvent() with linkedOperation?.targetObject</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_4</defName>
+		<label>Off-surface Settlements</label>
+		<description>Allows settling appropriate Empire settlements on non-surface layers even when the &quot;Can only found on VOE Towns&quot; restriction is enabled. Otherwise, orbital settlements are entirely blocked off.</description>
+		<releaseDate>2026-06-03</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Change the IsValidTileForNewSettlement prefix to only apply to tiles on the surface layer</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_5</defName>
+		<label>PlanetTile Update</label>
+		<description>Updates the mod to use PlanetTile instead of int wherever possible. Rimworld allows for PlanetTile to be cast down to an int, but you lose layer info when you do that, which is a bad thing when it&apos;s possible to have Empire settlements on multiple different layers.</description>
+		<releaseDate>2026-06-03</releaseDate>
+		<patchNoteType>Patch</patchNoteType>
+		<patchNoteLines>
+		<li>Updates the mod to use PlanetTile instead of int</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_6</defName>
+		<label>Road-builder Compat</label>
+		<description>Adds compatibility with Empire&apos;s road builder. When enabled, VOE outposts will be included in the road network calculations, and roads will be built between them and Empire settlements.</description>
+		<releaseDate>2026-06-13</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Add compat support with Empire&apos;s road builder</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_7</defName>
+		<label>Updates &amp; Info</label>
+		<description>Removes two subsystems that are now obsolete in the base mod, and adds Codex entries for the mod&apos;s mechanics</description>
+		<releaseDate>2026-06-16</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Remove cooldown-reduction from Encampments (cooldown in the base mod is now mostly based on travel distance)</li>
+		<li>Remove the threat-scaling contributor (the base mod doesn&apos;t use threat scaling anymore)</li>
+		<li>Add numerous Codex entries</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_8</defName>
+		<label>Town Fixes &amp; Config</label>
+		<description>Folds in my own older mod, &quot;Vanilla Outposts Expanded: Settings for Towns&quot;. Includes a bugfix for towns, as well as expanded configuration for them to replace the hard-coded constants of &quot;3 settlements within 10 tiles&quot;.</description>
+		<releaseDate>2026-06-16</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Fold in &quot;Vanilla Outposts Expanded: Settings for Towns&quot;</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_9</defName>
+		<label>Outpost Conversion Expansion</label>
+		<description>Rework how the outpost -&gt; settlement conversion mechanism works. Includes better UI integration, as well as the possibility for non-Town outposts to be turned into settlements.</description>
+		<releaseDate>2026-06-16</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Rework the outpost -&gt; settlement conversion mechanism to integrate better with the UI and support more outposts than just Towns</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_10</defName>
+		<label>More Science!</label>
+		<description>Lifts a restriction on research outposts.</description>
+		<releaseDate>2026-06-16</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Allow more than one research outpost to link to a settlement</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_11</defName>
+		<label>Fixes &amp; Updates</label>
+		<description>Handful of bugfixes and balance tweaks.</description>
+		<releaseDate>2026-06-17</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Officially rename the mod to &quot;Empire Refactored: Outposts &amp; Settlements&quot;</li>
+		<li>Town outposts can be set to only recruit pawns that match the xenotype or race of the current inhabitants, at a reduced chance of recruitment. Not really an Empire feature, but if we&apos;re already touching VOE, then why not?</li>
+		<li>Change how military level is calculated: it is now based on similar logic as squads in the base mod, that being level is derived from the cost of all the pawns in the outpost</li>
+		<li>Defensive Outpost military efficiency calculations were simplified (it&apos;s linear now) with a higher floor and slightly lower ceiling</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_12</defName>
+		<label>Minor Fixes</label>
+		<description>A handful of minor fixes.</description>
+		<releaseDate>2026-06-17</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Defensive Outposts now show their combat efficiency in their world map infobox</li>
+		<li>Fix an issue where some modifier tooltips weren&apos;t colorized correctly</li>
+		<li>Tax notifications now respect the base mod&apos;s tax notification setting (letter vs message)</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_13</defName>
+		<label>New Features, UI, and Fixes</label>
+		<description>Adds a few new features, and new UI to more easil engage with the mod.</description>
+		<releaseDate>2026-06-19</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Expand the &quot;Science outpost link&quot; functionality to be a general resource-linking system, where certain outposts can link to a settlement and forego their item production to instead provide Empire resource production to the settlement</li>
+		<li>Add a &quot;Defensive Aura&quot; to Defensive Outposts, only active when they aren&apos;t audo-defending or otherwise busy. The aura applies a small military level bonus to all Empire settlements within range</li>
+		<li>Add settlement window- and main tab- UI for settlement-outpost linking</li>
+		<li>Update some Codex entries</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_14</defName>
+		<label>Backend Changes</label>
+		<description>A few backend changes to reduce the likelihood of translation strings or defs colliding with Vanilla Outposts Expanded.</description>
+		<releaseDate>2026-06-19</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>VOE -&gt; FCVOE for all translation strings and defNames</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_15</defName>
+		<label>Minor updates</label>
+		<description>A few minor last-minute updates.</description>
+		<releaseDate>2026-06-25</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>Update mod settings to add numeric text fields to the sliders, and also use zebra striping</li>
+		<li>Some fixes to make sure that all of the feature toggles actually correctly gate their features</li>
+		<li>Change to the Found New Settlement companion window to make sure it doesn&apos;t stack with other Empire Refactored submods</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_0_3_16</defName>
+		<label>Routes &amp; Resources Compatibility</label>
+		<description>Adds compability with Routes &amp; Resources when the &quot;Found Settlement only via outpost&quot; option is enabled.</description>
+		<releaseDate>2026-06-25</releaseDate>
+		<patchNoteType>Minor</patchNoteType>
+		<patchNoteLines>
+		<li>When &quot;Found settlements via outposts&quot; mode is enabled, changed Routes &amp; Resources resource-cost window to show the cost of converting, not founding. Also expose this info on the conversion screen</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
+</Defs>

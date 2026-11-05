@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    VOE Integration - Codex Entry Definitions
+
+    One CodexEntryDef per documented mechanic. Descriptions are deliberately
+    qualitative: they describe direction and relationships, not specific balance
+    constants (ranges, military-level formulas, cooldown days, per-level rates),
+    which are tuned in mod settings and would drift out of date here. Live,
+    current-state numbers are surfaced by the dynamicProvider panels instead.
+
+    seeAlso entries may reference base-mod Codex entries (Codex_MilitaryCooldown,
+    Codex_TaxOverview, etc.) - the base mod loads first, so those defNames resolve.
+
+    iconPath is optional; a missing texture renders the entry icon-less. Only the
+    overview uses the shared banner, which is guaranteed to exist in this mod.
+-->
+<Defs>
+
+    <!-- CATEGORY: Outpost Operations -->
+
+    <FactionColonies.CodexEntryDef>
+        <defName>Codex_FCVOE_Overview</defName>
+        <label>Outpost Integration</label>
+        <description>This add-on wires Vanilla Outposts Expanded into your {FACTION_TITLE}. Outposts you build through Vanilla Outposts Expanded stop being a separate, parallel system and start interacting with your settlements, your military, and your economy.
+
+Different outpost types take on different roles in the Empire:
+
+[b] - Defensive[/b] outposts can stand guard over nearby settlements, and passively stiffen their defense just by being close.
+[b] - Encampments[/b] speed up your mercenaries' healing after battle.
+[b] - Production[/b] outposts (mining, farming, hunting, logging, drilling, science) can be linked to feed a settlement's matching resource output instead of shipping items.
+[b] - Towns[/b] can be converted into any kind of settlement; other outposts can become their matching specialized settlement type.
+[b] - Any outpost[/b] can receive your tax shipments, bankroll a settlement's silver, and become a raid target in its own right.
+
+Every part of this integration is optional. A master switch turns the whole thing off, and each feature - military, tax delivery, financing, resource linking, encampment recovery, outpost conversion, and roads - has its own toggle in the mod settings. The panel on the right shows which features are currently active and what outposts you have established.</description>
+        <category>CodexCat_FCVOE_Operations</category>
+        <displayOrder>0</displayOrder>
+        <iconPath>UI/Banners/Banner-VOEIntegration</iconPath>
+        <dynamicProvider>EmpireVOE.CodexProvider_VOEOverview</dynamicProvider>
+        <seeAlso>
+            <li>Codex_FCVOE_RaidTargets</li>
+            <li>Codex_FCVOE_Defensive</li>
+            <li>Codex_FCVOE_TaxDelivery</li>
+            <li>Codex_FirstSettlement</li>
+        </seeAlso>
+    </FactionColonies.CodexEntryDef>
+
+    <FactionColonies.CodexEntryDef>
+        <defName>Codex_FCVOE_RaidTargets</defName>
+        <label>Outposts Under Attack</label>
+        <description>Once integrated, your outposts are no longer invisible to your enemies. Any outpost can become the target of a raid, with the same advance warning a settlement gets, giving you time to react before the attackers arrive.
+
+An undefended outpost resolves its fight automatically. Its strength comes from how many people live there - a busy outpost can fend off a raid that would overrun a near-empty one. Win, and the raid is repelled with no lasting harm. Lose, and the outpost is sacked: some of its occupants are wounded and a portion of whatever it had in storage is destroyed. You are notified either way.
+
+This is why outpost placement matters. A lone, lightly-staffed outpost on a hostile frontier is a tempting, soft target. The remedy is a [i]Defensive Outpost[/i] stationed within reach, which can step in and fight the raid on the outpost's behalf.</description>
+        <category>CodexCat_FCVOE_Operations</category>
+        <displayOrder>10</displayOrder>
+        <seeAlso>
+            <li>Codex_FCVOE_Defensive</li>
+            <li>Codex_BattleOutcomes</li>
+        </seeAlso>
+    </FactionColonies.CodexEntryDef>
+
+    <FactionColonies.CodexEntryDef>
+        <defName>Codex_FCVOE_Defensive</defName>
+        <label>Defensive Outposts</label>
+        <description>A Defensive outpost is a garrison, able to auto-defend outposts and settlements just like a squad can.
+
+Its fighting strength is driven mainly by how many defenders it holds: a bigger garrison fields a bigger force. An outpost's stats are derived as follows:
+
+[b] - Military Level[/b]: derived from the total market value of the outpost's pawns. More pawns with better gear means a higher military level.
+[b] - Military Efficiency[/b]: derived from the average of the outpost pawns' shooting and melee skills. Only the highest of each is considered for each pawn, so a high-skill sniper with poor melee will still bring up the average. Efficiency scales up with that average skill - the panel on the right shows the current scale.
+
+Defending is not free. After a battle, the garrison needs time to recover before it can deploy again, and while it is recovering it cannot be sent out as reinforcements. A defeat is costlier still: some defenders are wounded and the recovery period is extended. Further, a garrison must always leave one pawn behind at the outpost (a restriction from Vanilla Outposts Expanded - can't have empty outposts).
+
+Beyond actively deploying, a garrisoned defensive outpost also provides a [i]passive aura[/i]: settlements within range gain a fraction of the outpost's military level toward their own auto-resolved defense, stiffening them against raids even when the garrison never leaves home. Optionally, that shielding can also draw raids away from the settlement and toward the defensive outposts themselves.
+
+Defensive outposts also appear in your Empire's military tab alongside your squads, showing each one's status at a glance - ready, recovering, or currently defending. The panel on the right lists your defensive outposts with their live strength and status.</description>
+        <category>CodexCat_FCVOE_Operations</category>
+        <displayOrder>20</displayOrder>
+        <dynamicProvider>EmpireVOE.CodexProvider_VOEDefensive</dynamicProvider>
+        <seeAlso>
+            <li>Codex_FCVOE_RaidTargets</li>
+            <li>Codex_MilitaryCooldown</li>
+            <li>Codex_BattleSimulation</li>
+        </seeAlso>
+    </FactionColonies.CodexEntryDef>
+
+    <FactionColonies.CodexEntryDef>
+        <defName>Codex_FCVOE_Encampment</defName>
+        <label>Encampment Recovery</label>
+        <description>Encampments are field hospitals for your war effort. An encampment within range increases the rate at which a nearby settlement's mercenaries heal, so wounded fighters return to readiness more quickly after a battle.
+
+This scales with the [i]Medicine[/i] skill of the people stationed in the encampment, and stacks across multiple encampments in range. The panel on the right shows which settlements are currently within reach of an encampment and the heal-rate boost each is receiving.</description>
+        <category>CodexCat_FCVOE_Operations</category>
+        <displayOrder>30</displayOrder>
+        <dynamicProvider>EmpireVOE.CodexProvider_VOEEncampment</dynamicProvider>
+        <seeAlso>
+            <li>Codex_SquadEconomy</li>
+            <li>Codex_FCVOE_Overview</li>
+        </seeAlso>
+    </FactionColonies.CodexEntryDef>
+
+    <!-- CATEGORY: Outpost Economy -->
+
+    <FactionColonies.CodexEntryDef>
+        <defName>Codex_FCVOE_TaxDelivery</defName>
+        <label>Tax Delivery to Outposts</label>
+        <description>Normally, a settlement's tithe is delivered to your tax map. With this feature, you can instead send it to any outpost.
+
+Choose the destination from a gizmo on the settlement on the world map. From then on, that settlement's tax shipments travel to the chosen outpost and arrive there as real, stored goods - items land in the outpost's stores, and any people sent along join the outpost's population. The shipment's travel time reflects the distance to its new destination rather than to your tax map.
+
+If the destination outpost no longer exists when a shipment is ready, then the delivery safely falls back to your tax map along with a reason for why.</description>
+        <category>CodexCat_FCVOE_Economy</category>
+        <displayOrder>10</displayOrder>
+        <dynamicProvider>EmpireVOE.CodexProvider_VOETaxDelivery</dynamicProvider>
+        <seeAlso>
+            <li>Codex_FCVOE_Financing</li>
+            <li>Codex_TaxOverview</li>
+            <li>Codex_FCVOE_Overview</li>
+        </seeAlso>
+    </FactionColonies.CodexEntryDef>
+
+    <FactionColonies.CodexEntryDef>
+        <defName>Codex_FCVOE_Financing</defName>
+        <label>Outpost Financing</label>
+        <description>An outpost can act as a settlement's purse. Assign a financing outpost to a settlement, and whenever that settlement owes silver, the payment is drawn from the outpost's stored silver first - sparing your central treasury.
+
+If the outpost holds enough, your coffers are never touched. If it falls short, the rest is taken from your coffers as usual and you're notified that the outpost ran dry.
+
+Pair this with tax delivery - route a productive settlement's goods into an outpost, sell them there, and have that same outpost finance a needier settlement nearby.</description>
+        <category>CodexCat_FCVOE_Economy</category>
+        <displayOrder>20</displayOrder>
+        <dynamicProvider>EmpireVOE.CodexProvider_VOEFinancing</dynamicProvider>
+        <seeAlso>
+            <li>Codex_FCVOE_TaxDelivery</li>
+            <li>Codex_TaxOverview</li>
+            <li>Codex_LatePayments</li>
+        </seeAlso>
+    </FactionColonies.CodexEntryDef>
+
+    <FactionColonies.CodexEntryDef>
+        <defName>Codex_FCVOE_ResourceLink</defName>
+        <label>Resource Outpost Linking</label>
+        <description>Most production outposts - mining, farming, hunting, logging, drilling, and science - can be [i]linked[/i] to a nearby settlement instead of shipping goods back to a colony. A linked outpost stops making its physical delivery and instead feeds the settlement's matching resource output directly: a mining outpost adds to mining, a farm to food, a hunting camp to food and animals, and so on.
+
+The size of the contribution grows with the relevant skill of the outpost's workers, so a well-staffed outpost is worth more. Each settlement can draw on as many outposts as are in range, but any one outpost can only be linked to a single settlement at a time. You manage links from the [i]Outposts[/i] tab of the settlement window, and see every link across your faction in the [i]Outposts[/i] tab of the Empire+ window.
+
+The panel on the right shows your current resource links.</description>
+        <category>CodexCat_FCVOE_Economy</category>
+        <displayOrder>28</displayOrder>
+        <dynamicProvider>EmpireVOE.CodexProvider_VOEResourceLink</dynamicProvider>
+        <seeAlso>
+            <li>Codex_ResourceProduction</li>
+            <li>Codex_FCVOE_Science</li>
+            <li>Codex_FCVOE_Overview</li>
+        </seeAlso>
+    </FactionColonies.CodexEntryDef>
+
+    <FactionColonies.CodexEntryDef>
+        <defName>Codex_FCVOE_Science</defName>
+        <label>Science Outposts</label>
+        <description>A Science outpost can throw its research behind one of your settlements - one flavour of the broader resource linking system (see the [i]Resource Outpost Linking[/i] entry). Link it to a nearby settlement and it adds to that settlement's research output, with the size of the boost growing with the [i]Intellectual[/i] skill of the outpost's researchers.
+
+While an outpost is linked, its own standalone research is folded into the settlement instead of being counted separately - so you channel its work rather than double-counting it. You manage links from the [i]Outposts[/i] tab of the settlement window.
+
+The panel on the right shows your current research links and how many researchers each linked outpost is contributing.</description>
+        <category>CodexCat_FCVOE_Economy</category>
+        <displayOrder>30</displayOrder>
+        <dynamicProvider>EmpireVOE.CodexProvider_VOEScience</dynamicProvider>
+        <seeAlso>
+            <li>Codex_TechProgression</li>
+            <li>Codex_ResourceProduction</li>
+            <li>Codex_FCVOE_Overview</li>
+        </seeAlso>
+    </FactionColonies.CodexEntryDef>
+
+    <FactionColonies.CodexEntryDef>
+        <defName>Codex_FCVOE_OutpostConversion</defName>
+        <label>Converting Outposts into Settlements</label>
+        <description>Any outpost can potentially be transformed into a settlement, right on the world map. Select the outpost and use the Convert gizmo to choose what kind of settlement it becomes.
+
+What an outpost can become depends on its type. A [b]Town[/b] is versatile - it can become any kind of settlement, and grants the resulting settlement an extra flat production bonus.
+
+A specialized production outpost can only become its matching settlement type - a logging outpost becomes a lumber camp, a mining outpost becomes a mining camp - and only when a submod that adds those settlement types, such as [b]Empire Refactored: Cities &amp; Fields[/b], is enabled.
+
+Converting consumes the outpost: its workers join the new settlement, slotting in as specialists and residents with [b]Empire Refactored: Specialists &amp; Governors[/b] installed, or otherwise becoming a lasting, skill-weighted production bonus. Conversion costs only a fraction of the normal founding price in silver - and, with [b]Empire Refactored: Routes &amp; Resources[/b], a matching fraction of its resource cost.
+
+A freshly-built outpost must stand for a while before it can be converted, and an outpost that is under attack, packing up, or whose forces are away on a mission cannot be converted.
+
+An optional rule can require that settlements be founded [i]only[/i] by converting outposts. With it on, the Found screen's Settle button becomes [i]Send a Caravan[/i] and a side panel tells you which outposts can become the settlement type you have selected. The panel on the right shows which of your outposts are ready to convert.</description>
+        <category>CodexCat_FCVOE_Economy</category>
+        <displayOrder>40</displayOrder>
+        <dynamicProvider>EmpireVOE.CodexProvider_VOEConversion</dynamicProvider>
+        <seeAlso>
+            <li>Codex_FirstSettlement</li>
+            <li>Codex_ResourceProduction</li>
+            <li>Codex_FCVOE_Overview</li>
+        </seeAlso>
+    </FactionColonies.CodexEntryDef>
+
+    <FactionColonies.CodexEntryDef>
+        <defName>Codex_FCVOE_Roads</defName>
+        <label>Outposts and Roads</label>
+        <description>The Empire's road builder treats your outposts as part of the network. When it plans roads, it connects to and between your outposts the same way it links your settlements, weaving them into a single web of routes rather than leaving them stranded off the road grid.
+
+The network keeps pace with your holdings: as you establish or lose outposts, the road plan is recomputed to match. This works quietly in the background, and means the outposts you rely on stay connected as your territory grows and shifts.</description>
+        <category>CodexCat_FCVOE_Economy</category>
+        <displayOrder>50</displayOrder>
+        <seeAlso>
+            <li>Codex_FCVOE_Overview</li>
+            <li>Codex_FirstSettlement</li>
+        </seeAlso>
+    </FactionColonies.CodexEntryDef>
+
+</Defs>

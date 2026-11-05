@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+	<!-- ============================================================ -->
+	<!-- VOE: Power Grid (MrHydralisk.VOEPowerGrid)                     -->
+	<!-- ============================================================ -->
+
+	<!-- Every power outpost carries VOEPowerGrid.OutpostExtension_PowerGrid, so a single
+	     xpath predicate adds the PowerPlant conversion mapping to all of them at once.
+	     Their modExtensions node is therefore guaranteed present. WorldSettlementDef_PowerPlant
+	     (Cities & Fields) is resolved leniently - it only takes effect when that submod is
+	     installed. -->
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/WorldObjectDef[modExtensions/li[@Class="VOEPowerGrid.OutpostExtension_PowerGrid"]]/modExtensions</xpath>
+		<value>
+			<li Class="EmpireVOE.OutpostConversionExtension">
+				<allowedSettlementTypes>
+					<li>WorldSettlementDef_PowerPlant</li>
+				</allowedSettlementTypes>
+			</li>
+		</value>
+	</Operation>
+
+</Patch>

@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <!-- Shared settings (framework, language version, RimWorld/Harmony refs) live in ../Directory.Build.props -->
     <PropertyGroup>
-        <OutputPath>..\..\Compat\1.6\Specialists\Assemblies</OutputPath>
-        <BaseOutputPath>..\..\Compat\1.6\Specialists\Assemblies</BaseOutputPath>
+        <OutputPath>..\..\Compat\1.7\Specialists\Assemblies</OutputPath>
+        <BaseOutputPath>..\..\Compat\1.7\Specialists\Assemblies</BaseOutputPath>
         <AssemblyName>EmpireVOE.Specialists</AssemblyName>
         <RootNamespace>EmpireVOE.Specialists</RootNamespace>
     </PropertyGroup>
@@ -14,12 +14,12 @@
     <ItemGroup>
         <!-- Empire main mod -->
         <Reference Include="Empire">
-            <HintPath>..\..\..\Empire\1.6\Assemblies\Empire.dll</HintPath>
+            <HintPath>..\..\..\Empire\1.7\Assemblies\Empire.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <!-- Empire Specialists submod -->
         <Reference Include="Empire.Specialists">
-            <HintPath>..\..\..\Empire-Specialists\1.6\Assemblies\Empire.Specialists.dll</HintPath>
+            <HintPath>..\..\..\Empire-Specialists\1.7\Assemblies\Empire.Specialists.dll</HintPath>
             <Private>False</Private>
         </Reference>
     </ItemGroup>

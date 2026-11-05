@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <!-- Shared settings (framework, language version, RimWorld/Harmony refs) live in ../Directory.Build.props -->
     <PropertyGroup>
-        <OutputPath>..\..\Compat\1.6\VOEPowerGrid\Assemblies</OutputPath>
-        <BaseOutputPath>..\..\Compat\1.6\VOEPowerGrid\Assemblies</BaseOutputPath>
+        <OutputPath>..\..\Compat\1.7\VOEPowerGrid\Assemblies</OutputPath>
+        <BaseOutputPath>..\..\Compat\1.7\VOEPowerGrid\Assemblies</BaseOutputPath>
         <AssemblyName>EmpireVOE.PowerGrid</AssemblyName>
         <RootNamespace>EmpireVOE.PowerGrid</RootNamespace>
     </PropertyGroup>
@@ -14,7 +14,7 @@
     <ItemGroup>
         <!-- Empire main mod -->
         <Reference Include="Empire">
-            <HintPath>..\..\..\Empire\1.6\Assemblies\Empire.dll</HintPath>
+            <HintPath>..\..\..\Empire\1.7\Assemblies\Empire.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <!-- VEF Outposts framework -->

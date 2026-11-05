@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_1_1_0</defName>
+		<label>Update for Empire Refactored 1.6</label>
+		<description>Recompile against Empire Refactored 1.6 (instead of 1.5)</description>
+		<releaseDate>2026-07-09</releaseDate>
+		<patchNoteType>Patch</patchNoteType>
+		<patchNoteLines>
+		<li>Recompile</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
+
+	<FactionColonies.PatchNoteDef ParentName="FCVOEPatchBase">
+		<defName>FCVOE_1_1_1</defName>
+		<label>Various Fixes</label>
+		<description>Various bugfixes and minor changes.</description>
+		<releaseDate>2026-07-13</releaseDate>
+		<patchNoteType>Patch</patchNoteType>
+		<patchNoteLines>
+		<li>Bugfix: when an outpost is set to finance a settlement, payments could succeed even if the player doesn&apos;t have enough silver</li>
+		<li>When an outpost is converted to a settlement, ship all of the outpost&apos;s stored goods to the player instead of destroying them with the outpost</li>
+		<li>Bugfix: the new comps for empire settlements would get double-added to any WorldSettlementDef that has multiple parent defs that define a comps node</li>
+		<li>Bugfix: some distance calculations wouldn&apos;t take planet layers into account</li>
+		<li>Bugfix: if an outpost is marked for a raid, but the user saves and loads before the raid arrives, then the outpost loses its IsUnderAttack flag</li>
+		<li>Bugfix: defensive auras and encampment bonuses wouldn&apos;t apply properly after loading the game</li>
+		<li>Bugfix: raids on outposts that end in a player loss could improperly destroy things</li>
+		<li>Bugfix: outpost to settlement conversion would skip biome and other tile checks</li>
+		<li>Bugfix: when used alongside Specialists &amp; Governors and an outpost is converted into a settlement, pawns could get orphaned in the world pawn ether</li>
+		<li>Bugfix: outposts that are linked to a settlement and then destroyed could leave the link data in a bad shape</li>
+		<li>Bugfix: when returning pawns to an outpost for whatever reason, pawns could potentially be silently dropped</li>
+		<li>Bugfix: UI issues when used alongside Routes &amp; Resources</li>
+		<li>Bugfix: outpost conversion to a settlement could send two letters</li>
+		<li>Added mod version to the mod settings</li>
+		</patchNoteLines>
+		<authors>
+		<li>Matathias</li>
+		</authors>
+	</FactionColonies.PatchNoteDef>
+</Defs>

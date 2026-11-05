@@ -117,14 +117,16 @@ namespace EmpireVOE
                 "FCVOE_PlayerTaxMap".Translate(),
                 delegate { deliveryOutpost = null; }));
 
+            // ExpandingIcon goes through WorldObject: VOE's Outposts.dll is built against pre-1.7 Unity,
+            // so the compiler can't read its override signatures. The calls are still virtual.
             foreach (Outpost outpost in OutpostsByDistance())
             {
                 Outpost op = outpost;
                 options.Add(new FloatMenuOption(
                     op.LabelCap,
                     delegate { deliveryOutpost = op; },
-                    op.ExpandingIcon,
-                    op.ExpandingIconColor));
+                    ((WorldObject)op).ExpandingIcon,
+                    ((WorldObject)op).ExpandingIconColor));
             }
 
             Find.WindowStack.Add(new FloatMenu(options));
@@ -144,8 +146,8 @@ namespace EmpireVOE
                 options.Add(new FloatMenuOption(
                     op.LabelCap,
                     delegate { financingOutpost = op; },
-                    op.ExpandingIcon,
-                    op.ExpandingIconColor));
+                    ((WorldObject)op).ExpandingIcon,
+                    ((WorldObject)op).ExpandingIconColor));
             }
 
             Find.WindowStack.Add(new FloatMenu(options));

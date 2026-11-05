@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+	<!-- ============================================================ -->
+	<!-- Resource-link mappings                                        -->
+	<!--                                                               -->
+	<!-- Attaches OutpostResourceLinkExtension to each production       -->
+	<!-- outpost, declaring which Empire resource(s) it feeds when      -->
+	<!-- linked to a settlement and which skill drives the bonus.       -->
+	<!-- resources/skill are direct def cross-references (Empire RTD_*  -->
+	<!-- and vanilla SkillDefs are always present when this mod loads). -->
+	<!-- Scavenging (random rewards, no skill) and Encampment (a heal   -->
+	<!-- outpost) are intentionally excluded.                           -->
+	<!-- ============================================================ -->
+
+	<!-- Outpost_Mining -> Mining (Mining skill) -->
+	<Operation Class="PatchOperationConditional">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Mining"]/modExtensions</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>Defs/WorldObjectDef[defName="Outpost_Mining"]</xpath>
+			<value><modExtensions /></value>
+		</nomatch>
+	</Operation>
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Mining"]/modExtensions</xpath>
+		<value>
+			<li Class="EmpireVOE.OutpostResourceLinkExtension">
+				<resources>
+					<li>RTD_Mining</li>
+				</resources>
+				<skill>Mining</skill>
+			</li>
+		</value>
+	</Operation>
+
+	<!-- Outpost_Farming -> Food (Plants skill) -->
+	<Operation Class="PatchOperationConditional">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Farming"]/modExtensions</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>Defs/WorldObjectDef[defName="Outpost_Farming"]</xpath>
+			<value><modExtensions /></value>
+		</nomatch>
+	</Operation>
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Farming"]/modExtensions</xpath>
+		<value>
+			<li Class="EmpireVOE.OutpostResourceLinkExtension">
+				<resources>
+					<li>RTD_Food</li>
+				</resources>
+				<skill>Plants</skill>
+			</li>
+		</value>
+	</Operation>
+
+	<!-- Outpost_Hunting -> Food + Animals (Shooting, secondary Animals) -->
+	<Operation Class="PatchOperationConditional">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Hunting"]/modExtensions</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>Defs/WorldObjectDef[defName="Outpost_Hunting"]</xpath>
+			<value><modExtensions /></value>
+		</nomatch>
+	</Operation>
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Hunting"]/modExtensions</xpath>
+		<value>
+			<li Class="EmpireVOE.OutpostResourceLinkExtension">
+				<resources>
+					<li>RTD_Food</li>
+					<li>RTD_Animals</li>
+				</resources>
+				<skill>Shooting</skill>
+				<secondarySkill>Animals</secondarySkill>
+			</li>
+		</value>
+	</Operation>
+
+	<!-- Outpost_Logging -> Logging/wood (Plants skill) -->
+	<Operation Class="PatchOperationConditional">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Logging"]/modExtensions</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>Defs/WorldObjectDef[defName="Outpost_Logging"]</xpath>
+			<value><modExtensions /></value>
+		</nomatch>
+	</Operation>
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Logging"]/modExtensions</xpath>
+		<value>
+			<li Class="EmpireVOE.OutpostResourceLinkExtension">
+				<resources>
+					<li>RTD_Logging</li>
+				</resources>
+				<skill>Plants</skill>
+			</li>
+		</value>
+	</Operation>
+
+	<!-- Outpost_Drilling -> Chemfuel (Construction skill) -->
+	<Operation Class="PatchOperationConditional">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Drilling"]/modExtensions</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>Defs/WorldObjectDef[defName="Outpost_Drilling"]</xpath>
+			<value><modExtensions /></value>
+		</nomatch>
+	</Operation>
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Drilling"]/modExtensions</xpath>
+		<value>
+			<li Class="EmpireVOE.OutpostResourceLinkExtension">
+				<resources>
+					<li>RTD_Chemfuel</li>
+				</resources>
+				<skill>Construction</skill>
+			</li>
+		</value>
+	</Operation>
+
+	<!-- Outpost_Science -> Research (Intellectual skill). Physical-delivery suppression is N/A for
+	     science; its research contribution is suppressed separately by ScienceLinkPatches. -->
+	<Operation Class="PatchOperationConditional">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Science"]/modExtensions</xpath>
+		<nomatch Class="PatchOperationAdd">
+			<xpath>Defs/WorldObjectDef[defName="Outpost_Science"]</xpath>
+			<value><modExtensions /></value>
+		</nomatch>
+	</Operation>
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/WorldObjectDef[defName="Outpost_Science"]/modExtensions</xpath>
+		<value>
+			<li Class="EmpireVOE.OutpostResourceLinkExtension">
+				<resources>
+					<li>RTD_Research</li>
+				</resources>
+				<skill>Intellectual</skill>
+			</li>
+		</value>
+	</Operation>
+
+</Patch>

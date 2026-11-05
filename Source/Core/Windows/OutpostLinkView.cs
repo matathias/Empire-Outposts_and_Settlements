@@ -43,11 +43,14 @@ namespace EmpireVOE
             if (outpost is null) return;
 
             Rect iconRect = new Rect(rect.x, rect.y + (rect.height - IconSize) / 2f, IconSize, IconSize);
-            Texture2D icon = outpost.ExpandingIcon;
+            // Through WorldObject: VOE's Outposts.dll is built against pre-1.7 Unity, so the
+            // compiler can't read its override signatures. The call is still virtual.
+            WorldObject wo = outpost;
+            Texture2D icon = wo.ExpandingIcon;
             if (icon != null)
             {
                 Color prev = GUI.color;
-                GUI.color = outpost.ExpandingIconColor;
+                GUI.color = wo.ExpandingIconColor;
                 GUI.DrawTexture(iconRect, icon);
                 GUI.color = prev;
             }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Patch>
+
+	<!-- ============================================================ -->
+	<!-- VOE: Power Outposts (MrHydralisk.VOEPowerGrid)                 -->
+	<!-- Resource-link mapping                                          -->
+	<!--                                                               -->
+	<!-- Every power outpost carries VOEPowerGrid.OutpostExtension_     -->
+	<!-- PowerGrid, so a single predicate attaches the power resource-  -->
+	<!-- link extension to all of them at once. The contribution and    -->
+	<!-- the colony-delivery suppression live in the EmpireVOE.PowerGrid -->
+	<!-- compat assembly (loaded from this folder's Assemblies/ only     -->
+	<!-- when VOEPowerGrid is active).                                   -->
+	<!--                                                               -->
+	<!-- These outposts deliver power via a custom outlet, not          -->
+	<!-- Outpost.Produce(), so the generic Produce() suppression does    -->
+	<!-- not apply - hence the dedicated patch in the compat assembly.   -->
+	<!-- ============================================================ -->
+
+	<Operation Class="PatchOperationAdd">
+		<xpath>Defs/WorldObjectDef[modExtensions/li[@Class="VOEPowerGrid.OutpostExtension_PowerGrid"]]/modExtensions</xpath>
+		<value>
+			<li Class="EmpireVOE.PowerGrid.OutpostResourceLinkExtension_Power">
+				<resources>
+					<li>RTD_Power</li>
+				</resources>
+			</li>
+		</value>
+	</Operation>
+
+</Patch>
