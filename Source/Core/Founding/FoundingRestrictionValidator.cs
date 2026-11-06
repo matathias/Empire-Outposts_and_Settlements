@@ -21,13 +21,4 @@ public class FoundingRestrictionValidator : ISettlementFoundingValidator
         }
         return true;
     }
-
-    public string GetAdditionalCostDescription(PlanetTile tile, WorldSettlementDef type, float costMultiplier)
-    {
-        return null;
-    }
-
-    public void OnSettlementFounded(PlanetTile tile, WorldSettlementDef type, float costMultiplier)
-    {
-    }
 }

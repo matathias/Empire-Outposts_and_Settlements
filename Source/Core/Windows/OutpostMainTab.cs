@@ -39,7 +39,6 @@ public class OutpostMainTab : IMainTabWindowOverview
         scroll = Vector2.zero;
     }
 
-    public void OnTabSwitch() { }
     public void PostCloseWindow() { uiFaction = null; }
 
     public void DrawOverviewTab(Rect boundingBox)

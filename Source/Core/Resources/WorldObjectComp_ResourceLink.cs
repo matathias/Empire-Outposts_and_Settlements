@@ -74,11 +74,6 @@ public class WorldObjectComp_ResourceLink : WorldObjectComp, IResourceProduction
         return null;
     }
 
-    public string GetResourceMultiplierDesc(ResourceFC resource)
-    {
-        return null;
-    }
-
     // --- Per-settlement link state / mutators (driven by the Outposts tab) ---
 
     internal bool IsLinkedHere(Outpost outpost) => linkedOutposts.Contains(outpost);

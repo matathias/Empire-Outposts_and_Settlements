@@ -60,11 +60,6 @@ public class WorldObjectComp_OutpostBonus : WorldObjectComp, IResourceProduction
         return null;
     }
 
-    public string GetResourceMultiplierDesc(ResourceFC resource)
-    {
-        return null;
-    }
-
     public override void PostExposeData()
     {
         base.PostExposeData();

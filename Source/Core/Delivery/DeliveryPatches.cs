@@ -22,7 +22,7 @@ public class OutpostDeliveryInterceptor : ITaxDeliveryInterceptor
         if (WorldComponent_VOETracker.IsRedirected(fcevent.source))
         {
             WorldComponent_VOETracker.ClearRedirected(fcevent.source);
-            DeliveryUtil.DebugLog($"Skipping redirect for already-redirected event from {settlement.Name}");
+            VOELog.Message($"Skipping redirect for already-redirected event from {settlement.Name}");
             return;
         }
 
@@ -45,7 +45,7 @@ public class OutpostDeliveryInterceptor : ITaxDeliveryInterceptor
         fcevent.hasCustomDescription = true;
         context.Redirected = true;
 
-        DeliveryUtil.DebugLog($"Redirected tax event from {settlement.Name} to outpost {outpost.LabelCap}");
+        VOELog.Message($"Redirected tax event from {settlement.Name} to outpost {outpost.LabelCap}");
     }
 
     public bool TryDeliverGoods(TaxDeliveryContext context)
@@ -112,12 +112,12 @@ public class OutpostDeliveryInterceptor : ITaxDeliveryInterceptor
             evt.msg = new Message(label, MessageTypeDefOf.PositiveEvent);
             DeliveryNotification.MakeDeliveryLetterAndMessage(evt);
 
-            DeliveryUtil.DebugLog("Delivered taxes from " + sourceName + " to outpost " + destination.LabelCap);
+            VOELog.Message($"Delivered taxes from {sourceName} to outpost {destination.LabelCap}");
             return true;
         }
 
         // Outpost no longer exists — redirect to tax map
-        DeliveryUtil.DebugLog("Delivery outpost at tile " + evt.location + " no longer exists. Redirecting to tax map.");
+        VOELog.Message($"Delivery outpost at tile {evt.location} no longer exists. Redirecting to tax map.");
         Messages.Message("FCVOE_TaxRedirectedDesc".Translate(
             source is not null ? source.Name : "Unknown",
             "FCVOE_PlayerTaxMap".Translate()),
@@ -136,7 +136,7 @@ public class OutpostDeliveryInterceptor : ITaxDeliveryInterceptor
         // loop + message spam). Bail out and let the base mod log the undeliverable tax instead.
         if (taxMap is null)
         {
-            DeliveryUtil.DebugLog("No tax map available; skipping redirect to avoid a re-interception loop.");
+            VOELog.Message("No tax map available; skipping redirect to avoid a re-interception loop.");
             return false;
         }
 

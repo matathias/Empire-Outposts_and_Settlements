@@ -33,7 +33,6 @@ public class WorldObjectComp_OutpostOverview : WorldObjectComp, ISettlementWindo
         scroll = Vector2.zero;
     }
 
-    public void OnTabSwitch() { }
     public void PostCloseWindow() { uiSettlement = null; }
     public string OverviewTabName() => "FCVOE_OutpostsTab".Translate();
 

@@ -25,7 +25,7 @@ public class OutpostFinancer : ISilverPaymentModifier
         // Validate outpost still exists on the world map
         if (Find.WorldObjects.WorldObjectAt<Outpost>(outpost.Tile) is null)
         {
-            DeliveryUtil.DebugLog("Financing outpost no longer exists, clearing for " + context.Settlement.Name);
+            VOELog.Message($"Financing outpost no longer exists, clearing for {context.Settlement.Name}");
             links.financingOutpost = null;
             return;
         }
@@ -72,8 +72,7 @@ public class OutpostFinancer : ISilverPaymentModifier
 
         if (remaining > 0)
         {
-            DeliveryUtil.DebugLog("Financing outpost " + outpost.LabelCap
-                + " drained less than promised (short by " + remaining + ")");
+            VOELog.Message($"Financing outpost {outpost.LabelCap} drained less than promised (short by {remaining})");
         }
     }
 }

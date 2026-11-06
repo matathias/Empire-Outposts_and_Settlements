@@ -16,9 +16,4 @@ public static class DeliveryUtil
         }
         return sb.ToString().TrimEnd();
     }
-
-    public static void DebugLog(string message)
-    {
-        VOELog.Message(message);
-    }
 }
