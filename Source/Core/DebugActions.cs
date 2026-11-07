@@ -7,7 +7,7 @@ namespace EmpireVOE;
 
 public static class VOEDebugActions
 {
-    [DebugAction("Empire - VOE", "Attack VOE Outpost", allowedGameStates = AllowedGameStates.Playing)]
+    [EmpireDebugAction("Empire - VOE", "Attack VOE Outpost", allowedGameStates = AllowedGameStates.Playing)]
     private static void AttackVOEOutpost()
     {
         IReadOnlyList<IRaidTarget> targets = RaidTargetRegistry.Targets;
@@ -91,7 +91,7 @@ public static class VOEDebugActions
     }
 
     /* Spawns one of each link-capable outpost within range of a settlement (creating one if needed) and links each. */
-    [DebugAction("Empire - VOE", "Spawn & link resource outposts", allowedGameStates = AllowedGameStates.Playing)]
+    [EmpireDebugAction("Empire - VOE", "Spawn & link resource outposts", allowedGameStates = AllowedGameStates.Playing)]
     private static void SpawnAndLinkOutposts()
     {
         List<WorldObjectDef> defs = LinkableOutpostDefs();
