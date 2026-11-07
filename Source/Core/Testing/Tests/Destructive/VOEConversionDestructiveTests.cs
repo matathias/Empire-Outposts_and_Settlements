@@ -3,7 +3,8 @@ using Outposts;
 namespace EmpireVOE;
 
 /* DESTRUCTIVE: drives the real outpost->settlement conversion against live world/faction state.
-   Creates transient outposts and (on success) a real settlement; spends silver. Settings are pinned
+   Creates transient outposts (the conversions always use a fresh, garrisoned one so the player's real
+   outposts are never consumed) and (on success) a real settlement; spends silver. Settings are pinned
    (conversion delay off, founding cost forced free) and restored, but the created settlement and the
    destroyed outpost are NOT reverted. */
 public static class VOEConversionDestructiveTests
@@ -13,12 +14,8 @@ public static class VOEConversionDestructiveTests
     {
         FactionFC f = DestructiveTestUtil.RequireFaction();
 
-        Outpost outpost = VOEDestructiveTestUtil.FirstConvertibleOutpost()
-            ?? VOEDestructiveTestUtil.CreateTransientOutpost(requireConversion: true);
-        if (outpost is null) TestAssert.Skip("No convertible outpost available");
-
+        Outpost outpost = VOEDestructiveTestUtil.RequireConvertibleOutpost();
         List<WorldSettlementDef> types = OutpostConversionUtil.GetConvertibleTypes(outpost);
-        if (types.Count == 0) TestAssert.Skip("Outpost has no currently-convertible settlement types");
 
         int baseline = f.settlements.Count;
         var snap = VOETestHelper.SnapshotSettings();
@@ -46,8 +43,8 @@ public static class VOEConversionDestructiveTests
     /// a Town-derived settlement gets EmpireVOESettings.townFlatAdditive applied to every resource — so we
     /// pin that setting to a known value and assert the settlement's OutpostBonus comp reports it. (The
     /// skill-derived per-resource path is comp-level covered by VOEOutpostBonusTests; here we prove the
-    /// integration seam actually attaches a bonus.) Requires an outpost whose conversion def grants the
-    /// town additive; skips otherwise.
+    /// integration seam actually attaches a bonus.) The Town outpost's conversion def grants the town
+    /// additive; a transient one is converted.
     /// </summary>
     [EmpireDestructiveTest("VOE.Destructive.Conversion")]
     public static void ConvertOutpost_TownAdditive_AppliedToNewSettlement()
@@ -60,15 +57,10 @@ public static class VOEConversionDestructiveTests
             return e is not null && e.grantsTownAdditive
                 && d.worldObjectClass is not null && typeof(Outpost).IsAssignableFrom(d.worldObjectClass);
         });
-        if (def is null) TestAssert.Skip("No conversion def grants the town flat additive");
+        TestAssert.NotNull(def, "No outpost conversion def grants the town flat additive (the Town outpost should)");
 
-        Outpost outpost = Find.WorldObjects.AllWorldObjects.OfType<Outpost>()
-            .FirstOrDefault(o => o.Faction == Faction.OfPlayer && o.def == def)
-            ?? VOEDestructiveTestUtil.CreateTransientOutpost(def);
-        if (outpost is null) TestAssert.Skip("Could not obtain a town-additive outpost");
-
+        Outpost outpost = VOEDestructiveTestUtil.RequireConvertibleOutpost(def);
         List<WorldSettlementDef> types = OutpostConversionUtil.GetConvertibleTypes(outpost);
-        if (types.Count == 0) TestAssert.Skip("Outpost has no currently-convertible settlement types");
 
         RimWorld.Planet.PlanetTile tile = outpost.Tile;
         const double flat = 0.5;
@@ -107,8 +99,7 @@ public static class VOEConversionDestructiveTests
     {
         FactionFC f = DestructiveTestUtil.RequireFaction();
 
-        Outpost outpost = VOEDestructiveTestUtil.CreateTransientOutpost(pawnCount: 0);
-        if (outpost is null) TestAssert.Skip("Could not create a transient outpost");
+        Outpost outpost = VOEDestructiveTestUtil.RequireTransientOutpost(pawnCount: 0);
 
         var snap = VOETestHelper.SnapshotSettings();
         try
@@ -133,13 +124,14 @@ public static class VOEConversionDestructiveTests
         FactionFC f = DestructiveTestUtil.RequireFaction();
 
         Outpost existing = VOEDestructiveTestUtil.FirstConvertibleOutpost();
-        Outpost outpost = existing ?? VOEDestructiveTestUtil.CreateTransientOutpost(requireConversion: true);
-        if (outpost is null) TestAssert.Skip("No convertible outpost available");
+        Outpost outpost = existing ?? VOEDestructiveTestUtil.RequireConvertibleOutpost();
         bool transient = existing is null;
 
         try
         {
-            foreach (WorldSettlementDef d in OutpostConversionUtil.GetConvertibleTypes(outpost))
+            List<WorldSettlementDef> types = OutpostConversionUtil.GetConvertibleTypes(outpost);
+            TestAssert.IsNotEmpty(types, "The fixture outpost should have at least one convertible type");
+            foreach (WorldSettlementDef d in types)
             {
                 TestAssert.IsTrue(d.available, $"{d.defName}: returned type should be available");
                 TestAssert.IsTrue(d.IsUnlocked(), $"{d.defName}: returned type should be unlocked");

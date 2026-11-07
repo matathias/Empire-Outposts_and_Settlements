@@ -32,8 +32,7 @@ public static class VOEResourceLinkTests
         var mapped = DefDatabase<WorldObjectDef>.AllDefsListForReading
             .Where(d => d.GetModExtension<OutpostResourceLinkExtension>() is not null)
             .ToList();
-        if (mapped.Count == 0)
-            TestAssert.Skip("No outpost defs carry OutpostResourceLinkExtension (VOE not loaded)");
+        TestAssert.IsNotEmpty(mapped, "No outpost defs carry OutpostResourceLinkExtension; the submod's patches onto VOE defs did not apply");
 
         foreach (WorldObjectDef d in mapped)
         {

@@ -4,9 +4,9 @@ namespace EmpireVOE;
 
 /* DESTRUCTIVE: exercises the defensive auto-defender against a live (or transient) Outpost_Defensive.
    OnDefenseComplete sets a real cooldown on the comp; the loss branch injures pawns (only ever on a
-   transient outpost). The cooldown-expiry test moves the game tick counter and restores it. Skips
-   cleanly when no defensive outpost (and no def for one) exists. Created outposts are NOT cleaned up
-   unless a test made a pure-probe transient, which it removes itself. */
+   transient outpost). The cooldown-expiry test moves the game tick counter and restores it. When the
+   world holds no (manned) player defensive outpost, a transient one is created. Created outposts are
+   NOT cleaned up unless a test made a pure-probe transient, which it removes itself. */
 public static class VOEAutoDefendDestructiveTests
 {
     [EmpireDestructiveTest("VOE.Destructive.Defense")]
@@ -14,10 +14,8 @@ public static class VOEAutoDefendDestructiveTests
     {
         FactionFC f = DestructiveTestUtil.RequireFaction();
 
-        Outpost_Defensive outpost = VOEDestructiveTestUtil.FirstOrTransientDefensiveOutpost();
-        if (outpost is null) TestAssert.Skip("No defensive outpost available");
-        WorldObjectComp_EmpireDefensive comp = outpost.GetComponent<WorldObjectComp_EmpireDefensive>();
-        if (comp is null) TestAssert.Skip("Defensive outpost has no WorldObjectComp_EmpireDefensive");
+        Outpost_Defensive outpost = VOEDestructiveTestUtil.EnsureDefensiveOutpost();
+        WorldObjectComp_EmpireDefensive comp = RequireDefensiveComp(outpost);
 
         comp.ClearCooldown();
         var defender = new DefensiveAutoDefender(outpost);
@@ -39,9 +37,7 @@ public static class VOEAutoDefendDestructiveTests
     {
         FactionFC f = DestructiveTestUtil.RequireFaction();
 
-        Outpost_Defensive outpost = VOEDestructiveTestUtil.FirstOrTransientDefensiveOutpost();
-        if (outpost is null) TestAssert.Skip("No defensive outpost available");
-        if (outpost.PawnCount == 0) TestAssert.Skip("Defensive outpost has no pawns");
+        Outpost_Defensive outpost = VOEDestructiveTestUtil.EnsureMannedDefensiveOutpost();
 
         var defender = new DefensiveAutoDefender(outpost);
         TestAssert.GreaterThan(defender.MilitaryLevel, 0, "A manned outpost should have a positive military level");
@@ -62,13 +58,10 @@ public static class VOEAutoDefendDestructiveTests
         FactionFC f = DestructiveTestUtil.RequireFaction();
 
         // Empty-garrison floor: no capable pawns -> DefaultIfEmpty(5) -> Efficiency(5) = 0.5 + 0.05*5 = 0.75.
-        WorldObjectDef def = VOEDestructiveTestUtil.FindDefensiveOutpostDef();
-        if (def is null) TestAssert.Skip("No defensive outpost def available");
-        var empty = VOEDestructiveTestUtil.CreateTransientOutpost(def, pawnCount: 0) as Outpost_Defensive;
-        if (empty is null) TestAssert.Skip("Could not create a transient defensive outpost");
+        Outpost_Defensive empty = VOEDestructiveTestUtil.RequireTransientDefensiveOutpost(pawnCount: 0);
         try
         {
-            if (empty.CapablePawns.Any()) TestAssert.Skip("Transient outpost unexpectedly has capable pawns");
+            TestAssert.IsFalse(empty.CapablePawns.Any(), "A transient outpost created with no pawns should have no capable pawns");
             var emptyDefender = new DefensiveAutoDefender(empty);
             TestAssert.AreEqual(0.75, emptyDefender.Efficiency, 0.001,
                 "An empty garrison should fall back to the skill-5 efficiency floor (0.75)");
@@ -79,8 +72,7 @@ public static class VOEAutoDefendDestructiveTests
         }
 
         // Manned garrison: Efficiency must equal VOEFormulas.Efficiency of the re-derived average.
-        Outpost_Defensive manned = VOEDestructiveTestUtil.FirstOrTransientDefensiveOutpost();
-        if (manned is null) TestAssert.Skip("No manned defensive outpost available");
+        Outpost_Defensive manned = VOEDestructiveTestUtil.EnsureMannedDefensiveOutpost();
         double sum = 0; int n = 0;
         foreach (Pawn p in manned.CapablePawns)
         {
@@ -88,7 +80,7 @@ public static class VOEAutoDefendDestructiveTests
             sum += Math.Max(p.skills.GetSkill(SkillDefOf.Shooting).Level, p.skills.GetSkill(SkillDefOf.Melee).Level);
             n++;
         }
-        if (n == 0) TestAssert.Skip("Manned outpost has no skilled capable pawns");
+        TestAssert.GreaterThan(n, 0, "A manned outpost's capable pawns should all have skills");
         double expected = VOEFormulas.Efficiency(sum / n);
         var defender = new DefensiveAutoDefender(manned);
         TestAssert.AreEqual(expected, defender.Efficiency, 0.001,
@@ -107,10 +99,8 @@ public static class VOEAutoDefendDestructiveTests
     {
         FactionFC f = DestructiveTestUtil.RequireFaction();
 
-        Outpost_Defensive outpost = VOEDestructiveTestUtil.FirstOrTransientDefensiveOutpost();
-        if (outpost is null) TestAssert.Skip("No defensive outpost available");
-        WorldObjectComp_EmpireDefensive comp = outpost.GetComponent<WorldObjectComp_EmpireDefensive>();
-        if (comp is null) TestAssert.Skip("Defensive outpost has no WorldObjectComp_EmpireDefensive");
+        Outpost_Defensive outpost = VOEDestructiveTestUtil.EnsureDefensiveOutpost();
+        WorldObjectComp_EmpireDefensive comp = RequireDefensiveComp(outpost);
 
         int t0 = Find.TickManager.TicksGame;
         try
@@ -142,28 +132,14 @@ public static class VOEAutoDefendDestructiveTests
     {
         FactionFC f = DestructiveTestUtil.RequireFaction();
 
-        WorldObjectDef def = VOEDestructiveTestUtil.FindDefensiveOutpostDef();
-        if (def is null) TestAssert.Skip("No defensive outpost def available");
-
-        var won = VOEDestructiveTestUtil.CreateTransientOutpost(def) as Outpost_Defensive;
-        var lost = VOEDestructiveTestUtil.CreateTransientOutpost(def) as Outpost_Defensive;
-        if (won is null || lost is null)
-        {
-            VOEDestructiveTestUtil.SafeRemoveOutpost(won);
-            VOEDestructiveTestUtil.SafeRemoveOutpost(lost);
-            TestAssert.Skip("Could not create two transient defensive outposts");
-        }
-        WorldObjectComp_EmpireDefensive wonComp = won.GetComponent<WorldObjectComp_EmpireDefensive>();
-        WorldObjectComp_EmpireDefensive lostComp = lost.GetComponent<WorldObjectComp_EmpireDefensive>();
-        if (wonComp is null || lostComp is null)
-        {
-            VOEDestructiveTestUtil.SafeRemoveOutpost(won);
-            VOEDestructiveTestUtil.SafeRemoveOutpost(lost);
-            TestAssert.Skip("Transient defensive outpost has no WorldObjectComp_EmpireDefensive");
-        }
-
+        Outpost_Defensive won = VOEDestructiveTestUtil.RequireTransientDefensiveOutpost();
+        Outpost_Defensive lost = null;
         try
         {
+            lost = VOEDestructiveTestUtil.RequireTransientDefensiveOutpost();
+            WorldObjectComp_EmpireDefensive wonComp = RequireDefensiveComp(won);
+            WorldObjectComp_EmpireDefensive lostComp = RequireDefensiveComp(lost);
+
             new DefensiveAutoDefender(won).OnDefenseComplete(true, new BattleResult());
             TestAssert.AreEqual(GenDate.TicksPerDay * 2, wonComp.CooldownTicksLeft,
                 "A won defense should set a 2-day cooldown");
@@ -180,4 +156,8 @@ public static class VOEAutoDefendDestructiveTests
 
         DestructiveTestUtil.AssertEmpireInvariants(f, "OnDefenseComplete_WonVsLost");
     }
+
+    private static WorldObjectComp_EmpireDefensive RequireDefensiveComp(Outpost_Defensive outpost) =>
+        TestAssert.NotNull(outpost.GetComponent<WorldObjectComp_EmpireDefensive>(),
+            $"The defensive outpost def carries WorldObjectComp_EmpireDefensive; {outpost.def.defName} has none");
 }

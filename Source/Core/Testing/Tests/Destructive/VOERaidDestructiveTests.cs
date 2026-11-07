@@ -13,8 +13,7 @@ public static class VOERaidDestructiveTests
         FactionFC f = DestructiveTestUtil.RequireFaction();
 
         Outpost outpost = VOEDestructiveTestUtil.FirstPlayerOutpost()
-            ?? VOEDestructiveTestUtil.CreateTransientOutpost();
-        if (outpost is null) TestAssert.Skip("No player outpost available");
+            ?? VOEDestructiveTestUtil.RequireTransientOutpost();
 
         var target = new OutpostRaidTarget(outpost);
 
@@ -38,8 +37,7 @@ public static class VOERaidDestructiveTests
         FactionFC f = DestructiveTestUtil.RequireFaction();
 
         Outpost outpost = VOEDestructiveTestUtil.FirstPlayerOutpost()
-            ?? VOEDestructiveTestUtil.CreateTransientOutpost();
-        if (outpost is null) TestAssert.Skip("No player outpost available");
+            ?? VOEDestructiveTestUtil.RequireTransientOutpost();
 
         var target = new OutpostRaidTarget(outpost);
         TestAssert.DoesNotThrow(() => target.OnRaidWon(new BattleResult()), "OnRaidWon threw");
@@ -53,8 +51,7 @@ public static class VOERaidDestructiveTests
         FactionFC f = DestructiveTestUtil.RequireFaction();
 
         // Use a transient outpost so we don't injure the player's real outpost pawns.
-        Outpost outpost = VOEDestructiveTestUtil.CreateTransientOutpost();
-        if (outpost is null) TestAssert.Skip("Could not create a transient outpost");
+        Outpost outpost = VOEDestructiveTestUtil.RequireTransientOutpost();
 
         var target = new OutpostRaidTarget(outpost);
         TestAssert.DoesNotThrow(() => target.OnRaidLost(new BattleResult()), "OnRaidLost threw");
@@ -74,8 +71,7 @@ public static class VOERaidDestructiveTests
         FactionFC f = DestructiveTestUtil.RequireFaction();
 
         // Transient so we never destroy the player's real stored goods or injure their pawns.
-        Outpost outpost = VOEDestructiveTestUtil.CreateTransientOutpost();
-        if (outpost is null) TestAssert.Skip("Could not create a transient outpost");
+        Outpost outpost = VOEDestructiveTestUtil.RequireTransientOutpost();
 
         try
         {
@@ -87,7 +83,7 @@ public static class VOERaidDestructiveTests
             AddStack(outpost, ThingDefOf.Plasteel, 50);
 
             int before = outpost.Things.Count();
-            if (before < 4) TestAssert.Skip("Could not stock enough distinct items");
+            TestAssert.GreaterThan(before, 3, "Five distinct stacks should leave more items than the 3-item destroy cap");
 
             new OutpostRaidTarget(outpost).OnRaidLost(new BattleResult());
 
@@ -115,8 +111,7 @@ public static class VOERaidDestructiveTests
     {
         FactionFC f = DestructiveTestUtil.RequireFaction();
 
-        Outpost outpost = VOEDestructiveTestUtil.CreateTransientOutpost();
-        if (outpost is null) TestAssert.Skip("Could not create a transient outpost");
+        Outpost outpost = VOEDestructiveTestUtil.RequireTransientOutpost();
 
         var target = new OutpostRaidTarget(outpost);
         // Submods register through the EmpireRegistry facade; the probe routes IRaidTarget to RaidTargetRegistry.

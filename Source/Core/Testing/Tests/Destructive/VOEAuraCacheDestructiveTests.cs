@@ -1,3 +1,4 @@
+using Outposts;
 using VOE;
 
 namespace EmpireVOE;
@@ -5,8 +6,9 @@ namespace EmpireVOE;
 /* DESTRUCTIVE: builds the defensive-aura and encampment cache entries against live faction/world state.
    Entry construction is read-only, but it needs a real settlement + faction, so it rides the destructive
    tier (RequireFaction + invariants). The OutpostBonus formula check creates and removes a transient
-   defensive outpost. The filtering checks assert the layer/range/eligibility contract over whatever
-   outposts the live world holds — trivially satisfied (no assertions) when there are none nearby. */
+   defensive outpost. The filtering checks first place a garrisoned outpost of the right kind well inside
+   range of a surface settlement (removed afterwards), so the entry is never empty, then assert the
+   layer/range/eligibility contract over every outpost the entry includes. */
 public static class VOEAuraCacheDestructiveTests
 {
     /// <summary>
@@ -18,10 +20,7 @@ public static class VOEAuraCacheDestructiveTests
     {
         FactionFC f = DestructiveTestUtil.RequireFaction();
 
-        WorldObjectDef def = VOEDestructiveTestUtil.FindDefensiveOutpostDef();
-        if (def is null) TestAssert.Skip("No defensive outpost def available");
-        var outpost = VOEDestructiveTestUtil.CreateTransientOutpost(def) as Outpost_Defensive;
-        if (outpost is null) TestAssert.Skip("Could not create a transient defensive outpost");
+        Outpost_Defensive outpost = VOEDestructiveTestUtil.RequireTransientDefensiveOutpost();
 
         try
         {
@@ -46,26 +45,35 @@ public static class VOEAuraCacheDestructiveTests
     public static void DefensiveAura_Entry_OnlyIncludesEligibleOutposts()
     {
         FactionFC f = DestructiveTestUtil.RequireFaction();
-        WorldSettlementFC settlement = f.settlements.FirstOrDefault();
-        if (settlement is null) TestAssert.Skip("No Empire settlement available");
+        WorldSettlementFC settlement = DestructiveTestUtil.EnsureSettlement(s => s.Tile.Layer.IsRootSurface);
+        Outpost probe = VOEDestructiveTestUtil.RequireTransientOutpost(VOEDestructiveTestUtil.RequireDefensiveOutpostDef(),
+            near: settlement.Tile, maxDistance: Math.Max(1, EmpireVOESettings.defensiveAuraRange / 2));
 
-        var entry = new DefensiveAuraEntry(settlement);
-        double sum = 0;
-        foreach (Outpost_Defensive o in entry.outposts)
+        try
         {
-            TestAssert.IsTrue(o.Tile.Layer == settlement.Tile.Layer, "Aura outpost must be on the settlement's layer");
-            TestAssert.LessThanOrEqual(Find.WorldGrid.ApproxDistanceInTiles(o.Tile, settlement.Tile),
-                EmpireVOESettings.defensiveAuraRange, "Aura outpost must be within range");
-            TestAssert.GreaterThan(o.PawnCount, 0, "Aura outpost must be garrisoned");
+            var entry = new DefensiveAuraEntry(settlement);
+            TestAssert.Contains(entry.outposts, (Outpost_Defensive)probe, "A garrisoned, idle defensive outpost in range must be included");
+            double sum = 0;
+            foreach (Outpost_Defensive o in entry.outposts)
+            {
+                TestAssert.IsTrue(o.Tile.Layer == settlement.Tile.Layer, "Aura outpost must be on the settlement's layer");
+                TestAssert.LessThanOrEqual(Find.WorldGrid.ApproxDistanceInTiles(o.Tile, settlement.Tile),
+                    EmpireVOESettings.defensiveAuraRange, "Aura outpost must be within range");
+                TestAssert.GreaterThan(o.PawnCount, 0, "Aura outpost must be garrisoned");
 
-            WorldObjectComp_EmpireDefensive comp = o.GetComponent<WorldObjectComp_EmpireDefensive>();
-            if (comp is not null)
-                TestAssert.IsTrue(comp.ProvidesAura, "A committed garrison should not project an aura");
+                WorldObjectComp_EmpireDefensive comp = o.GetComponent<WorldObjectComp_EmpireDefensive>();
+                if (comp is not null)
+                    TestAssert.IsTrue(comp.ProvidesAura, "A committed garrison should not project an aura");
 
-            sum += DefensiveAuraEntry.OutpostBonus(o);
+                sum += DefensiveAuraEntry.OutpostBonus(o);
+            }
+            TestAssert.AreEqual(sum, entry.militaryLevelBonus, 0.001,
+                "Entry bonus should equal the sum of per-outpost OutpostBonus values");
         }
-        TestAssert.AreEqual(sum, entry.militaryLevelBonus, 0.001,
-            "Entry bonus should equal the sum of per-outpost OutpostBonus values");
+        finally
+        {
+            VOEDestructiveTestUtil.SafeRemoveOutpost(probe);
+        }
 
         DestructiveTestUtil.AssertEmpireInvariants(f, "DefensiveAura_EntryFilter");
     }
@@ -78,22 +86,33 @@ public static class VOEAuraCacheDestructiveTests
     public static void Encampment_Entry_OnlyIncludesEligibleEncampments()
     {
         FactionFC f = DestructiveTestUtil.RequireFaction();
-        WorldSettlementFC settlement = f.settlements.FirstOrDefault();
-        if (settlement is null) TestAssert.Skip("No Empire settlement available");
+        WorldSettlementFC settlement = DestructiveTestUtil.EnsureSettlement(s => s.Tile.Layer.IsRootSurface);
+        WorldObjectDef encampmentDef = TestAssert.NotNull(
+            DefDatabase<WorldObjectDef>.GetNamedSilentFail("Outpost_Encampment"), "VOE's Outpost_Encampment def is not loaded");
+        Outpost probe = VOEDestructiveTestUtil.RequireTransientOutpost(encampmentDef,
+            near: settlement.Tile, maxDistance: Math.Max(1, EmpireVOESettings.encampmentRange / 2));
 
-        var entry = new EncampmentCacheEntry(settlement);
-        double sum = 0;
-        foreach (EncampmentData d in entry.encampments)
+        try
         {
-            TestAssert.GreaterThan(d.encampment.PawnCount, 0, "Encampment must be garrisoned");
-            TestAssert.IsTrue(d.encampment.Tile.Layer == settlement.Tile.Layer,
-                "Encampment must be on the settlement's layer");
-            TestAssert.LessThanOrEqual(Find.WorldGrid.ApproxDistanceInTiles(d.encampment.Tile, settlement.Tile),
-                EmpireVOESettings.encampmentRange, "Encampment must be within range");
-            sum += d.healRateContribution;
+            var entry = new EncampmentCacheEntry(settlement);
+            TestAssert.IsTrue(entry.encampments.Any(d => d.encampment == probe), "A garrisoned encampment in range must be included");
+            double sum = 0;
+            foreach (EncampmentData d in entry.encampments)
+            {
+                TestAssert.GreaterThan(d.encampment.PawnCount, 0, "Encampment must be garrisoned");
+                TestAssert.IsTrue(d.encampment.Tile.Layer == settlement.Tile.Layer,
+                    "Encampment must be on the settlement's layer");
+                TestAssert.LessThanOrEqual(Find.WorldGrid.ApproxDistanceInTiles(d.encampment.Tile, settlement.Tile),
+                    EmpireVOESettings.encampmentRange, "Encampment must be within range");
+                sum += d.healRateContribution;
+            }
+            TestAssert.AreEqual(sum, entry.totalHealRateBonus, 0.001,
+                "Entry heal bonus should equal the sum of per-encampment contributions");
         }
-        TestAssert.AreEqual(sum, entry.totalHealRateBonus, 0.001,
-            "Entry heal bonus should equal the sum of per-encampment contributions");
+        finally
+        {
+            VOEDestructiveTestUtil.SafeRemoveOutpost(probe);
+        }
 
         DestructiveTestUtil.AssertEmpireInvariants(f, "Encampment_EntryFilter");
     }

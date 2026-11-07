@@ -15,8 +15,7 @@ public static class VOEConversionMappingTests
     [EmpireTest("VOE.Conversion")]
     public static void GetExplicitTypes_ResolvesRealNameDropsBogus()
     {
-        WorldSettlementDef real = AnySettlementDef();
-        if (real is null) TestAssert.Skip("No WorldSettlementDefs loaded");
+        WorldSettlementDef real = TestAssert.NotNull(AnySettlementDef(), "Empire ships WorldSettlementDefs; none are loaded");
 
         OutpostConversionExtension ext = VOETestHelper.MakeConversionExtension(
             false, real.defName, "VOE_BogusSettlementType_DoesNotExist");
@@ -42,8 +41,7 @@ public static class VOEConversionMappingTests
     [EmpireTest("VOE.Conversion")]
     public static void GetOutpostTypesFor_RealType_ReturnsOnlyConsistentDefs()
     {
-        WorldSettlementDef type = AnySettlementDef();
-        if (type is null) TestAssert.Skip("No WorldSettlementDefs loaded");
+        WorldSettlementDef type = TestAssert.NotNull(AnySettlementDef(), "Empire ships WorldSettlementDefs; none are loaded");
 
         // The reverse lookup may legitimately be empty (no outpost maps to this type); the contract
         // is that every def it DOES return actually allows this type.

@@ -19,7 +19,6 @@ public static class VOERedirectTrackerTests
     [EmpireTest("VOE.Redirect")]
     public static void Redirect_SetClearRoundTrip()
     {
-        if (Find.World is null) TestAssert.Skip("No world loaded");
         PlanetTile tile = FakeTile();
 
         try
@@ -44,7 +43,6 @@ public static class VOERedirectTrackerTests
     [EmpireDestructiveTest("VOE.Redirect")]
     public static void Redirect_Flag_SelfClearsAfterExpiry()
     {
-        if (Find.World is null) TestAssert.Skip("No world loaded");
         PlanetTile tile = FakeTile();
 
         int t0 = Find.TickManager.TicksGame;

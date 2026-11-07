@@ -15,13 +15,11 @@ public static class VOEFinancingDestructiveTests
     public static void OutpostFinancer_CanAfford_CreditsOutpostWithoutDraining()
     {
         FactionFC f = DestructiveTestUtil.RequireFaction();
-        WorldSettlementFC settlement = f.settlements.FirstOrDefault();
-        if (settlement is null) TestAssert.Skip("No Empire settlement available");
-        WorldObjectComp_OutpostLinks links = settlement.GetComponent<WorldObjectComp_OutpostLinks>();
-        if (links is null) TestAssert.Skip("Settlement has no OutpostLinks comp");
+        WorldSettlementFC settlement = DestructiveTestUtil.EnsureSettlement();
+        WorldObjectComp_OutpostLinks links = TestAssert.NotNull(settlement.GetComponent<WorldObjectComp_OutpostLinks>(),
+            "Every settlement def carries WorldObjectComp_OutpostLinks; this one has none");
 
-        Outpost outpost = VOEDestructiveTestUtil.CreateTransientOutpost();
-        if (outpost is null) TestAssert.Skip("Could not create a transient outpost");
+        Outpost outpost = VOEDestructiveTestUtil.RequireTransientOutpost();
 
         bool financingBefore = EmpireVOESettings.enableFinancing;
         Outpost linkBefore = links.financingOutpost;
@@ -50,13 +48,11 @@ public static class VOEFinancingDestructiveTests
     public static void OutpostFinancer_TryPaySilver_DrainsOutpostNotHome()
     {
         FactionFC f = DestructiveTestUtil.RequireFaction();
-        WorldSettlementFC settlement = f.settlements.FirstOrDefault();
-        if (settlement is null) TestAssert.Skip("No Empire settlement available");
-        WorldObjectComp_OutpostLinks links = settlement.GetComponent<WorldObjectComp_OutpostLinks>();
-        if (links is null) TestAssert.Skip("Settlement has no OutpostLinks comp");
+        WorldSettlementFC settlement = DestructiveTestUtil.EnsureSettlement();
+        WorldObjectComp_OutpostLinks links = TestAssert.NotNull(settlement.GetComponent<WorldObjectComp_OutpostLinks>(),
+            "Every settlement def carries WorldObjectComp_OutpostLinks; this one has none");
 
-        Outpost outpost = VOEDestructiveTestUtil.CreateTransientOutpost();
-        if (outpost is null) TestAssert.Skip("Could not create a transient outpost");
+        Outpost outpost = VOEDestructiveTestUtil.RequireTransientOutpost();
 
         bool financingBefore = EmpireVOESettings.enableFinancing;
         Outpost linkBefore = links.financingOutpost;
@@ -88,13 +84,11 @@ public static class VOEFinancingDestructiveTests
         // The original H1 free-payment scenario: a settlement-less payment must NOT see any outpost
         // silver (no global inflation) and must NOT drain any outpost.
         FactionFC f = DestructiveTestUtil.RequireFaction();
-        WorldSettlementFC settlement = f.settlements.FirstOrDefault();
-        if (settlement is null) TestAssert.Skip("No Empire settlement available");
-        WorldObjectComp_OutpostLinks links = settlement.GetComponent<WorldObjectComp_OutpostLinks>();
-        if (links is null) TestAssert.Skip("Settlement has no OutpostLinks comp");
+        WorldSettlementFC settlement = DestructiveTestUtil.EnsureSettlement();
+        WorldObjectComp_OutpostLinks links = TestAssert.NotNull(settlement.GetComponent<WorldObjectComp_OutpostLinks>(),
+            "Every settlement def carries WorldObjectComp_OutpostLinks; this one has none");
 
-        Outpost outpost = VOEDestructiveTestUtil.CreateTransientOutpost();
-        if (outpost is null) TestAssert.Skip("Could not create a transient outpost");
+        Outpost outpost = VOEDestructiveTestUtil.RequireTransientOutpost();
 
         bool financingBefore = EmpireVOESettings.enableFinancing;
         Outpost linkBefore = links.financingOutpost;

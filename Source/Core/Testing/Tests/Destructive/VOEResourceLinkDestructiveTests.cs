@@ -5,7 +5,7 @@ namespace EmpireVOE;
 /* DESTRUCTIVE: exercises WorldObjectComp_ResourceLink.ToggleLink against live Empire settlements and a
    transient outpost. Toggling mutates the settlement-side linked list and the outpost's runtime reverse
    pointer and invalidates resource caches; every test unlinks what it linked and removes its transient
-   outpost. The aggregation test only runs when a genuinely linkable (resource-feeding) outpost exists. */
+   outpost. Missing settlements are created; those are NOT cleaned up. */
 public static class VOEResourceLinkDestructiveTests
 {
     /// <summary>
@@ -17,13 +17,10 @@ public static class VOEResourceLinkDestructiveTests
     public static void ResourceLink_ToggleLink_AddRemoveRoundTrips()
     {
         FactionFC f = DestructiveTestUtil.RequireFaction();
-        WorldSettlementFC settlement = f.settlements.FirstOrDefault();
-        if (settlement is null) TestAssert.Skip("No Empire settlement available");
-        WorldObjectComp_ResourceLink comp = settlement.GetComponent<WorldObjectComp_ResourceLink>();
-        if (comp is null) TestAssert.Skip("Settlement has no WorldObjectComp_ResourceLink");
+        WorldSettlementFC settlement = DestructiveTestUtil.EnsureSettlement();
+        WorldObjectComp_ResourceLink comp = RequireResourceLink(settlement);
 
-        Outpost outpost = VOEDestructiveTestUtil.CreateTransientOutpost();
-        if (outpost is null) TestAssert.Skip("Could not create a transient outpost");
+        Outpost outpost = VOEDestructiveTestUtil.RequireTransientOutpost();
         bool hasEmpireComp = outpost.GetComponent<WorldObjectComp_EmpireOutpost>() is not null;
 
         try
@@ -59,20 +56,19 @@ public static class VOEResourceLinkDestructiveTests
     public static void ResourceLink_Exclusivity_OneSettlementPerOutpost()
     {
         FactionFC f = DestructiveTestUtil.RequireFaction();
-        if (f.settlements.Count < 2) TestAssert.Skip("Need at least two settlements to test link exclusivity");
-        WorldSettlementFC s1 = f.settlements[0];
-        WorldSettlementFC s2 = f.settlements[1];
-        WorldObjectComp_ResourceLink comp1 = s1.GetComponent<WorldObjectComp_ResourceLink>();
-        WorldObjectComp_ResourceLink comp2 = s2.GetComponent<WorldObjectComp_ResourceLink>();
-        if (comp1 is null || comp2 is null) TestAssert.Skip("A settlement has no WorldObjectComp_ResourceLink");
+        List<WorldSettlementFC> settlements = DestructiveTestUtil.EnsureSettlements(2);
+        WorldSettlementFC s1 = settlements[0];
+        WorldSettlementFC s2 = settlements[1];
+        WorldObjectComp_ResourceLink comp1 = RequireResourceLink(s1);
+        WorldObjectComp_ResourceLink comp2 = RequireResourceLink(s2);
 
-        Outpost outpost = VOEDestructiveTestUtil.CreateTransientOutpost();
-        if (outpost is null) TestAssert.Skip("Could not create a transient outpost");
-        // Exclusivity is enforced through the outpost's reverse pointer, which lives on its Empire comp.
+        Outpost outpost = VOEDestructiveTestUtil.RequireTransientOutpost();
+        // Exclusivity is enforced through the outpost's reverse pointer, which lives on its Empire comp
+        // (patched onto every VEF outpost def).
         if (outpost.GetComponent<WorldObjectComp_EmpireOutpost>() is null)
         {
             VOEDestructiveTestUtil.SafeRemoveOutpost(outpost);
-            TestAssert.Skip("Transient outpost has no WorldObjectComp_EmpireOutpost (no reverse index)");
+            TestAssert.Fail($"Outpost {outpost.def.defName} has no WorldObjectComp_EmpireOutpost (no reverse index)");
         }
 
         try
@@ -98,52 +94,59 @@ public static class VOEResourceLinkDestructiveTests
     }
 
     /// <summary>
-    /// The additive modifier a settlement gets from a linked outpost equals that outpost's own
-    /// contribution for a resource it feeds. Only runs when a genuinely linkable outpost exists (needs
-    /// the VOE resource-link defs loaded); otherwise skips.
+    /// Linking an outpost raises the settlement's additive modifier for a resource it feeds by exactly that
+    /// outpost's own contribution. Uses a transient outpost of a resource-feeding def (patched onto VOE's
+    /// production outposts) and compares against the pre-link modifier, so outposts the settlement already
+    /// links don't skew the result.
     /// </summary>
     [EmpireDestructiveTest("VOE.Destructive.ResourceLink")]
     public static void ResourceLink_AdditiveModifier_EqualsLinkedContribution()
     {
         FactionFC f = DestructiveTestUtil.RequireFaction();
-        WorldSettlementFC settlement = f.settlements.FirstOrDefault();
-        if (settlement is null) TestAssert.Skip("No Empire settlement available");
-        WorldObjectComp_ResourceLink comp = settlement.GetComponent<WorldObjectComp_ResourceLink>();
-        if (comp is null) TestAssert.Skip("Settlement has no WorldObjectComp_ResourceLink");
+        WorldSettlementFC settlement = DestructiveTestUtil.EnsureSettlement();
+        WorldObjectComp_ResourceLink comp = RequireResourceLink(settlement);
 
-        Outpost outpost = Find.WorldObjects.AllWorldObjects
-            .OfType<Outpost>()
-            .FirstOrDefault(o => ResourceLinkUtil.IsLinkable(o) && !comp.IsLinkedHere(o));
-        if (outpost is null) TestAssert.Skip("No linkable resource outpost available");
+        WorldObjectDef linkableDef = TestAssert.NotNull(
+            DefDatabase<WorldObjectDef>.AllDefsListForReading.FirstOrDefault(d =>
+                d.worldObjectClass is not null && typeof(Outpost).IsAssignableFrom(d.worldObjectClass)
+                && d.GetModExtension<OutpostResourceLinkExtension>()?.resources?.Count > 0),
+            "No outpost def carries a resource-feeding OutpostResourceLinkExtension");
+        OutpostResourceLinkExtension ext = linkableDef.GetModExtension<OutpostResourceLinkExtension>();
+        ResourceTypeDef fed = TestAssert.NotNull(ext.resources.FirstOrDefault(),
+            $"{linkableDef.defName} resource-link extension lists a null resource");
 
-        OutpostResourceLinkExtension ext = outpost.def.GetModExtension<OutpostResourceLinkExtension>();
-        ResourceTypeDef fed = ext.resources.FirstOrDefault();
-        if (fed is null) TestAssert.Skip("Linkable outpost declares no resources");
+        Outpost outpost = VOEDestructiveTestUtil.RequireTransientOutpost(linkableDef);
+        TestAssert.IsTrue(ResourceLinkUtil.IsLinkable(outpost), "A resource-feeding outpost should be linkable");
 
         bool resourceLinkBefore = EmpireVOESettings.enableResourceLink;
         bool integrationBefore = EmpireVOESettings.disableIntegration;
-        bool linkedByUs = false;
         try
         {
             EmpireVOESettings.disableIntegration = false;
             EmpireVOESettings.enableResourceLink = true;
 
-            comp.ToggleLink(outpost);
-            linkedByUs = comp.IsLinkedHere(outpost);
-            if (!linkedByUs) TestAssert.Skip("Could not link the outpost (already claimed elsewhere)");
-
             var res = new ResourceFC { def = fed };
+            double before = comp.GetResourceAdditiveModifier(res);
+
+            comp.ToggleLink(outpost);
+            TestAssert.IsTrue(comp.IsLinkedHere(outpost), "A fresh, unclaimed outpost should link on the first toggle");
+
             double expected = ext.Contribution(outpost, settlement);
-            TestAssert.AreEqual(expected, comp.GetResourceAdditiveModifier(res), 0.001,
-                "A single linked outpost's additive modifier should equal its own contribution");
+            TestAssert.AreEqual(before + expected, comp.GetResourceAdditiveModifier(res), 0.001,
+                "Linking an outpost should raise the additive modifier by exactly its own contribution");
         }
         finally
         {
-            if (linkedByUs && comp.IsLinkedHere(outpost)) comp.ToggleLink(outpost);
+            if (comp.IsLinkedHere(outpost)) comp.ToggleLink(outpost);
             EmpireVOESettings.enableResourceLink = resourceLinkBefore;
             EmpireVOESettings.disableIntegration = integrationBefore;
+            VOEDestructiveTestUtil.SafeRemoveOutpost(outpost); // pure probe
         }
 
         DestructiveTestUtil.AssertEmpireInvariants(f, "ResourceLink_AdditiveEqualsContribution");
     }
+
+    private static WorldObjectComp_ResourceLink RequireResourceLink(WorldSettlementFC settlement) =>
+        TestAssert.NotNull(settlement.GetComponent<WorldObjectComp_ResourceLink>(),
+            $"Every settlement def carries WorldObjectComp_ResourceLink; '{settlement.Name}' has none");
 }

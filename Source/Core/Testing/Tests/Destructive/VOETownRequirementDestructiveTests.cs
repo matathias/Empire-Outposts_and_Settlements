@@ -3,7 +3,8 @@ using Outposts;
 namespace EmpireVOE;
 
 /* DESTRUCTIVE: exercises the layer-filtered nearby-object counting behind VOE's Town spawn requirement.
-   Creates a transient outpost to count against and toggles townExcludeTowns; both are restored/removed.
+   Creates a transient outpost to count against and toggles townExcludeTowns (and townRange when it is
+   non-positive); all are restored/removed.
    (The xenotype-pure Produce patch is left out — its recruit generation is random and heavy to stage.) */
 public static class VOETownRequirementDestructiveTests
 {
@@ -15,15 +16,16 @@ public static class VOETownRequirementDestructiveTests
     public static void TownRequirements_NearbyOutposts_CountsOutpostOnTile()
     {
         FactionFC f = DestructiveTestUtil.RequireFaction();
-        if (EmpireVOESettings.townRange <= 0) TestAssert.Skip("townRange is non-positive; nothing can be in range");
 
-        Outpost outpost = VOEDestructiveTestUtil.CreateTransientOutpost();
-        if (outpost is null) TestAssert.Skip("Could not create a transient outpost");
+        Outpost outpost = VOEDestructiveTestUtil.RequireTransientOutpost();
         PlanetTile tile = outpost.Tile;
 
         bool excludeBefore = EmpireVOESettings.townExcludeTowns;
+        int rangeBefore = EmpireVOESettings.townRange;
         try
         {
+            // The count is strictly "distance < townRange", so a non-positive range admits nothing.
+            if (EmpireVOESettings.townRange <= 0) EmpireVOESettings.townRange = 10;
             // Count towns too, so the assertion holds even if the transient def happens to be a Town.
             EmpireVOESettings.townExcludeTowns = false;
             TestAssert.GreaterThan(OutpostTownRequirements.NearbyOutposts(tile), 0,
@@ -32,6 +34,7 @@ public static class VOETownRequirementDestructiveTests
         finally
         {
             EmpireVOESettings.townExcludeTowns = excludeBefore;
+            EmpireVOESettings.townRange = rangeBefore;
             VOEDestructiveTestUtil.SafeRemoveOutpost(outpost); // pure probe
         }
 
@@ -46,8 +49,7 @@ public static class VOETownRequirementDestructiveTests
     {
         FactionFC f = DestructiveTestUtil.RequireFaction();
 
-        Outpost outpost = VOEDestructiveTestUtil.CreateTransientOutpost();
-        if (outpost is null) TestAssert.Skip("Could not create a transient outpost");
+        Outpost outpost = VOEDestructiveTestUtil.RequireTransientOutpost();
         PlanetTile tile = outpost.Tile;
 
         bool excludeBefore = EmpireVOESettings.townExcludeTowns;
