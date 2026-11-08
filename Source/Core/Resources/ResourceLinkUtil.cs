@@ -57,7 +57,14 @@ public static class ResourceLinkUtil
     /// </summary>
     public static event Action<Outpost> LinkChanged;
 
-    internal static void NotifyLinkChanged(Outpost outpost) => LinkChanged?.Invoke(outpost);
+    /// <summary>Bumped on every link change, so caches of link candidates can tell they are stale.</summary>
+    internal static int LinkVersion { get; private set; }
+
+    internal static void NotifyLinkChanged(Outpost outpost)
+    {
+        LinkVersion++;
+        LinkChanged?.Invoke(outpost);
+    }
 
     /*-*-*- Outpost -> settlement reverse index (one outpost -> one settlement) -*-*-*/
 

@@ -78,15 +78,30 @@ public class WorldObjectComp_ResourceLink : WorldObjectComp, IResourceProduction
 
     internal bool IsLinkedHere(Outpost outpost) => linkedOutposts.Contains(outpost);
 
+    // The management tab asks for the candidates every frame, and a range check can path-find,
+    // so the list is rebuilt at most this often (and whenever a link here changes).
+    private const int CandidateRefreshTicks = 250;
+    [Unsaved] private List<Outpost> cachedCandidates;
+    [Unsaved] private int cachedCandidatesTick = -1;
+    [Unsaved] private int cachedCandidatesLinkVersion = -1;
+
     /// <summary>Linkable outposts within range, sorted by distance. Used by the management tab.</summary>
     internal List<Outpost> GetLinkableOutpostsInRange()
     {
-        return Find.WorldObjects.AllWorldObjects
+        int now = Find.TickManager.TicksGame;
+        if (cachedCandidates is not null && cachedCandidatesTick >= 0 && now - cachedCandidatesTick < CandidateRefreshTicks
+            && cachedCandidatesLinkVersion == ResourceLinkUtil.LinkVersion && !cachedCandidates.Any(o => o.Destroyed))
+            return cachedCandidates;
+
+        cachedCandidatesTick = now;
+        cachedCandidatesLinkVersion = ResourceLinkUtil.LinkVersion;
+        cachedCandidates = Find.WorldObjects.AllWorldObjects
             .OfType<Outpost>()
             .Where(o => ResourceLinkUtil.IsLinkable(o)
                         && ResourceLinkUtil.InLinkRange(o, parent.Tile))
             .OrderBy(o => o.Tile.ApproxDistanceSameLayer(parent.Tile))
             .ToList();
+        return cachedCandidates;
     }
 
     internal void ToggleLink(Outpost outpost)

@@ -45,7 +45,9 @@ public class OutpostResourceLinkExtension_Power : OutpostResourceLinkExtension
     {
         Outpost_PowerGrid pg = outpost as Outpost_PowerGrid;
         if (pg is null) return false;
-        return Find.WorldGrid.TraversalDistanceBetween(pg.Tile, settlementTile) <= pg.PowerNetworkRange;
+        // Bounded by the range, so a distant settlement doesn't flood-fill the whole layer
+        int range = pg.PowerNetworkRange;
+        return Find.WorldGrid.TraversalDistanceBetween(pg.Tile, settlementTile, maxDist: range) <= range;
     }
 }
 
