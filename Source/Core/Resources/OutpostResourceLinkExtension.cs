@@ -38,7 +38,7 @@ public class OutpostResourceLinkExtension : DefModExtension
     /// </summary>
     public virtual bool InLinkRange(Outpost outpost, PlanetTile settlementTile)
     {
-        if (outpost.Tile.Layer != settlementTile.Layer) return false;   // never link across planet layers
-        return Find.WorldGrid.ApproxDistanceInTiles(outpost.Tile, settlementTile) <= EmpireVOESettings.resourceLinkRange;
+        // Never links across planet layers: the distance is infinite there
+        return outpost.Tile.ApproxDistanceSameLayer(settlementTile) <= EmpireVOESettings.resourceLinkRange;
     }
 }

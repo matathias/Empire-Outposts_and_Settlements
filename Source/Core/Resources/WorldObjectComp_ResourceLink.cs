@@ -85,7 +85,7 @@ public class WorldObjectComp_ResourceLink : WorldObjectComp, IResourceProduction
             .OfType<Outpost>()
             .Where(o => ResourceLinkUtil.IsLinkable(o)
                         && ResourceLinkUtil.InLinkRange(o, parent.Tile))
-            .OrderBy(o => Find.WorldGrid.ApproxDistanceInTiles(o.Tile, parent.Tile))
+            .OrderBy(o => o.Tile.ApproxDistanceSameLayer(parent.Tile))
             .ToList();
     }
 

@@ -129,9 +129,7 @@ public static class VOEDebugActions
         // Only accept tiles within the outpost link range (same layer + distance), so every link takes.
         float range = EmpireVOESettings.resourceLinkRange;
         PlanetTile settlementTile = settlement.Tile;
-        Predicate<PlanetTile> inRange = t =>
-            t.Layer == settlementTile.Layer
-            && Find.WorldGrid.ApproxDistanceInTiles(t, settlementTile) <= range;
+        Predicate<PlanetTile> inRange = t => t.ApproxDistanceSameLayer(settlementTile) <= range;
 
         List<PlanetTile> tiles = [];
         TryFindEmptyTilesNear(settlementTile, defs.Count, inRange, tiles);

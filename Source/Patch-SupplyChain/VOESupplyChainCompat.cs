@@ -14,7 +14,7 @@ public static class VOESupplyChainCompat
 {
     static VOESupplyChainCompat()
     {
-        new Harmony("com.Matathias.EmpireVOE.SupplyChain").PatchAll(Assembly.GetExecutingAssembly());
+        new Harmony("com.Matathias.EmpireVOE.SupplyChain").PatchEachClass(Assembly.GetExecutingAssembly(), VOELog.Error);
 
         // Requirement 1: manage the Found-screen conversion-cost companion via the base hook.
         FoundingScreenHooks.SelectionChanged += OnSelectionChanged;

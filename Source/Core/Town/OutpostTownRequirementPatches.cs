@@ -118,13 +118,12 @@ internal static class OutpostTownRequirements
 {
     /// <summary>
     /// Settlements within townRange of the target tile, counting only same-layer
-    /// settlements so ApproxDistanceInTiles never crosses planet layers (the source of
-    /// the "tile out of range" error).
+    /// settlements (a cross-layer ApproxDistanceInTiles was the source of the "tile out of
+    /// range" error).
     /// </summary>
     internal static int NearbySettlements(PlanetTile tile) =>
         Find.WorldObjects.Settlements.Count(s =>
-            s.Tile.Layer == tile.Layer &&
-            Find.WorldGrid.ApproxDistanceInTiles(s.Tile, tile) < EmpireVOESettings.townRange);
+            s.Tile.ApproxDistanceSameLayer(tile) < EmpireVOESettings.townRange);
 
     /// <summary>
     /// Outposts within townRange of the target tile (same layer only). When
@@ -132,7 +131,6 @@ internal static class OutpostTownRequirements
     /// </summary>
     internal static int NearbyOutposts(PlanetTile tile) =>
         Find.WorldObjects.AllWorldObjects.OfType<Outpost>().Count(o =>
-            o.Tile.Layer == tile.Layer &&
             (!EmpireVOESettings.townExcludeTowns || o is not Outpost_Town) &&
-            Find.WorldGrid.ApproxDistanceInTiles(o.Tile, tile) < EmpireVOESettings.townRange);
+            o.Tile.ApproxDistanceSameLayer(tile) < EmpireVOESettings.townRange);
 }

@@ -27,7 +27,7 @@ public class OutpostMainTab : IMainTabWindowOverview
     /// <summary>Register/unregister the tab when its setting is toggled at runtime.</summary>
     internal static void SetRegistered(bool on)
     {
-        if (on) EmpireRegistry.Register(Instance);
+        if (on) EmpireRegistry.RegisterPersistent(Instance);
         else EmpireRegistry.Unregister(Instance);
     }
 

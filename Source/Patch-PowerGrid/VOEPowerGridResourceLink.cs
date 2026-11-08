@@ -59,7 +59,7 @@ public static class VOEPowerGridCompat
 {
     static VOEPowerGridCompat()
     {
-        new Harmony("com.Matathias.EmpireVOE.PowerGrid").PatchAll(Assembly.GetExecutingAssembly());
+        new Harmony("com.Matathias.EmpireVOE.PowerGrid").PatchEachClass(Assembly.GetExecutingAssembly(), VOELog.Error);
 
         // When a power outpost is linked/unlinked, re-run its outlet's power calc so the suppression
         // postfix applies (link) or lifts (unlink) immediately rather than waiting for the next VOE update.

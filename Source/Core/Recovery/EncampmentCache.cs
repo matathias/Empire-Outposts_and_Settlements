@@ -47,8 +47,8 @@ public class EncampmentCacheEntry
         {
             if (wo is not Outpost_Encampment enc) continue;
             if (enc.PawnCount == 0) continue;
-            if (enc.Tile.Layer != settlement.Tile.Layer) continue;   // encampment heal bonus doesn't cross planet layers
-            float distance = Find.WorldGrid.ApproxDistanceInTiles(enc.Tile, settlement.Tile);
+            // Infinite across planet layers: the encampment heal bonus doesn't cross them
+            float distance = enc.Tile.ApproxDistanceSameLayer(settlement.Tile);
             if (distance > EmpireVOESettings.encampmentRange) continue;
 
             EncampmentData data = new(enc);

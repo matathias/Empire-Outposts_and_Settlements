@@ -23,8 +23,8 @@ public class DefensiveAuraEntry
             if (defensive.PawnCount == 0) continue;
             WorldObjectComp_EmpireDefensive defComp = defensive.GetComponent<WorldObjectComp_EmpireDefensive>();
             if (defComp is not null && !defComp.ProvidesAura) continue;   // committed garrisons project no aura
-            if (defensive.Tile.Layer != settlement.Tile.Layer) continue;   // aura doesn't cross planet layers
-            float distance = Find.WorldGrid.ApproxDistanceInTiles(defensive.Tile, settlement.Tile);
+            // Infinite across planet layers: the aura doesn't cross them
+            float distance = defensive.Tile.ApproxDistanceSameLayer(settlement.Tile);
             if (distance > EmpireVOESettings.defensiveAuraRange) continue;
 
             outposts.Add(defensive);

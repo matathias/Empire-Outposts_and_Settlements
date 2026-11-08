@@ -156,13 +156,10 @@ public class WorldObjectComp_OutpostLinks : WorldObjectComp
 
     private IEnumerable<Outpost> OutpostsByDistance()
     {
-        // Same-layer outposts first, ordered by true distance; cross-layer ones sink to the
-        // bottom (ApproxDistanceInTiles is layer-local, so its cross-layer value is meaningless).
+        // Same-layer outposts first, ordered by distance; cross-layer ones (infinitely far) sink
+        // to the bottom.
         return Find.WorldObjects.AllWorldObjects
             .OfType<Outpost>()
-            .OrderBy(o => o.Tile.Layer == parent.Tile.Layer ? 0 : 1)
-            .ThenBy(o => o.Tile.Layer == parent.Tile.Layer
-                ? Find.WorldGrid.ApproxDistanceInTiles(o.Tile, parent.Tile)
-                : 0f);
+            .OrderBy(o => o.Tile.ApproxDistanceSameLayer(parent.Tile));
     }
 }

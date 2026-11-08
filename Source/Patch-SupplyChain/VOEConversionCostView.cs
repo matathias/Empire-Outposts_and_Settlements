@@ -132,9 +132,6 @@ public static class VOEConversionCostView
         WorldSettlementFC source = wc.FoundingValidator is not null
             ? wc.FoundingValidator.GetEffectiveSource(tile)
             : FoundingCostUtil.FindNearestSettlement(tile);
-        if (source is null) return null;
-
-        WorldObjectComp_SupplyChain comp = SupplyChainCache.GetSettlementComp(source);
-        return comp?.GetStockpile();
+        return WorldComponent_SupplyChain.StockpileFor(source);
     }
 }

@@ -11,25 +11,16 @@ public static class VOECompatInit
     static VOECompatInit()
     {
         EmpireVOECompat.CheckForMods();
-        new Harmony("com.Matathias.EmpireVOE").PatchAll(Assembly.GetExecutingAssembly());
-        EmpireRegistry.Register(OutpostFinancer.Instance);
-        EmpireRegistry.Register(_foundingRestrictionValidator);
-        EmpireRegistry.Register(OutpostDeliveryInterceptor.Instance);
-        EmpireRegistry.Register(VOERoadNodeProvider.Instance);
-        EmpireRegistry.Register(DefensiveAuraRaidWeightProvider.Instance);
-        if (EmpireVOESettings.OutpostMainTabActive)
-            EmpireRegistry.Register(OutpostMainTab.Instance);
+        new Harmony("com.Matathias.EmpireVOE").PatchEachClass(Assembly.GetExecutingAssembly(), VOELog.Error);
+        EmpireRegistry.RegisterPersistent(OutpostFinancer.Instance);
+        EmpireRegistry.RegisterPersistent(_foundingRestrictionValidator);
+        EmpireRegistry.RegisterPersistent(OutpostDeliveryInterceptor.Instance);
+        EmpireRegistry.RegisterPersistent(VOERoadNodeProvider.Instance);
+        EmpireRegistry.RegisterPersistent(DefensiveAuraRaidWeightProvider.Instance);
+        OutpostMainTab.SetRegistered(EmpireVOESettings.OutpostMainTabActive);
         EmpireCacheUtil.RegisterCacheInvalidator("EmpireVOE", () =>
         {
-            // Re-register after InvalidateAll clears all registries
-            EmpireRegistry.Register(OutpostFinancer.Instance);
-            EmpireRegistry.Register(_foundingRestrictionValidator);
-            EmpireRegistry.Register(OutpostDeliveryInterceptor.Instance);
-            EmpireRegistry.Register(VOERoadNodeProvider.Instance);
-            EmpireRegistry.Register(DefensiveAuraRaidWeightProvider.Instance);
-            if (EmpireVOESettings.OutpostMainTabActive)
-                EmpireRegistry.Register(OutpostMainTab.Instance);
-            // Drop the PlanetTile-keyed static caches too — they collide across worlds, so
+            // Drop the PlanetTile-keyed static caches — they collide across worlds, so
             // loading another save would otherwise inherit the previous world's auras/heal
             // bonuses and pin its outpost objects.
             DefensiveAuraCache.Invalidate();

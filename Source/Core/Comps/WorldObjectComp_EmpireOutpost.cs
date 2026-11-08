@@ -316,7 +316,7 @@ public class WorldObjectComp_EmpireOutpost : WorldObjectComp
     public static void ReregisterAll()
     {
         if (Find.World is null) return;
-        EmpireRegistry.Register(OutpostFinancer.Instance);
+        EmpireRegistry.RegisterPersistent(OutpostFinancer.Instance);
         if (EmpireVOESettings.enableMilitary)
             ToggleMilitary(true);
         OutpostMainTab.SetRegistered(EmpireVOESettings.OutpostMainTabActive);

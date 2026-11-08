@@ -145,23 +145,10 @@ public class EmpireVOEMod : Mod
     {
         settings = GetSettings<EmpireVOESettings>();
         
-        string modVersion = content?.ModMetaData?.ModVersion;
-        if (modVersion.NullOrEmpty())
-        {
-            VOELog.MessageForce("Did not load a mod version");
-        }
-        else
-        {
-            VOELog.MessageForce($"v{modVersion}");
-        }
+        ModVersionUtil.LogLoaded(content, VOELog.MessageForce);
     }
 
-    public static string GetModVersion()
-    {
-        var mod = LoadedModManager.GetMod<EmpireVOEMod>();
-        string version = mod?.Content?.ModMetaData?.ModVersion;
-        return version.NullOrEmpty() ? "Unknown" : version;
-    }
+    public static string GetModVersion() => ModVersionUtil.Get<EmpireVOEMod>();
 
     public override string SettingsCategory()
     {
