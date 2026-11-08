@@ -239,6 +239,7 @@ public static class OutpostConversionUtil
             if (settlement is null)
             {
                 RefundSilver(silverPaid);
+                FoundingValidatorRegistry.NotifyFoundingCancelled(tile, type);
                 Messages.Message("FCVOE_ConvertFailed".Translate(), MessageTypeDefOf.RejectInput);
                 return false;
             }

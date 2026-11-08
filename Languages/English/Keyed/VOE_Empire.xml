@@ -87,7 +87,7 @@
     <FCVOE_ConvertNoPawns>This outpost has no workers to form a settlement.</FCVOE_ConvertNoPawns>
     <FCVOE_ConvertBusyPacking>This outpost is being packed up.</FCVOE_ConvertBusyPacking>
     <FCVOE_ConvertBusyAttacked>This outpost is under attack.</FCVOE_ConvertBusyAttacked>
-    <FCVOE_ConvertFailed>The settlement could not be created. Silver paid for the conversion was refunded; the outpost is unchanged.</FCVOE_ConvertFailed>
+    <FCVOE_ConvertFailed>The settlement could not be created. Silver and any Routes &amp; Resources goods paid for the conversion were refunded; the outpost is unchanged.</FCVOE_ConvertFailed>
     <FCVOE_ConvertBusyDefending>This outpost's forces are away defending {0}.</FCVOE_ConvertBusyDefending>
     <FCVOE_ConvertInvalidType>This outpost cannot be converted into that settlement type.</FCVOE_ConvertInvalidType>
     <FCVOE_OutpostGoodsShipped>Goods shipped from {0}</FCVOE_OutpostGoodsShipped>

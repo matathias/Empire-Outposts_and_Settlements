@@ -315,11 +315,12 @@ public class WorldObjectComp_EmpireOutpost : WorldObjectComp
 
     public static void ReregisterAll()
     {
-        if (Find.World is null) return;
+        // The registrations are session-wide, so they come back even at the main menu; only the
+        // per-outpost military wrappers need a world (ToggleMilitary returns without one).
         EmpireRegistry.RegisterPersistent(OutpostFinancer.Instance);
+        OutpostMainTab.SetRegistered(EmpireVOESettings.OutpostMainTabActive);
         if (EmpireVOESettings.enableMilitary)
             ToggleMilitary(true);
-        OutpostMainTab.SetRegistered(EmpireVOESettings.OutpostMainTabActive);
     }
 
     // --- Private helpers ---
