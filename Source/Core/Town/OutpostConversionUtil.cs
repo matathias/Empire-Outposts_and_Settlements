@@ -244,7 +244,7 @@ public static class OutpostConversionUtil
             }
         }
 
-        string outpostName = outpost.Name;
+        string outpostName = outpost.DisplayLabelCap();
         if (EmpireVOESettings.convertOutpostPawns)
         {
             FoldOutpostPawns(outpost, settlement);

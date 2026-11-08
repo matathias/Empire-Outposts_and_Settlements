@@ -24,7 +24,7 @@ public class CodexProvider_VOEFinancing : ICodexDynamicProvider
             Outpost outpost = links?.GetFinancingOutpost();
             if (outpost is null) continue;
             any = true;
-            result += "  " + "FCVOE_CodexFinancingLine".Translate(s.Name, outpost.LabelCap) + "\n";
+            result += "  " + "FCVOE_CodexFinancingLine".Translate(s.Name, outpost.DisplayLabelCap()) + "\n";
         }
 
         return any ? result.TrimEnd() : "FCVOE_CodexFinancingNone".Translate().ToString();

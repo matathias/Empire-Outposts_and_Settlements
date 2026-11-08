@@ -72,7 +72,7 @@ public class OutpostFinancer : ISilverPaymentModifier
 
         if (remaining > 0)
         {
-            VOELog.Message($"Financing outpost {outpost.LabelCap} drained less than promised (short by {remaining})");
+            VOELog.Message($"Financing outpost {outpost.DisplayLabelCap()} drained less than promised (short by {remaining})");
         }
     }
 }

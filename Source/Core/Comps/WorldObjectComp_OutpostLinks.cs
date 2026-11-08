@@ -69,7 +69,7 @@ public class WorldObjectComp_OutpostLinks : WorldObjectComp
     {
         Outpost current = GetDeliveryOutpost();
         string currentLabel = current is not null
-            ? current.LabelCap
+            ? current.DisplayLabelCap()
             : "FCVOE_PlayerTaxMap".Translate().ToString();
 
         return new Command_Action
@@ -87,7 +87,7 @@ public class WorldObjectComp_OutpostLinks : WorldObjectComp
     {
         Outpost current = GetFinancingOutpost();
         string currentLabel = current is not null
-            ? current.LabelCap
+            ? current.DisplayLabelCap()
             : "None".Translate().ToString();
 
         return new Command_Action
@@ -119,7 +119,7 @@ public class WorldObjectComp_OutpostLinks : WorldObjectComp
         {
             Outpost op = outpost;
             options.Add(new FloatMenuOption(
-                op.LabelCap,
+                op.DisplayLabelCap(),
                 delegate { deliveryOutpost = op; },
                 ((WorldObject)op).ExpandingIcon,
                 ((WorldObject)op).ExpandingIconColor));
@@ -142,7 +142,7 @@ public class WorldObjectComp_OutpostLinks : WorldObjectComp
         {
             Outpost op = outpost;
             options.Add(new FloatMenuOption(
-                op.LabelCap,
+                op.DisplayLabelCap(),
                 delegate { financingOutpost = op; },
                 ((WorldObject)op).ExpandingIcon,
                 ((WorldObject)op).ExpandingIconColor));

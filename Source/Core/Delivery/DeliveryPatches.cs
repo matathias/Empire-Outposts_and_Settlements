@@ -41,12 +41,12 @@ public class OutpostDeliveryInterceptor : ITaxDeliveryInterceptor
         // Redirect the event to the outpost tile
         fcevent.location = outpost.Tile;
         fcevent.timeTillTrigger = Find.TickManager.TicksGame + TravelUtil.ReturnTicksToArrive(fcevent.source, fcevent.location);
-        fcevent.customDescription = "FCVOE_DeliveryEventDesc".Translate(settlement.Name, outpost.LabelCap, DeliveryUtil.GoodsToString(fcevent.goods));
+        fcevent.customDescription = "FCVOE_DeliveryEventDesc".Translate(settlement.Name, outpost.DisplayLabelCap(), DeliveryUtil.GoodsToString(fcevent.goods));
         fcevent.hasCustomDescription = true;
         context.Redirected = true;
         WorldComponent_VOETracker.MarkOutpostBound(fcevent);
 
-        VOELog.Message($"Redirected tax event from {settlement.Name} to outpost {outpost.LabelCap}");
+        VOELog.Message($"Redirected tax event from {settlement.Name} to outpost {outpost.DisplayLabelCap()}");
     }
 
     public bool TryDeliverGoods(TaxDeliveryContext context)
@@ -91,9 +91,9 @@ public class OutpostDeliveryInterceptor : ITaxDeliveryInterceptor
                 foreach (Pawn rerouted in reroutedPawns)
                     evt.goods.Remove(rerouted);
 
-                string rerouteLabel = "FCVOE_DeliveryPawnRerouted".Translate(destination.LabelCap);
+                string rerouteLabel = "FCVOE_DeliveryPawnRerouted".Translate(destination.DisplayLabelCap());
                 string rerouteText = "FCVOE_DeliveryPawnReroutedDesc".Translate(
-                    destination.LabelCap, DeliveryUtil.GoodsToString(reroutedPawns.ConvertAll<Thing>(p => p)));
+                    destination.DisplayLabelCap(), DeliveryUtil.GoodsToString(reroutedPawns.ConvertAll<Thing>(p => p)));
                 VOEPawnUtil.DeliverPawnsToPlayer(reroutedPawns, destination.Tile, rerouteLabel, rerouteText);
             }
 
@@ -103,15 +103,15 @@ public class OutpostDeliveryInterceptor : ITaxDeliveryInterceptor
             // so we want only the notification step -- not DeliverThings/DeliveryEvent,
             // which would also try to physically transport goods to the outpost tile.
             string sourceName = source is not null ? source.Name : "Unknown";
-            string label = "FCVOE_TaxDeliveredToOutpost".Translate(sourceName, destination.LabelCap);
+            string label = "FCVOE_TaxDeliveredToOutpost".Translate(sourceName, destination.DisplayLabelCap());
             string text = "FCVOE_TaxDeliveredToOutpostDesc".Translate(
-                sourceName, destination.LabelCap, DeliveryUtil.GoodsToString(evt.goods));
+                sourceName, destination.DisplayLabelCap(), DeliveryUtil.GoodsToString(evt.goods));
 
             evt.let = LetterMaker.MakeLetter(label, text, LetterDefOf.PositiveEvent);
             evt.msg = new Message(label, MessageTypeDefOf.PositiveEvent);
             DeliveryNotification.MakeDeliveryLetterAndMessage(evt);
 
-            VOELog.Message($"Delivered taxes from {sourceName} to outpost {destination.LabelCap}");
+            VOELog.Message($"Delivered taxes from {sourceName} to outpost {destination.DisplayLabelCap()}");
             return true;
         }
 

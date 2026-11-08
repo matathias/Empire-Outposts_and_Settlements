@@ -14,7 +14,7 @@ public class DefensiveAutoDefender : IAutoDefender
 
     // Busy/target state lives on the comp so it persists across save/reload (this object is [Unsaved]).
     public bool Busy => comp.defending;
-    public string DefendingTargetName => comp.defendingTarget is not null ? comp.defendingTarget.LabelCap : "";
+    public string DefendingTargetName => comp.defendingTarget is not null ? comp.defendingTarget.DisplayLabelCap() : "";
 
     public DefensiveAutoDefender(Outpost_Defensive outpost)
     {
@@ -150,11 +150,10 @@ public class DefensiveAutoDefender : IAutoDefender
         {
             // These defenders originated from this outpost, so a rejection here is unexpected —
             // surface it — and hand the pawns back to the player rather than losing them.
-            VOELog.Error($"Outpost '{outpost.Name}' refused {failed.Count} returning defender(s) that " +
-                "originated from it; delivering them to the player instead.");
-            string label = "FCVOE_DefenderReturnFailed".Translate(outpost.LabelCap);
+            VOELog.Error($"Outpost '{outpost.DisplayLabelCap()}' refused {failed.Count} returning defender(s) that originated from it; delivering them to the player instead.");
+            string label = "FCVOE_DefenderReturnFailed".Translate(outpost.DisplayLabelCap());
             string text = "FCVOE_DefenderReturnFailedDesc".Translate(
-                outpost.LabelCap, DeliveryUtil.GoodsToString(failed.ConvertAll<Thing>(p => p)));
+                outpost.DisplayLabelCap(), DeliveryUtil.GoodsToString(failed.ConvertAll<Thing>(p => p)));
             VOEPawnUtil.DeliverPawnsToPlayer(failed, outpost.Tile, label, text);
         }
     }

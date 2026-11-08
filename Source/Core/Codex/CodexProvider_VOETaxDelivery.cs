@@ -24,7 +24,7 @@ public class CodexProvider_VOETaxDelivery : ICodexDynamicProvider
             Outpost outpost = links?.GetDeliveryOutpost();
             if (outpost is null) continue;
             any = true;
-            result += "  " + "FCVOE_CodexDeliveryLine".Translate(s.Name, outpost.LabelCap) + "\n";
+            result += "  " + "FCVOE_CodexDeliveryLine".Translate(s.Name, outpost.DisplayLabelCap()) + "\n";
         }
 
         return any ? result.TrimEnd() : "FCVOE_CodexDeliveryNone".Translate().ToString();
