@@ -44,6 +44,7 @@ public class OutpostDeliveryInterceptor : ITaxDeliveryInterceptor
         fcevent.customDescription = "FCVOE_DeliveryEventDesc".Translate(settlement.Name, outpost.LabelCap, DeliveryUtil.GoodsToString(fcevent.goods));
         fcevent.hasCustomDescription = true;
         context.Redirected = true;
+        WorldComponent_VOETracker.MarkOutpostBound(fcevent);
 
         VOELog.Message($"Redirected tax event from {settlement.Name} to outpost {outpost.LabelCap}");
     }
@@ -55,17 +56,15 @@ public class OutpostDeliveryInterceptor : ITaxDeliveryInterceptor
         FCEvent evt = context.Event;
         if (!evt.source.Valid) return false;
 
-        Map taxMap = FindFC.TaxMap;
-        // Ordinary tax events are bound for the capital (FCEventMaker sets location = capitalLocation);
-        // only events we redirected point at an outpost tile. Test against the capital tile directly:
-        // it holds even when the capital's map is unloaded and TaxMap falls back to another home map,
-        // whereas the old `location != taxMap.Tile` check misclassified every ordinary tax event as an
-        // outpost delivery and hijacked it.
-        PlanetTile capital = FindFC.FactionComp?.capitalLocation ?? PlanetTile.Invalid;
-        if (capital.Valid && evt.location == capital) return false;
-        if (taxMap is not null && evt.location == taxMap.Tile) return false;
-
+        // Only events OnTaxEventCreated stamped are outpost deliveries. Inferring them from "not bound
+        // for the capital" hijacked every ordinary tax event whenever the capital was unset or had
+        // moved. An unstamped event still headed for a live outpost is one redirected before stamping
+        // existed (an older save); core events never target an outpost tile.
+        bool stamped = WorldComponent_VOETracker.ConsumeOutpostBound(evt);
         Outpost destination = Find.WorldObjects.WorldObjectAt<Outpost>(evt.location);
+        if (!stamped && destination is null) return false;
+
+        Map taxMap = FindFC.TaxMap;
         WorldSettlementFC source = context.Settlement;
 
         if (destination is not null)
