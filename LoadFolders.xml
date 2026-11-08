@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <loadFolders>
-    <v1.7>
-        <li>/</li>
-        <li>1.7</li>
-        <li IfModActive="Matathias.Empire.Specialists">Compat/1.7/Specialists</li>
-        <li IfModActive="Matathias.Empire.SupplyChain">Compat/1.7/SupplyChain</li>
-        <li IfModActive="MrHydralisk.VOEAdditionalOutposts">Compat/1.7/VOEAdditionalOutposts</li>
-        <li IfModActive="MrHydralisk.VOEPowerGrid">Compat/1.7/VOEPowerGrid</li>
-        <li IfModActive="Scorpio.VOEFactory">Compat/1.7/VOEFactory</li>
-    </v1.7>
     <v1.6>
         <li>/</li>
         <li>1.6</li>
@@ -18,4 +9,13 @@
         <li IfModActive="MrHydralisk.VOEPowerGrid">Compat/1.6/VOEPowerGrid</li>
         <li IfModActive="Scorpio.VOEFactory">Compat/1.6/VOEFactory</li>
     </v1.6>
+    <v1.7>
+        <li>/</li>
+        <li>1.7</li>
+        <li IfModActive="Matathias.Empire.Specialists">Compat/1.7/Specialists</li>
+        <li IfModActive="Matathias.Empire.SupplyChain">Compat/1.7/SupplyChain</li>
+        <li IfModActive="MrHydralisk.VOEAdditionalOutposts">Compat/1.7/VOEAdditionalOutposts</li>
+        <li IfModActive="MrHydralisk.VOEPowerGrid">Compat/1.7/VOEPowerGrid</li>
+        <li IfModActive="Scorpio.VOEFactory">Compat/1.7/VOEFactory</li>
+    </v1.7>
 </loadFolders>
