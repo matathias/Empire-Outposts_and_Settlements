@@ -38,6 +38,9 @@ public static class VOEDeliveryDestructiveTests
 
             TestAssert.IsTrue(ctx.Redirected, "A settlement with a delivery outpost should have its tax event redirected");
             TestAssert.IsTrue(evt.location == outpost.Tile, "The redirected event should point at the delivery outpost tile");
+            // Delivery trusts only stamped events; consuming the stamp also keeps this probe event out of the save.
+            TestAssert.IsTrue(WorldComponent_VOETracker.ConsumeOutpostBound(evt),
+                "A redirected event should be stamped as an outpost delivery");
         }
         finally
         {

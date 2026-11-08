@@ -1,3 +1,5 @@
+using Outposts;
+
 namespace EmpireVOE;
 
 /// <summary>
@@ -55,5 +57,21 @@ public static class VOETestHelper
             allowAnySettlementType = allowAny,
             allowedSettlementTypes = allowedDefNames is not null ? new List<string>(allowedDefNames) : null
         };
+    }
+
+    /// <summary>
+    /// An unspawned outpost of the first loaded outpost def, built without WorldObjectMaker so no comp is
+    /// initialised (comp setup would register military wrappers and flag road updates). It is never added
+    /// to the world, so it needs no cleanup. Fails the test if no outpost def is loaded.
+    /// </summary>
+    public static Outpost MakeUnspawnedOutpost(string name = null)
+    {
+        WorldObjectDef def = TestAssert.NotNull(DefDatabase<WorldObjectDef>.AllDefsListForReading.FirstOrDefault(d =>
+                d.worldObjectClass is not null && typeof(Outpost).IsAssignableFrom(d.worldObjectClass)),
+            "No VOE outpost def is loaded");
+        Outpost outpost = (Outpost)Activator.CreateInstance(def.worldObjectClass);
+        outpost.def = def;
+        outpost.Name = name;
+        return outpost;
     }
 }

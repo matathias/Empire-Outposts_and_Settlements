@@ -244,7 +244,8 @@ public static class OutpostConversionUtil
             }
         }
 
-        string outpostName = outpost.DisplayLabelCap();
+        // The player-given name as typed; the def-based label only when the outpost has no name.
+        string outpostName = outpost.Name ?? outpost.DisplayLabelCap();
         if (EmpireVOESettings.convertOutpostPawns)
         {
             FoldOutpostPawns(outpost, settlement);
@@ -280,7 +281,7 @@ public static class OutpostConversionUtil
         return true;
     }
 
-    private static void RefundSilver(int amount)
+    internal static void RefundSilver(int amount)
     {
         while (amount > 0)
         {
