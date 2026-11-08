@@ -232,7 +232,7 @@ public static class OutpostConversionUtil
         }
         catch (Exception e)
         {
-            VOELog.Error("OutpostConversionUtil: settlement creation failed: " + e);
+            VOELog.Error($"OutpostConversionUtil: settlement creation failed: {e}");
             // If the settlement was registered before the throw it exists and works; finish the
             // conversion with it. Otherwise refund the silver and keep the outpost.
             settlement = faction.settlements.Count > settlementCountBefore ? faction.settlements[^1] : null;
