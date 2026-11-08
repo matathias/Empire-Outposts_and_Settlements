@@ -1,3 +1,5 @@
+using Outposts;
+
 namespace EmpireVOE;
 
 /// <summary>
@@ -53,11 +55,34 @@ public class WorldComponent_VOETracker : WorldComponent
         return evt is not null && (Instance?.outpostBoundEventIds.Remove(evt.loadID) ?? false);
     }
 
+    // Outposts whose military wrappers stay registered after a military toggle-off until the live
+    // operations that reference them end. Runtime-only: the post-load reconcile rebuilds it.
+    private static readonly HashSet<Outpost> pendingUnregister = [];
+    private bool militaryReconciled;
+
     public override void FinalizeInit(bool fromload)
     {
         base.FinalizeInit(fromload);
         redirectExpiryTick.Clear();
+        pendingUnregister.Clear();
     }
+
+    public override void WorldComponentTick()
+    {
+        base.WorldComponentTick();
+        // Deferred to the first tick: operation references are not resolved yet in FinalizeInit.
+        if (!militaryReconciled)
+        {
+            militaryReconciled = true;
+            WorldObjectComp_EmpireOutpost.ReconcileMilitaryState();
+        }
+        if (pendingUnregister.Count > 0 && Find.TickManager.TicksGame % 250 == 0)
+            pendingUnregister.RemoveWhere(o => o.Destroyed || WorldObjectComp_EmpireOutpost.UnregisterIdleWrappers(o));
+    }
+
+    public static void AddPendingUnregister(Outpost outpost) => pendingUnregister.Add(outpost);
+
+    public static void CancelPendingUnregister(Outpost outpost) => pendingUnregister.Remove(outpost);
 
     public static bool IsRedirected(PlanetTile settlementTile)
     {

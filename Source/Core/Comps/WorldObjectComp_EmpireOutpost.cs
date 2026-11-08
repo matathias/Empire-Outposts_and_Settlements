@@ -238,13 +238,71 @@ public class WorldObjectComp_EmpireOutpost : WorldObjectComp
         if (Find.World is null) return;
         foreach (Outpost outpost in Find.WorldObjects.AllWorldObjects.OfType<Outpost>())
         {
-            WorldObjectComp_EmpireOutpost comp = outpost.GetComponent<WorldObjectComp_EmpireOutpost>();
-            if (enable) comp?.Register();
-            else comp?.Unregister();
+            if (enable)
+            {
+                WorldComponent_VOETracker.CancelPendingUnregister(outpost);
+                outpost.GetComponent<WorldObjectComp_EmpireOutpost>()?.Register();
+                outpost.GetComponent<WorldObjectComp_EmpireDefensive>()?.Register();
+            }
+            else
+            {
+                // A wrapper still referenced by a live operation stays registered until that op ends:
+                // core clears the under-attack/defending flags and returns defending pawns through
+                // registry lookups, so unregistering now would strand both.
+                if (!UnregisterIdleWrappers(outpost))
+                    WorldComponent_VOETracker.AddPendingUnregister(outpost);
+            }
+        }
+    }
 
+    /// <summary>Unregisters whichever of the outpost's military wrappers no live operation references.
+    /// Returns true when both are unregistered.</summary>
+    internal static bool UnregisterIdleWrappers(Outpost outpost)
+    {
+        FindLiveOperationRoles(outpost, out bool asTarget, out bool asDefender);
+        if (!asTarget) outpost.GetComponent<WorldObjectComp_EmpireOutpost>()?.Unregister();
+        if (!asDefender) outpost.GetComponent<WorldObjectComp_EmpireDefensive>()?.Unregister();
+        return !asTarget && !asDefender;
+    }
+
+    /// <summary>
+    /// One-time pass after a load or new game. Clears under-attack/defending flags that no live
+    /// operation backs (left stuck by a mid-operation military toggle before this was handled). With
+    /// military off, registers the wrappers a live operation still needs so it can finish cleanly.
+    /// </summary>
+    internal static void ReconcileMilitaryState()
+    {
+        if (Find.World is null) return;
+        foreach (Outpost outpost in Find.WorldObjects.AllWorldObjects.OfType<Outpost>())
+        {
+            FindLiveOperationRoles(outpost, out bool asTarget, out bool asDefender);
+            WorldObjectComp_EmpireOutpost comp = outpost.GetComponent<WorldObjectComp_EmpireOutpost>();
             WorldObjectComp_EmpireDefensive defComp = outpost.GetComponent<WorldObjectComp_EmpireDefensive>();
-            if (enable) defComp?.Register();
-            else defComp?.Unregister();
+            if (!asTarget && comp is not null) comp.outpostUnderAttack = false;
+            if (!asDefender && defComp is not null)
+            {
+                defComp.defending = false;
+                defComp.defendingTarget = null;
+            }
+
+            if (EmpireVOESettings.MilitaryActive || (!asTarget && !asDefender)) continue;
+            if (asTarget) comp?.Register();
+            if (asDefender) defComp?.Register();
+            WorldComponent_VOETracker.AddPendingUnregister(outpost);
+        }
+    }
+
+    private static void FindLiveOperationRoles(WorldObject outpost, out bool asTarget, out bool asDefender)
+    {
+        asTarget = false;
+        asDefender = false;
+        IReadOnlyList<MilitaryOperation> ops = FindFC.MilitaryManager?.Active;
+        if (ops is null) return;
+        foreach (MilitaryOperation op in ops)
+        {
+            if (op is null) continue;
+            if (op.targetObject == outpost) asTarget = true;
+            if (op.externalDefenderSource == outpost) asDefender = true;
         }
     }
 
