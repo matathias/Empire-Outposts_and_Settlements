@@ -17,7 +17,7 @@ public static class VOEDefensiveAuraTests
     [EmpireTest("VOE.Aura")]
     public static void StatModifier_WrongStat_ReturnsIdentity()
     {
-        WorldObjectComp_DefensiveAura comp = new();
+        IStatModifierProvider comp = new WorldObjectComp_DefensiveAura();
         // Any stat other than militaryBaseLevel returns the stat's identity without touching the (null) parent.
         FCStatDef other = FCStatDefOf.mercHealRateMultiplier;
         TestAssert.AreEqual(other.IdentityValue, comp.GetStatModifier(other));

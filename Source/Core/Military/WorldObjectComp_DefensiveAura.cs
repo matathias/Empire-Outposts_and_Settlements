@@ -12,38 +12,17 @@ public class WorldObjectCompProperties_DefensiveAura : WorldObjectCompProperties
 /// Passive "shield" tier of the defensive-outpost integration: nearby garrisoned <c>Outpost_Defensive</c>
 /// add to this settlement's <see cref="FCStatDefOf.militaryBaseLevel"/>, stiffening its auto-resolved
 /// defense when raided — even when the outpost never deploys. Complements the active
-/// <see cref="DefensiveAutoDefender"/>. Reads from <see cref="DefensiveAuraCache"/>; mirrors
+/// <see cref="DefensiveAutoDefender"/>. Reads from <see cref="DefensiveAuraCache"/>; shares its gating with
 /// <see cref="WorldObjectComp_EncampmentBonus"/>.
 /// </summary>
-public class WorldObjectComp_DefensiveAura : WorldObjectComp, IStatModifierProvider
+public class WorldObjectComp_DefensiveAura : WorldObjectComp_OutpostProximityBonus
 {
-    public double GetStatModifier(FCStatDef stat)
-    {
-        if (!EmpireVOESettings.DefensiveAuraActive) return stat.IdentityValue;
-        if (stat != FCStatDefOf.militaryBaseLevel) return stat.IdentityValue;
+    protected override bool Active => EmpireVOESettings.DefensiveAuraActive;
+    protected override FCStatDef Stat => FCStatDefOf.militaryBaseLevel;
 
-        WorldSettlementFC settlement = parent as WorldSettlementFC;
-        if (settlement is null) return stat.IdentityValue;
+    protected override IOutpostProximityBonus GetEntry(WorldSettlementFC settlement)
+        => DefensiveAuraCache.GetOrBuild(settlement);
 
-        DefensiveAuraEntry entry = DefensiveAuraCache.GetOrBuild(settlement);
-        if (entry is null || entry.outposts.Count == 0) return stat.IdentityValue;
-
-        return stat.IdentityValue + entry.militaryLevelBonus;
-    }
-
-    public string GetStatModifierDesc(FCStatDef stat)
-    {
-        if (!EmpireVOESettings.DefensiveAuraActive) return null;
-        if (stat != FCStatDefOf.militaryBaseLevel) return null;
-
-        WorldSettlementFC settlement = parent as WorldSettlementFC;
-        if (settlement is null) return null;
-
-        DefensiveAuraEntry entry = DefensiveAuraCache.GetOrBuild(settlement);
-        if (entry is null || entry.outposts.Count == 0) return null;
-
-        return TextUtil.AdditiveBonusLine(
-            entry.militaryLevelBonus,
-            "FCVOE_DefensiveAuraSource".Translate(entry.outposts.Count)) + "\n";
-    }
+    protected override string DescLine(FCStatDef stat, IOutpostProximityBonus entry)
+        => TextUtil.AdditiveBonusLine(entry.Bonus, "FCVOE_DefensiveAuraSource".Translate(entry.SourceCount));
 }

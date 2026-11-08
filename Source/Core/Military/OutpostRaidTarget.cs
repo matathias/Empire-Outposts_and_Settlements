@@ -60,16 +60,7 @@ public class OutpostRaidTarget : IRaidTarget
     public void OnRaidLost(BattleResult result)
     {
         int injuries = Math.Max(1, outpost.PawnCount / 3);
-        var pawns = outpost.AllPawns.InRandomOrder().Take(injuries).ToList();
-        foreach (Pawn pawn in pawns)
-        {
-            BodyPartRecord part = pawn.health.hediffSet.GetRandomNotMissingPart(DamageDefOf.Cut);
-            if (part is not null)
-            {
-                pawn.TakeDamage(new DamageInfo(DamageDefOf.Cut, Rand.Range(8f, 25f), 0f,
-                    -1f, null, part));
-            }
-        }
+        VOEPawnUtil.InjureRandomPawns(outpost, injuries, new FloatRange(8f, 25f));
 
         int itemCount = outpost.Things.Count();
         if (itemCount > 0)

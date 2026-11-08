@@ -76,16 +76,7 @@ public class DefensiveAutoDefender : IAutoDefender
         int cooldown = GenDate.TicksPerDay * 2;
         if (!won)
         {
-            int injuries = Math.Max(1, outpost.PawnCount / 4);
-            foreach (Pawn pawn in outpost.AllPawns.InRandomOrder().Take(injuries))
-            {
-                BodyPartRecord part = pawn.health.hediffSet.GetRandomNotMissingPart(DamageDefOf.Cut);
-                if (part is not null)
-                {
-                    pawn.TakeDamage(new DamageInfo(DamageDefOf.Cut, Rand.Range(5f, 15f), 0f,
-                        -1f, null, part));
-                }
-            }
+            VOEPawnUtil.InjureRandomPawns(outpost, Math.Max(1, outpost.PawnCount / 4), new FloatRange(5f, 15f));
             // Extra day cooldown on loss
             cooldown += GenDate.TicksPerDay;
         }

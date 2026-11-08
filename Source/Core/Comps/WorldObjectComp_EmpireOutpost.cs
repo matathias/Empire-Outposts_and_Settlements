@@ -184,7 +184,7 @@ public class WorldObjectComp_EmpireOutpost : WorldObjectComp
         // Financing info (reverse lookup)
         if (EmpireVOESettings.enableFinancing)
         {
-            List<string> financedNames = GetFinancedSettlementNames();
+            List<string> financedNames = GetSettlementNamesLinkingHere(OutpostLinkSlot.Financing);
             if (financedNames.Count > 0)
                 lines.Add("FCVOE_FinancingFor".Translate(string.Join(", ", financedNames)));
         }
@@ -192,7 +192,7 @@ public class WorldObjectComp_EmpireOutpost : WorldObjectComp
         // Delivery source info (reverse lookup)
         if (EmpireVOESettings.enableDelivery)
         {
-            List<string> deliveryNames = GetDeliverySourceNames();
+            List<string> deliveryNames = GetSettlementNamesLinkingHere(OutpostLinkSlot.Delivery);
             if (deliveryNames.Count > 0)
                 lines.Add("FCVOE_ReceivingTaxes".Translate(string.Join(", ", deliveryNames)));
         }
@@ -345,7 +345,8 @@ public class WorldObjectComp_EmpireOutpost : WorldObjectComp
         return names;
     }
 
-    private List<string> GetFinancedSettlementNames()
+    /// <summary>Names of the Empire settlements whose <paramref name="slot"/> link points at this outpost.</summary>
+    private List<string> GetSettlementNamesLinkingHere(OutpostLinkSlot slot)
     {
         List<string> names = [];
         FactionFC faction = FindFC.FactionComp;
@@ -354,22 +355,7 @@ public class WorldObjectComp_EmpireOutpost : WorldObjectComp
         foreach (WorldSettlementFC s in faction.settlements)
         {
             WorldObjectComp_OutpostLinks links = s.GetComponent<WorldObjectComp_OutpostLinks>();
-            if (links?.financingOutpost == outpost)
-                names.Add(s.Name);
-        }
-        return names;
-    }
-
-    private List<string> GetDeliverySourceNames()
-    {
-        List<string> names = [];
-        FactionFC faction = FindFC.FactionComp;
-        if (faction is null) return names;
-        Outpost outpost = Outpost;
-        foreach (WorldSettlementFC s in faction.settlements)
-        {
-            WorldObjectComp_OutpostLinks links = s.GetComponent<WorldObjectComp_OutpostLinks>();
-            if (links?.deliveryOutpost == outpost)
+            if (links?.StoredLink(slot) == outpost)
                 names.Add(s.Name);
         }
         return names;

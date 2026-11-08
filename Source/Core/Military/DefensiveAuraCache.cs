@@ -10,22 +10,21 @@ namespace EmpireVOE;
 /// one set to auto-defend, deployed on a defense, or regrouping on cooldown has its garrison committed
 /// elsewhere and projects no aura.
 /// </summary>
-public class DefensiveAuraEntry
+public class DefensiveAuraEntry : IOutpostProximityBonus
 {
     public readonly List<Outpost_Defensive> outposts = [];
     public readonly double militaryLevelBonus;
 
+    int IOutpostProximityBonus.SourceCount => outposts.Count;
+    double IOutpostProximityBonus.Bonus => militaryLevelBonus;
+
     public DefensiveAuraEntry(WorldSettlementFC settlement)
     {
-        foreach (WorldObject wo in Find.WorldObjects.AllWorldObjects)
+        foreach (Outpost_Defensive defensive in OutpostProximityUtil.GarrisonedOutpostsNear<Outpost_Defensive>(
+                     settlement.Tile, EmpireVOESettings.defensiveAuraRange))
         {
-            if (wo is not Outpost_Defensive defensive) continue;
-            if (defensive.PawnCount == 0) continue;
             WorldObjectComp_EmpireDefensive defComp = defensive.GetComponent<WorldObjectComp_EmpireDefensive>();
             if (defComp is not null && !defComp.ProvidesAura) continue;   // committed garrisons project no aura
-            // Infinite across planet layers: the aura doesn't cross them
-            float distance = defensive.Tile.ApproxDistanceSameLayer(settlement.Tile);
-            if (distance > EmpireVOESettings.defensiveAuraRange) continue;
 
             outposts.Add(defensive);
             militaryLevelBonus += OutpostBonus(defensive);
@@ -49,24 +48,13 @@ public class DefensiveAuraEntry
 /// </summary>
 public static class DefensiveAuraCache
 {
-    private static readonly Dictionary<PlanetTile, DefensiveAuraEntry> cache = [];
+    private static readonly OutpostProximityCache<DefensiveAuraEntry> cache = new(s => new DefensiveAuraEntry(s));
 
-    public static DefensiveAuraEntry GetOrBuild(WorldSettlementFC settlement)
-    {
-        if (settlement is null) return null;
-        if (cache.TryGetValue(settlement.Tile, out DefensiveAuraEntry entry))
-            return entry;
+    public static DefensiveAuraEntry GetOrBuild(WorldSettlementFC settlement) => cache.GetOrBuild(settlement);
 
-        entry = new DefensiveAuraEntry(settlement);
-        cache[settlement.Tile] = entry;
-        return entry;
-    }
-
-    public static void Invalidate()
-    {
-        cache.Clear();
-        // The aura feeds militaryBaseLevel through the cached settlement stat partial, so dirty the
-        // settlement stat caches too (the IStatModifierProvider contribution is baked in at cache time).
-        FindFC.FactionComp?.InvalidateAllSettlementStatCaches();
-    }
+    /// <summary>
+    /// Clears the cache and dirties the settlement stat caches, since the aura feeds militaryBaseLevel
+    /// through the cached settlement stat partial.
+    /// </summary>
+    public static void Invalidate() => cache.Invalidate();
 }

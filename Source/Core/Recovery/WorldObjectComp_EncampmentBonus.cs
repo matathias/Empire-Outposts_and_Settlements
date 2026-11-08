@@ -13,35 +13,16 @@ public class WorldObjectCompProperties_EncampmentBonus : WorldObjectCompProperti
 /// Outpost_Encampment Medicine skill, using the same scaling as Specialists.
 /// Reads from EncampmentCache for performance.
 /// </summary>
-public class WorldObjectComp_EncampmentBonus : WorldObjectComp, IStatModifierProvider
+public class WorldObjectComp_EncampmentBonus : WorldObjectComp_OutpostProximityBonus
 {
-    public double GetStatModifier(FCStatDef stat)
-    {
-        if (!EmpireVOESettings.EncampmentActive) return stat.IdentityValue;
-        if (stat != FCStatDefOf.mercHealRateMultiplier) return stat.IdentityValue;
+    protected override bool Active => EmpireVOESettings.EncampmentActive;
+    protected override FCStatDef Stat => FCStatDefOf.mercHealRateMultiplier;
 
-        WorldSettlementFC settlement = parent as WorldSettlementFC;
-        if (settlement is null) return stat.IdentityValue;
+    protected override IOutpostProximityBonus GetEntry(WorldSettlementFC settlement)
+        => EncampmentCache.GetOrBuild(settlement);
 
-        EncampmentCacheEntry entry = EncampmentCache.GetOrBuild(settlement);
-        if (entry is null || entry.encampments.Count == 0) return stat.IdentityValue;
-
-        return stat.IdentityValue + entry.totalHealRateBonus;
-    }
-
-    public string GetStatModifierDesc(FCStatDef stat)
-    {
-        if (!EmpireVOESettings.EncampmentActive) return null;
-        if (stat != FCStatDefOf.mercHealRateMultiplier) return null;
-
-        WorldSettlementFC settlement = parent as WorldSettlementFC;
-        if (settlement is null) return null;
-
-        EncampmentCacheEntry entry = EncampmentCache.GetOrBuild(settlement);
-        if (entry is null || entry.encampments.Count == 0) return null;
-
-        return TextUtil.MultiplierBonusLine(
-            stat.IdentityValue + entry.totalHealRateBonus,
-            "FCVOE_EncampmentHealRateSource".Translate(entry.encampments.Count)) + "\n";
-    }
+    protected override string DescLine(FCStatDef stat, IOutpostProximityBonus entry)
+        => TextUtil.MultiplierBonusLine(
+            stat.IdentityValue + entry.Bonus,
+            "FCVOE_EncampmentHealRateSource".Translate(entry.SourceCount));
 }
