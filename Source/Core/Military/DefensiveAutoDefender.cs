@@ -32,8 +32,12 @@ public class DefensiveAutoDefender : IAutoDefender
 
     public int Range => outpost.Range;
 
+    // Defenders are drawn from the capable pawns (animals and violence-incapable pawns don't
+    // count) and one always stays behind, so at least two capable pawns are needed.
+    private bool HasSpareCapablePawn => outpost.CapablePawns.Skip(1).Any();
+
     public bool CanAutoDefend => comp.autoDefend
-                                 && outpost.PawnCount > 1
+                                 && HasSpareCapablePawn
                                  && !outpost.Packing
                                  && !comp.defending
                                  && !comp.IsOnCooldown;
@@ -119,11 +123,9 @@ public class DefensiveAutoDefender : IAutoDefender
 
     public List<Pawn> GetDefendingPawns()
     {
-        if (outpost.PawnCount <= 1) return null;
-
         List<Pawn> pawns = outpost.CapablePawns.ToList();
-        if (pawns.Count > 1)
-            pawns.RemoveAt(pawns.Count - 1); // keep at least 1 behind
+        if (pawns.Count <= 1) return null;
+        pawns.RemoveAt(pawns.Count - 1); // keep at least 1 capable pawn behind
 
         foreach (Pawn pawn in pawns)
             outpost.RemovePawn(pawn);

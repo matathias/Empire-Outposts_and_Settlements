@@ -212,16 +212,37 @@ public static class OutpostConversionUtil
             return false;
         }
 
-        // Pay
+        // Pay. The silver actually taken from storage is measured so it can be refunded exactly
+        // (payment modifiers may finance part of the cost from elsewhere).
+        int silverBefore = PaymentUtil.GetSilver();
         if (!PaymentUtil.TryPaySilver(reducedSilver, PaymentUtil.Reason_SettlementCreation))
         {
             Messages.Message("FCNotEnoughSilverToSettle".Translate(), MessageTypeDefOf.RejectInput);
             return false;
         }
+        int silverPaid = silverBefore - PaymentUtil.GetSilver();
         FoundingValidatorRegistry.NotifyFounded(tile, type, factor);
 
         // Create the settlement on the outpost's tile, then fold pawns + apply bonuses.
-        WorldSettlementFC settlement = ColonyUtil.CreatePlayerColonySettlement(tile, type);
+        int settlementCountBefore = faction.settlements.Count;
+        WorldSettlementFC settlement;
+        try
+        {
+            settlement = ColonyUtil.CreatePlayerColonySettlement(tile, type);
+        }
+        catch (Exception e)
+        {
+            VOELog.Error("OutpostConversionUtil: settlement creation failed: " + e);
+            // If the settlement was registered before the throw it exists and works; finish the
+            // conversion with it. Otherwise refund the silver and keep the outpost.
+            settlement = faction.settlements.Count > settlementCountBefore ? faction.settlements[^1] : null;
+            if (settlement is null)
+            {
+                RefundSilver(silverPaid);
+                Messages.Message("FCVOE_ConvertFailed".Translate(), MessageTypeDefOf.RejectInput);
+                return false;
+            }
+        }
 
         string outpostName = outpost.Name;
         if (EmpireVOESettings.convertOutpostPawns)
@@ -257,6 +278,17 @@ public static class OutpostConversionUtil
         // CreatePlayerColonySettlement already sends the "FCSettlementFormed" letter; a second
         // incorporation letter here just duplicated that notification.
         return true;
+    }
+
+    private static void RefundSilver(int amount)
+    {
+        while (amount > 0)
+        {
+            Thing silver = ThingMaker.MakeThing(ThingDefOf.Silver);
+            silver.stackCount = Math.Min(amount, ThingDefOf.Silver.stackLimit);
+            amount -= silver.stackCount;
+            PaymentUtil.PlaceThing(silver);
+        }
     }
 
     /// <summary>

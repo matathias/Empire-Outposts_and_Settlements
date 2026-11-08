@@ -31,26 +31,28 @@ public static class VOESpecialistsCompat
             return new List<Pawn>(pawns); // hand every pawn back so none is orphaned
         }
 
+        List<Pawn> leftovers = [];
         foreach (Pawn pawn in pawns)
         {
+            SpecialistRoleDef role = null;   // null role = Resident
             SkillRecord best = BestNonDisabledSkill(pawn);
             if (best is not null && best.Level >= SpecialistSkillThreshold
                 && comp.SpecialistCount < comp.MaxSpecialists)
             {
-                SpecialistRoleDef bestRole = FindBestRole(pawn);
+                role = FindBestRole(pawn);
                 // AssignSpecialist rejects (without placing) when the role is at its per-settlement
-                // cap, which would orphan the pawn. Fall back to Resident (null role, always placed).
-                if (comp.RoleAtCap(bestRole))
-                    bestRole = null;
-                comp.AssignSpecialist(pawn, bestRole);
+                // cap. Fall back to Resident instead.
+                if (comp.RoleAtCap(role))
+                    role = null;
             }
-            else
-            {
-                // null role = Resident
-                comp.AssignSpecialist(pawn, null);
-            }
+
+            // A rejected pawn is handed back so the caller folds it into the world rather than losing it.
+            bool placed = comp.AssignSpecialist(pawn, role)
+                || (role is not null && comp.AssignSpecialist(pawn, null));
+            if (!placed && pawn is not null)
+                leftovers.Add(pawn);
         }
-        return []; // every pawn was placed as a specialist or resident
+        return leftovers;
     }
 
     /// <summary>

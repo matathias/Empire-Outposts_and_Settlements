@@ -33,11 +33,13 @@ public class WorldObjectComp_ResourceLink : WorldObjectComp, IResourceProduction
         if (Scribe.mode == LoadSaveMode.PostLoadInit)
         {
             linkedOutposts ??= [];
+            // Drop references that failed to resolve (e.g. an outpost def removed by a mod change)
+            // or point at destroyed outposts, so they are not re-saved forever.
+            linkedOutposts.RemoveAll(o => o is null || o.Destroyed);
             // Rebuild the outpost -> settlement reverse index from this authoritative list (cross-refs are
             // resolved by now, so the outposts and their comps exist). Runtime-only; not serialized.
             foreach (Outpost outpost in linkedOutposts)
             {
-                if (outpost is null || outpost.Destroyed) continue;
                 WorldObjectComp_EmpireOutpost oc = outpost.GetComponent<WorldObjectComp_EmpireOutpost>();
                 if (oc is not null) oc.linkedSettlement = parent as WorldSettlementFC;
             }
